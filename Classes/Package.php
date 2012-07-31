@@ -32,8 +32,10 @@ class Package extends BasePackage {
 	 */
 	public function boot(\TYPO3\FLOW3\Core\Bootstrap $bootstrap) {
 		$dispatcher = $bootstrap->getSignalSlotDispatcher();
-		$dispatcher->connect('TYPO3\FLOW3\Core\Bootstrap', 'finishedRuntimeRun', function() use ($bootstrap) {
-			$this->prepareRealtimeIndexing($bootstrap);
+		$dispatcher->connect('TYPO3\FLOW3\Core\Booting\Sequence', 'afterInvokeStep', function(\TYPO3\FLOW3\Core\Booting\Step $step) use ($bootstrap) {
+			if ($step->getIdentifier() === 'typo3.flow3:persistence') {
+				$this->prepareRealtimeIndexing($bootstrap);
+			}
 		});
 	}
 

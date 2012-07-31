@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<package xmlns="http://typo3.org/ns/2008/flow3/package">
+	<key>TYPO3.Elasticsearch</key>
+	<title>Elasticsearch implementation for FLOW3</title>
+	<description>The package enables working with elasticsearch</description>
+	<version>1.0.0-dev</version>
+	<parties>
+		<person role="LeadDeveloper">
+			<name>Christian Müller</name>
+			<repositoryUserName>kitsunet</repositoryUserName>
+		</person>
+		<person role="LeadDeveloper">
+			<name>Adrian Föder</name>
+			<repositoryUserName>afoeder</repositoryUserName>
+		</person>
+	</parties>
+	<constraints>
+		<depends>
+			<package>TYPO3.FLOW3</package>
+		</depends>
+	</constraints>
+</package>

@@ -1,0 +1,13 @@
+TYPO3:
+  ElasticSearch:
+    clients:
+        # default bundle that will be used if no more specific bundle name was supplied.
+      default:
+        - host: localhost
+          port: 9200
+        - host: localhost
+          port: 9201
+
+    realtimeIndexing:
+      enabled: TRUE
+      client: default

@@ -101,7 +101,11 @@ class MappingCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 		$additiveMappings = $entityMappingCollection->diffAgainstCollection($backendMappingCollection);
 		/** @var $mapping \TYPO3\ElasticSearch\Domain\Model\Mapping */
 		foreach ($additiveMappings AS $mapping) {
-			$this->output('Applying properties to %s:%s... ', array($mapping->getType()->getIndex()->getName(), $mapping->getType()->getName()));
+			$this->outputLine('Attempt to apply properties to %s/%s: %s... ', array(
+				$mapping->getType()->getIndex()->getName(),
+				$mapping->getType()->getName(),
+				print_r($mapping->getProperties(), TRUE)
+			));
 			$mapping->getType()->getIndex()->setClient($client);
 			$response = $mapping->apply();
 			$treatedResponse = $response->getTreatedContent();

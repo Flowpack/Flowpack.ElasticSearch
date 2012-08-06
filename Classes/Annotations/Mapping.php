@@ -20,47 +20,65 @@ use Doctrine\Common\Annotations\Annotation as DoctrineAnnotation;
 final class Mapping {
 
 	/**
-	 * The name of the field that will be stored in the index. Defaults to the property/field name.
+	 * The name of the field that will be stored in the index.
+	 * Defaults to the property/field name.
+
 	 * @var string
-	 *
 	 * @see http://www.elasticsearch.org/guide/reference/mapping/core-types.html
 	 */
 	public $index_name;
 
 	/**
-	 * Defaults to `no`.
-	 * @var string
+	 * Set to yes the store actual field in the index, no to not store it.
+	 * Defaults to `no` (note, the JSON document itself is stored, and it can be retrieved from it).
 	 *
+	 * @var string
 	 * @see http://www.elasticsearch.org/guide/reference/mapping/core-types.html
 	 */
 	public $store;
 
 	/**
-	 * Defaults to `analyzed`.
-	 * @var string
+	 * Set to analyzed for the field to be indexed and searchable after being broken down into token using an analyzer.
+	 * not_analyzed means that its still searchable, but does not go through any analysis process or broken down into tokens.
+	 * no means that it won’t be searchable at all (as an individual field; it may still be included in _all).
+	 * Defaults to analyzed.
 	 *
+	 * @var string
 	 * @see http://www.elasticsearch.org/guide/reference/mapping/core-types.html
 	 */
 	public $index;
 
 	/**
-	 * The boost value. Defaults to `1.0`.
-	 * @var float
+	 * Possible values are `no`, `yes`, `with_offsets`, `with_positions`, `with_positions_offsets`.
+	 * Defaults to `no`.
 	 *
-	 * @see http://www.elasticsearch.org/guide/reference/mapping/boost-field.html
-	 */
-	public $boost;
-
-	/**
-	 * Possible values are `no`, `yes`, `with_offsets`, `with_positions`, `with_positions_offsets`. Defaults to `no`.
+	 * @see http://www.elasticsearch.org/guide/reference/mapping/core-types.html
 	 * @var string
 	 */
 	public $term_vector;
 
 	/**
-	 * The date format. Defaults to `dateOptionalTime`.
-	 * @var string
+	 * The boost value. Defaults to `1.0`.
 	 *
+	 * @var float
+	 * @see http://www.elasticsearch.org/guide/reference/mapping/boost-field.html
+	 */
+	public $boost;
+
+	/**
+	 * The analyzer used to analyze the text contents when analyzed during indexing and when searching using a query string.
+	 * Defaults to the globally configured analyzer.
+	 *
+	 * @var string
+	 * @see http://www.elasticsearch.org/guide/reference/mapping/core-types.html
+	 */
+	public $analyzer;
+
+	/**
+	 * The date format.
+	 * Defaults to `dateOptionalTime`.
+	 *
+	 * @var string
 	 * @see http://www.elasticsearch.org/guide/reference/mapping/date-format.html
 	 */
 	public $format;

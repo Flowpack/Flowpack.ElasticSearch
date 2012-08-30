@@ -28,7 +28,7 @@ class RequestService {
 	/**
 	 */
 	public function initializeObject() {
-		$this->browser->setRequestEngine(new \TYPO3\FLOW3\Http\Client\CurlRequestEngine());
+		$this->browser->setRequestEngine(new \TYPO3\FLOW3\Http\Client\CurlEngine());
 	}
 
 	/**

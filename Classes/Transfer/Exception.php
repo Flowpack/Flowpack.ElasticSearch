@@ -33,10 +33,11 @@ class Exception extends \TYPO3\ElasticSearch\Exception {
 		$this->response = $response;
 		$this->request = $request;
 		if ($request !== NULL) {
-			$message = sprintf("[%s %s]: %s\n\nData: %s",
+			$message = sprintf("[%s %s]: %s\n\nRequest data: %s",
 				$request->getMethod(),
 				$request->getUri(),
 				$message . '; Request body: ' . $response->getContent(),
+
 				$request->getContent()
 			);
 		}

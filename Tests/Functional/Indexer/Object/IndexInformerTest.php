@@ -13,7 +13,7 @@ namespace TYPO3\ElasticSearch\Tests\Functional\Indexer\Object;
 
 /**
  */
-class IndexInformerTest extends \TYPO3\FLOW3\Tests\FunctionalTestCase {
+class IndexInformerTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	/**
 	 * @var \TYPO3\ElasticSearch\Indexer\Object\IndexInformer
 	 */

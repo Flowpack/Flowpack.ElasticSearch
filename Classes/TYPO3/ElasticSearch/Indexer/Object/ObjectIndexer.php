@@ -12,7 +12,7 @@ namespace TYPO3\ElasticSearch\Indexer\Object;
  *                                                                        */
 
 use Doctrine\ORM\Mapping as ORM;
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 use TYPO3\ElasticSearch\Domain\Model\Client;
 use TYPO3\ElasticSearch\Domain\Model\Document;
 use TYPO3\ElasticSearch\Domain\Model\GenericType;
@@ -21,7 +21,7 @@ use TYPO3\ElasticSearch\Domain\Model\GenericType;
  * This serves functionality for indexing objects
  * Mainly the real time indexing feature will use this (signals being sent and calling this method's properties).
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class ObjectIndexer {
 
@@ -32,25 +32,25 @@ class ObjectIndexer {
 	const ACTION_TYPE_DELETE = 'delete';
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Persistence\PersistenceManagerInterface
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Persistence\PersistenceManagerInterface
 	 */
 	protected $persistenceManager;
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Reflection\ReflectionService
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Reflection\ReflectionService
 	 */
 	protected $reflectionService;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\ElasticSearch\Indexer\Object\IndexInformer
 	 */
 	protected $indexInformer;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\ElasticSearch\Indexer\Object\Transform\TransformerFactory
 	 */
 	protected $transformerFactory;
@@ -92,7 +92,7 @@ class ObjectIndexer {
 		$className = $this->reflectionService->getClassNameByObject($object);
 		$data = array();
 		foreach ($this->indexInformer->getClassProperties($className) AS $propertyName) {
-			$value = \TYPO3\FLOW3\Reflection\ObjectAccess::getProperty($object, $propertyName);
+			$value = \TYPO3\Flow\Reflection\ObjectAccess::getProperty($object, $propertyName);
 			if (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, 'TYPO3\ElasticSearch\Annotations\Transform')) !== NULL) {
 				$value = $this->transformerFactory->create($transformAnnotation->type)->transformByAnnotation($value, $transformAnnotation);
 			}

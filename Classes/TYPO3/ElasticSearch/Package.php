@@ -11,7 +11,7 @@ namespace TYPO3\ElasticSearch;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\FLOW3\Package\Package as BasePackage;
+use \TYPO3\Flow\Package\Package as BasePackage;
 
 /**
  * The ElasticSearch Package
@@ -19,20 +19,20 @@ use \TYPO3\FLOW3\Package\Package as BasePackage;
 class Package extends BasePackage {
 
 	/**
-	 * @var \TYPO3\FLOW3\Configuration\ConfigurationManager
+	 * @var \TYPO3\Flow\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;
 
 	/**
 	 * Invokes custom PHP code directly after the package manager has been initialized.
 	 *
-	 * @param \TYPO3\FLOW3\Core\Bootstrap $bootstrap The current bootstrap
+	 * @param \TYPO3\Flow\Core\Bootstrap $bootstrap The current bootstrap
 	 *
 	 * @return void
 	 */
-	public function boot(\TYPO3\FLOW3\Core\Bootstrap $bootstrap) {
+	public function boot(\TYPO3\Flow\Core\Bootstrap $bootstrap) {
 		$dispatcher = $bootstrap->getSignalSlotDispatcher();
-		$dispatcher->connect('TYPO3\FLOW3\Core\Booting\Sequence', 'afterInvokeStep', function(\TYPO3\FLOW3\Core\Booting\Step $step) use ($bootstrap) {
+		$dispatcher->connect('TYPO3\Flow\Core\Booting\Sequence', 'afterInvokeStep', function(\TYPO3\Flow\Core\Booting\Step $step) use ($bootstrap) {
 			if ($step->getIdentifier() === 'typo3.flow3:persistence') {
 				$this->prepareRealtimeIndexing($bootstrap);
 			}
@@ -40,11 +40,11 @@ class Package extends BasePackage {
 	}
 
 	/**
-	 * @param \TYPO3\FLOW3\Core\Bootstrap $bootstrap
+	 * @param \TYPO3\Flow\Core\Bootstrap $bootstrap
 	 */
-	protected function prepareRealtimeIndexing(\TYPO3\FLOW3\Core\Bootstrap $bootstrap) {
-		$this->configurationManager = $bootstrap->getObjectManager()->get('TYPO3\FLOW3\Configuration\ConfigurationManager');
-		$settings = $this->configurationManager->getConfiguration(\TYPO3\FLOW3\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, $this->getPackageKey());
+	protected function prepareRealtimeIndexing(\TYPO3\Flow\Core\Bootstrap $bootstrap) {
+		$this->configurationManager = $bootstrap->getObjectManager()->get('TYPO3\Flow\Configuration\ConfigurationManager');
+		$settings = $this->configurationManager->getConfiguration(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, $this->getPackageKey());
 		if (isset($settings['realtimeIndexing']['enabled']) && $settings['realtimeIndexing']['enabled'] === TRUE) {
 			$bootstrap->getObjectManager()->get('TYPO3\ElasticSearch\Indexer\Object\Signal\EmitterAdapterInterface');
 			$bootstrap->getSignalSlotDispatcher()->connect('TYPO3\ElasticSearch\Indexer\Object\Signal\SignalEmitter', 'objectUpdated', 'TYPO3\ElasticSearch\Indexer\Object\ObjectIndexer', 'indexObject');

@@ -11,7 +11,7 @@ namespace TYPO3\ElasticSearch\Domain\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\FLOW3\Annotations as FLOW3;
+use \TYPO3\Flow\Annotations as Flow;
 
 /**
  * Reflects a Mapping of Elasticsearch
@@ -41,7 +41,7 @@ class Mapping {
 	 * @return mixed
 	 */
 	public function getPropertyByPath($path) {
-		return \TYPO3\FLOW3\Utility\Arrays::getValueByPath($this->properties, $path);
+		return \TYPO3\Flow\Utility\Arrays::getValueByPath($this->properties, $path);
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Mapping {
 	 * @return void
 	 */
 	public function setPropertyByPath($path, $value) {
-		$this->properties = \TYPO3\FLOW3\Utility\Arrays::setValueByPath($this->properties, $path, $value);
+		$this->properties = \TYPO3\Flow\Utility\Arrays::setValueByPath($this->properties, $path, $value);
 	}
 
 	/**

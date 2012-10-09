@@ -14,6 +14,6 @@ namespace TYPO3\ElasticSearch;
 /**
  * This package's base exception
  */
-class Exception extends \TYPO3\FLOW3\Exception {
+class Exception extends \TYPO3\Flow\Exception {
 
 }

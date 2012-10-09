@@ -13,7 +13,7 @@ namespace TYPO3\ElasticSearch\Tests\Functional\Mapping;
 
 /**
  */
-class MappingBuilderTest extends \TYPO3\FLOW3\Tests\FunctionalTestCase {
+class MappingBuilderTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	/**
 	 * @var \TYPO3\ElasticSearch\Mapping\EntityMappingBuilder
 	 */

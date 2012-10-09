@@ -11,7 +11,7 @@ namespace TYPO3\ElasticSearch\Domain\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\FLOW3\Annotations as FLOW3;
+use \TYPO3\Flow\Annotations as Flow;
 
 /**
  * A Client representation
@@ -19,7 +19,7 @@ use \TYPO3\FLOW3\Annotations as FLOW3;
 class Client {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\ElasticSearch\Transfer\RequestService
 	 */
 	protected $requestService;

@@ -11,13 +11,13 @@ namespace TYPO3\ElasticSearch\Tests\Functional\Fixtures;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\FLOW3\Annotations as FLOW3;
+use \TYPO3\Flow\Annotations as Flow;
 use \TYPO3\ElasticSearch\Annotations as ElasticSearch;
 
 /**
  * An object for the "twitter" index, representing a "tweet" document.
  *
- * @FLOW3\Entity
+ * @Flow\Entity
  * @ElasticSearch\Indexable(indexName="flow3_elasticsearch_functionaltests_twitter", typeName="tweet")
  */
 class Tweet {

@@ -11,11 +11,11 @@ namespace TYPO3\ElasticSearch\Domain\Factory;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\FLOW3\Annotations as FLOW3;
+use \TYPO3\Flow\Annotations as Flow;
 
 /**
  * Client factory
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class ClientFactory {
 
@@ -66,7 +66,7 @@ class ClientFactory {
 				$setterMethodName = 'set' . ucfirst($settingKey);
 				try {
 					call_user_func(array($configuration, $setterMethodName), $settingValue);
-				} catch (\TYPO3\FLOW3\Error\Exception $exception) {
+				} catch (\TYPO3\Flow\Error\Exception $exception) {
 					$exceptionMessage = 'Setting key "' . $settingKey . '" as client configuration value is not allowed. Refer to the Settings.yaml.example for the supported keys.';
 					throw new \TYPO3\ElasticSearch\Exception($exceptionMessage, 1338886877, $exception);
 				}

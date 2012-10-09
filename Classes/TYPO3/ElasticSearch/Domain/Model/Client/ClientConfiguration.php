@@ -11,7 +11,7 @@ namespace TYPO3\ElasticSearch\Domain\Model\Client;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\FLOW3\Annotations as FLOW3;
+use \TYPO3\Flow\Annotations as Flow;
 
 /**
  * Client configuration
@@ -76,10 +76,10 @@ class ClientConfiguration {
 	}
 
 	/**
-	 * @return \TYPO3\FLOW3\Http\Uri
+	 * @return \TYPO3\Flow\Http\Uri
 	 */
 	public function getUri() {
-		$uri = new \TYPO3\FLOW3\Http\Uri('');
+		$uri = new \TYPO3\Flow\Http\Uri('');
 		$uri->setScheme($this->scheme);
 		$uri->setHost($this->host);
 		$uri->setPort($this->port);

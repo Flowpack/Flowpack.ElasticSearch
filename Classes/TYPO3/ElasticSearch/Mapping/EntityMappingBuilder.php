@@ -11,34 +11,34 @@ namespace TYPO3\ElasticSearch\Mapping;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\FLOW3\Annotations as FLOW3;
+use \TYPO3\Flow\Annotations as Flow;
 
 /**
  * Builds the mapping information across the objects
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class EntityMappingBuilder {
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Reflection\ReflectionService
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Reflection\ReflectionService
 	 */
 	protected $reflectionService;
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Object\ObjectManagerInterface
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Object\ObjectManagerInterface
 	 */
 	protected $objectManager;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\ElasticSearch\Indexer\Object\Transform\TransformerFactory
 	 */
 	protected $transformerFactory;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\ElasticSearch\Indexer\Object\IndexInformer
 	 */
 	protected $indexInformer;
@@ -82,7 +82,7 @@ class EntityMappingBuilder {
 	 */
 	protected function augmentMappingByProperty(\TYPO3\ElasticSearch\Domain\Model\Mapping $mapping, $className, $propertyName) {
 		list($propertyType) = $this->reflectionService->getPropertyTagValues($className, $propertyName, 'var');
-		if (\TYPO3\FLOW3\Utility\TypeHandling::isSimpleType($propertyType)) {
+		if (\TYPO3\Flow\Utility\TypeHandling::isSimpleType($propertyType)) {
 			$mappingType = $propertyType;
 		} elseif (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, 'TYPO3\ElasticSearch\Annotations\Transform')) !== NULL) {
 			$mappingType = $this->transformerFactory->create($transformAnnotation->type)->getTargetMappingType();

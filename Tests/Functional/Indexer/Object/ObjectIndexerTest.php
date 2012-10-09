@@ -16,7 +16,7 @@ use TYPO3\ElasticSearch\Tests\Functional\Fixtures\Tweet;
 
 /**
  */
-class ObjectIndexerTest extends \TYPO3\FLOW3\Tests\FunctionalTestCase {
+class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 
 	/**
 	 * @var boolean
@@ -117,8 +117,8 @@ class ObjectIndexerTest extends \TYPO3\FLOW3\Tests\FunctionalTestCase {
 	protected function createAndPersistTestEntity() {
 		$testEntity = new Tweet();
 		$testEntity->setDate(new \DateTime());
-		$testEntity->setMessage('This is a test message ' . \TYPO3\FLOW3\Utility\Algorithms::generateRandomString(8));
-		$testEntity->setUsername('Zak McKracken' . \TYPO3\FLOW3\Utility\Algorithms::generateRandomString(8));
+		$testEntity->setMessage('This is a test message ' . \TYPO3\Flow\Utility\Algorithms::generateRandomString(8));
+		$testEntity->setUsername('Zak McKracken' . \TYPO3\Flow\Utility\Algorithms::generateRandomString(8));
 
 		$this->testEntityRepository->add($testEntity);
 		$this->persistenceManager->persistAll();

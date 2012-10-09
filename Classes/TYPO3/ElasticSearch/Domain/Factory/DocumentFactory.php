@@ -12,13 +12,13 @@ namespace TYPO3\ElasticSearch\Domain\Factory;
  *                                                                        */
 
 use Doctrine\ORM\Mapping as ORM;
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 use TYPO3\ElasticSearch\Domain\Model;
-use TYPO3\FLOW3\Error\Result as ErrorResult;
-use TYPO3\FLOW3\Error\Error;
+use TYPO3\Flow\Error\Result as ErrorResult;
+use TYPO3\Flow\Error\Error;
 
 /**
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class DocumentFactory {
 

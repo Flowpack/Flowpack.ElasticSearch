@@ -11,13 +11,13 @@ namespace TYPO3\ElasticSearch\Tests\Functional\Fixtures;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\FLOW3\Annotations as FLOW3;
+use \TYPO3\Flow\Annotations as Flow;
 use \TYPO3\ElasticSearch\Annotations as ElasticSearch;
 
 /**
  * This class contains just one property that has to be flagged as indexable.
  *
- * @FLOW3\Entity
+ * @Flow\Entity
  * @ElasticSearch\Indexable(indexName="dummyindex", typeName="sampletype")
  */
 class JustFewPropertiesToIndex {

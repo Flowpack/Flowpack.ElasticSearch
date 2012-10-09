@@ -17,7 +17,7 @@ namespace TYPO3\ElasticSearch\Transfer;
 class Response {
 
 	/**
-	 * @var \TYPO3\FLOW3\Http\Response
+	 * @var \TYPO3\Flow\Http\Response
 	 */
 	protected $originalResponse;
 
@@ -28,13 +28,13 @@ class Response {
 	protected $treatedContent;
 
 	/**
-	 * @param \TYPO3\FLOW3\Http\Response $response
-	 * @param \TYPO3\FLOW3\Http\Request $request
+	 * @param \TYPO3\Flow\Http\Response $response
+	 * @param \TYPO3\Flow\Http\Request $request
 	 *
 	 * @throws \TYPO3\ElasticSearch\Transfer\Exception
 	 * @throws \TYPO3\ElasticSearch\Transfer\Exception\ApiException
 	 */
-	public function __construct(\TYPO3\FLOW3\Http\Response $response, \TYPO3\FLOW3\Http\Request $request = NULL) {
+	public function __construct(\TYPO3\Flow\Http\Response $response, \TYPO3\Flow\Http\Request $request = NULL) {
 		$this->originalResponse = $response;
 
 		$treatedContent = json_decode($response->getContent(), TRUE);
@@ -68,7 +68,7 @@ class Response {
 	}
 
 	/**
-	 * @return \TYPO3\FLOW3\Http\Response
+	 * @return \TYPO3\Flow\Http\Response
 	 */
 	public function getOriginalResponse() {
 		return $this->originalResponse;

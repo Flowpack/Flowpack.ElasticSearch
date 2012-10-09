@@ -12,21 +12,21 @@ namespace TYPO3\ElasticSearch\Domain\Exception;
  *                                                                        */
 
 use Doctrine\ORM\Mapping as ORM;
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  */
 class DocumentPropertiesMismatchException extends \TYPO3\ElasticSearch\Exception {
 
 	/**
-	 * @var \TYPO3\FLOW3\Error\Result
+	 * @var \TYPO3\Flow\Error\Result
 	 */
 	protected $errorResult;
 
 	/**
-	 * @param \TYPO3\FLOW3\Error\Result $result
+	 * @param \TYPO3\Flow\Error\Result $result
 	 */
-	public function setErrorResult(\TYPO3\FLOW3\Error\Result $result) {
+	public function setErrorResult(\TYPO3\Flow\Error\Result $result) {
 		$this->errorResult = $result;
 	}
 }

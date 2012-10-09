@@ -12,7 +12,7 @@ namespace TYPO3\ElasticSearch\Indexer\Object\Signal;
  *                                                                        */
 
 use Doctrine\ORM\Mapping as ORM;
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Marker interface for the Persistence signal emitter

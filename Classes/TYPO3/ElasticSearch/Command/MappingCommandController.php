@@ -11,29 +11,29 @@ namespace TYPO3\ElasticSearch\Command;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\FLOW3\Annotations as FLOW3;
+use \TYPO3\Flow\Annotations as Flow;
 
 /**
  * Provides CLI features for mapping handling
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
-class MappingCommandController extends \TYPO3\FLOW3\Cli\CommandController {
+class MappingCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\ElasticSearch\Mapping\EntityMappingBuilder
 	 */
 	protected $entityMappingBuilder;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\ElasticSearch\Mapping\BackendMappingBuilder
 	 */
 	protected $backendMappingBuilder;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\ElasticSearch\Domain\Factory\ClientFactory
 	 */
 	protected $clientFactory;
@@ -63,8 +63,8 @@ class MappingCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 				$propertiesSet = $mappingSet['properties'];
 				$this->outputFormatted('type %s:', array($this->markupDiffValue(isset($entityMappingCollection[$indexName][$typeName]) ? $typeName : NULL, isset($backendMappingCollection[$indexName][$typeName]) ? $typeName : NULL)), 4);
 				foreach ($propertiesSet as $propertyName => $properties) {
-					$entityProperties = \TYPO3\FLOW3\Utility\Arrays::getValueByPath($entityMappingCollection, array($indexName, $typeName, 'properties', $propertyName));
-					$backendProperties = \TYPO3\FLOW3\Utility\Arrays::getValueByPath($backendMappingCollection, array($indexName, $typeName, 'properties', $propertyName));
+					$entityProperties = \TYPO3\Flow\Utility\Arrays::getValueByPath($entityMappingCollection, array($indexName, $typeName, 'properties', $propertyName));
+					$backendProperties = \TYPO3\Flow\Utility\Arrays::getValueByPath($backendMappingCollection, array($indexName, $typeName, 'properties', $propertyName));
 
 					$this->outputFormatted('property %s:', array($this->markupDiffValue($entityProperties ? $propertyName : NULL, $backendProperties ? $propertyName : NULL)), 8);
 					foreach ($properties AS $key => $value) {

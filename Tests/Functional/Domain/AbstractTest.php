@@ -13,7 +13,7 @@ namespace TYPO3\ElasticSearch\Tests\Functional\Domain;
 
 /**
  */
-abstract class AbstractTest extends \TYPO3\FLOW3\Tests\FunctionalTestCase {
+abstract class AbstractTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 
 	/**
 	 * @var \TYPO3\ElasticSearch\Domain\Factory\ClientFactory

@@ -11,24 +11,24 @@ namespace TYPO3\ElasticSearch\Transfer;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\FLOW3\Annotations as FLOW3;
+use \TYPO3\Flow\Annotations as Flow;
 
 /**
  * Handles the requests
- * @FLOW3\scope("singleton")
+ * @Flow\scope("singleton")
  */
 class RequestService {
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Http\Client\Browser
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Http\Client\Browser
 	 */
 	protected $browser;
 
 	/**
 	 */
 	public function initializeObject() {
-		$this->browser->setRequestEngine(new \TYPO3\FLOW3\Http\Client\CurlEngine());
+		$this->browser->setRequestEngine(new \TYPO3\Flow\Http\Client\CurlEngine());
 	}
 
 	/**

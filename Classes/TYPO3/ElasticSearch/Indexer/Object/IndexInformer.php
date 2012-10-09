@@ -11,17 +11,17 @@ namespace TYPO3\ElasticSearch\Indexer\Object;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\FLOW3\Annotations as FLOW3;
+use \TYPO3\Flow\Annotations as Flow;
 
 /**
  * Provides information about the index rules of Objects
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class IndexInformer {
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Reflection\ReflectionService
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Reflection\ReflectionService
 	 */
 	protected $reflectionService;
 

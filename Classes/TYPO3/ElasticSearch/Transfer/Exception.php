@@ -17,19 +17,19 @@ namespace TYPO3\ElasticSearch\Transfer;
 class Exception extends \TYPO3\ElasticSearch\Exception {
 
 	/**
-	 * @var \TYPO3\FLOW3\Http\Response
+	 * @var \TYPO3\Flow\Http\Response
 	 */
 	protected $response;
 
 	/**
-	 * @var \TYPO3\FLOW3\Http\Request
+	 * @var \TYPO3\Flow\Http\Request
 	 */
 	protected $request;
 
 	/**
 	 *
 	 */
-	public function __construct($message, $code, \TYPO3\FLOW3\Http\Response $response, \TYPO3\FLOW3\Http\Request $request = NULL, \Exception $previous = NULL) {
+	public function __construct($message, $code, \TYPO3\Flow\Http\Response $response, \TYPO3\Flow\Http\Request $request = NULL, \Exception $previous = NULL) {
 		$this->response = $response;
 		$this->request = $request;
 		if ($request !== NULL) {
@@ -46,14 +46,14 @@ class Exception extends \TYPO3\ElasticSearch\Exception {
 	}
 
 	/**
-	 * @return \TYPO3\FLOW3\Http\Request
+	 * @return \TYPO3\Flow\Http\Request
 	 */
 	public function getRequest() {
 		return $this->request;
 	}
 
 	/**
-	 * @return \TYPO3\FLOW3\Http\Response
+	 * @return \TYPO3\Flow\Http\Response
 	 */
 	public function getResponse() {
 		return $this->response;

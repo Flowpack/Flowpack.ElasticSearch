@@ -12,29 +12,29 @@ namespace TYPO3\ElasticSearch\Indexer\Object\Signal;
  *                                                                        */
 
 use Doctrine\ORM\Mapping as ORM;
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class SignalEmitter {
 
 	/**
-	 * @FLOW3\Signal
+	 * @Flow\Signal
 	 * @param object $object The object that has been updated
 	 * @return void
 	 */
 	public function emitObjectUpdated($object) { }
 
 	/**
-	 * @FLOW3\Signal
+	 * @Flow\Signal
 	 * @param object $object The object that has been updated
 	 * @return void
 	 */
 	public function emitObjectPersisted($object) { }
 
 	/**
-	 * @FLOW3\Signal
+	 * @Flow\Signal
 	 * @param object $object The object that has been updated
 	 * @return void
 	 */

@@ -11,38 +11,38 @@ namespace TYPO3\ElasticSearch\Command;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
-use TYPO3\FLOW3\Error\Result as ErrorResult;
-use TYPO3\FLOW3\Error\Error;
+use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Error\Result as ErrorResult;
+use TYPO3\Flow\Error\Error;
 use TYPO3\ElasticSearch\Indexer\Object\ObjectIndexer;
 
 /**
  * Provides CLI features for index handling
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
-class IndexCommandController extends \TYPO3\FLOW3\Cli\CommandController {
+class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\ElasticSearch\Domain\Factory\ClientFactory
 	 */
 	protected $clientFactory;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\ElasticSearch\Indexer\Object\IndexInformer
 	 */
 	protected $indexInformer;
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Persistence\PersistenceManagerInterface
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Persistence\PersistenceManagerInterface
 	 */
 	protected $persistenceManager;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\ElasticSearch\Indexer\Object\ObjectIndexer
 	 */
 	protected $objectIndexer;
@@ -106,7 +106,7 @@ class IndexCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 		if ($result->hasErrors()) {
 			$this->outputLine();
 			$this->outputLine('The following errors occured:');
-			/** @var $error \TYPO3\FLOW3\Error\Error */
+			/** @var $error \TYPO3\Flow\Error\Error */
 			foreach ($result->getFlattenedErrors() AS $className => $errors) {
 				foreach ($errors as $error) {
 					$this->outputLine();

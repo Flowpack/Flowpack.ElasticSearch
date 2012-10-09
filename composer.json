@@ -1,0 +1,13 @@
+{
+    "name": "typo3/elasticsearch",
+    "type": "typo3-flow-package",
+    "description": "This package provides wrapper functionality for the elasticsearch engine.",
+    "require": {
+        "typo3/flow": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "TYPO3\\ElasticSearch": "Classes"
+        }
+    }
+}

@@ -14,7 +14,7 @@ single properties, only these will be indexed. However, you have to annotate the
 *Example: Class where every property will be indexed* ::
 
 	/**
-	 * @FLOW3\Entity
+	 * @Flow\Entity
 	 * @ElasticSearch\Index("twitter", type="tweet")
 	 */
 	class Tweet {
@@ -38,7 +38,7 @@ single properties, only these will be indexed. However, you have to annotate the
 *Example: Class where only the ``message`` property will be indexed* ::
 
 	/**
-	 * @FLOW3\Entity
+	 * @Flow\Entity
 	 * @ElasticSearch\Index("twitter", type="tweet")
 	 */
 	class Tweet {

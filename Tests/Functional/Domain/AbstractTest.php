@@ -2,7 +2,7 @@
 namespace TYPO3\ElasticSearch\Tests\Functional\Domain;
 
 /*                                                                        *
- * This script belongs to the FLOW3-package "TYPO3.ElasticSearch".        *
+ * This script belongs to the TYPO3 Flow package "TYPO3.ElasticSearch".   *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -31,7 +31,7 @@ abstract class AbstractTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	protected $removeIndexOnTearDown = FALSE;
 
 	/**
-	 * final because else it could seriously damage the Index in the unlikely case there's already an index named FLOW3_ElasticSearch_FunctionalTests
+	 * final because else it could seriously damage the Index in the unlikely case there's already an index named typo3_ElasticSearch_FunctionalTests
 	 */
 	final public function setUp() {
 		parent::setUp();

@@ -133,8 +133,7 @@ class ObjectIndexer {
 		$document = $type->findDocumentById($id);
 		if ($document !== NULL) {
 			$objectData = $this->getIndexablePropertiesAndValuesFromObject($object);
-			$diff = array_diff_assoc($objectData, $document->getData());
-			if (empty($diff)) {
+            if (strcmp(json_encode($objectData), json_encode($document->getData())) === 0) {
 				$actionType = NULL;
 			} else {
 				$actionType = self::ACTION_TYPE_UPDATE;

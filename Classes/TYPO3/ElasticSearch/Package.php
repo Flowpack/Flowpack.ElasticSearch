@@ -35,7 +35,7 @@ class Package extends BasePackage {
 		$package = $this;
 		$dispatcher->connect('TYPO3\Flow\Core\Booting\Sequence', 'afterInvokeStep', function(\TYPO3\Flow\Core\Booting\Step $step) use ($package, $bootstrap) {
 			if ($step->getIdentifier() === 'typo3.flow:persistence') {
-                $package->prepareRealtimeIndexing($bootstrap);
+				$package->prepareRealtimeIndexing($bootstrap);
 			}
 		});
 	}
@@ -43,7 +43,7 @@ class Package extends BasePackage {
 	/**
 	 * @param \TYPO3\Flow\Core\Bootstrap $bootstrap
 	 */
-	protected function prepareRealtimeIndexing(\TYPO3\Flow\Core\Bootstrap $bootstrap) {
+	public function prepareRealtimeIndexing(\TYPO3\Flow\Core\Bootstrap $bootstrap) {
 		$this->configurationManager = $bootstrap->getObjectManager()->get('TYPO3\Flow\Configuration\ConfigurationManager');
 		$settings = $this->configurationManager->getConfiguration(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, $this->getPackageKey());
 		if (isset($settings['realtimeIndexing']['enabled']) && $settings['realtimeIndexing']['enabled'] === TRUE) {

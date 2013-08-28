@@ -47,7 +47,6 @@ class Package extends BasePackage {
 		$this->configurationManager = $bootstrap->getObjectManager()->get('TYPO3\Flow\Configuration\ConfigurationManager');
 		$settings = $this->configurationManager->getConfiguration(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, $this->getPackageKey());
 		if (isset($settings['realtimeIndexing']['enabled']) && $settings['realtimeIndexing']['enabled'] === TRUE) {
-			$bootstrap->getObjectManager()->get('TYPO3\ElasticSearch\Indexer\Object\Signal\EmitterAdapterInterface');
 			$bootstrap->getSignalSlotDispatcher()->connect('TYPO3\ElasticSearch\Indexer\Object\Signal\SignalEmitter', 'objectUpdated', 'TYPO3\ElasticSearch\Indexer\Object\ObjectIndexer', 'indexObject');
 			$bootstrap->getSignalSlotDispatcher()->connect('TYPO3\ElasticSearch\Indexer\Object\Signal\SignalEmitter', 'objectPersisted', 'TYPO3\ElasticSearch\Indexer\Object\ObjectIndexer', 'indexObject');
 			$bootstrap->getSignalSlotDispatcher()->connect('TYPO3\ElasticSearch\Indexer\Object\Signal\SignalEmitter', 'objectRemoved', 'TYPO3\ElasticSearch\Indexer\Object\ObjectIndexer', 'removeObject');

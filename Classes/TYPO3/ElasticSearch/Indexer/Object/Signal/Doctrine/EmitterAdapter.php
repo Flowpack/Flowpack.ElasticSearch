@@ -11,10 +11,9 @@ namespace TYPO3\ElasticSearch\Indexer\Object\Signal\Doctrine;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use Doctrine\ORM\Events;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use TYPO3\Flow\Annotations as Flow;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
  * @Flow\Scope("singleton")
@@ -26,23 +25,6 @@ class EmitterAdapter implements \TYPO3\ElasticSearch\Indexer\Object\Signal\Emitt
 	 * @var \TYPO3\ElasticSearch\Indexer\Object\Signal\SignalEmitter
 	 */
 	protected $signalEmitter;
-
-	/**
-	 * @Flow\Inject
-	 * @var \Doctrine\Common\Persistence\ObjectManager
-	 */
-	protected $doctrineEntityManager;
-
-	/**
-	 * Hook into Doctrine's Event Manager and register the mentioned events to be delegated to this' methods.
-	 * @return void
-	 */
-	public function initializeObject() {
-		$this->doctrineEntityManager->getEventManager()->addEventListener(
-			array(Events::postUpdate, Events::postPersist, Events::postRemove),
-			$this
-		);
-	}
 
 	/**
 	 * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArguments

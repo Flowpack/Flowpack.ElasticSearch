@@ -11,3 +11,10 @@ TYPO3:
     realtimeIndexing:
       enabled: TRUE
       client: default
+  Flow:
+    persistence:
+      doctrine:
+        eventListeners:
+          -
+            events: ['postUpdate', 'postPersist', 'postRemove']
+            listener: 'TYPO3\ElasticSearch\Indexer\Object\Signal\Doctrine\EmitterAdapter'

@@ -25,10 +25,11 @@ use TYPO3\ElasticSearch\Domain\Model\GenericType;
  */
 class ObjectIndexer {
 
+	/**
+	 * Defined action names
+	 */
 	const ACTION_TYPE_CREATE = 'create';
-
 	const ACTION_TYPE_UPDATE = 'update';
-
 	const ACTION_TYPE_DELETE = 'delete';
 
 	/**
@@ -63,6 +64,14 @@ class ObjectIndexer {
 	protected $client;
 
 	/**
+	 * Stores the objects which are already indexed in order to avoid duplicate indexing due to multiple notifications, for example
+	 * @var array
+	 */
+	protected $handledObjects = array();
+
+	/**
+	 * (Re-) indexes an object to the ElasticSearch index, no matter if the change is actually required.
+	 *
 	 * @param object $object
 	 * @param string $signalInformation Signal information, if called from a signal
 	 * @param \TYPO3\ElasticSearch\Domain\Model\Client $client
@@ -70,6 +79,12 @@ class ObjectIndexer {
 	 * @return void
 	 */
 	public function indexObject($object, $signalInformation = NULL, Client $client = NULL) {
+		$objectHash = spl_object_hash($object);
+		if (isset($this->handledObjects[$objectHash])) {
+			return;
+		}
+		$this->handledObjects[$objectHash] = $object;
+
 		$type = $this->getIndexTypeForObject($object, $client);
 		if ($type === NULL) {
 			return NULL;
@@ -107,6 +122,12 @@ class ObjectIndexer {
 	 * @param \TYPO3\ElasticSearch\Domain\Model\Client $client
 	 */
 	public function removeObject($object, $signalInformation = NULL, Client $client = NULL) {
+		$objectHash = spl_object_hash($object);
+		if (isset($this->handledObjects[$objectHash])) {
+			return;
+		}
+		$this->handledObjects[$objectHash] = $object;
+
 		$type = $this->getIndexTypeForObject($object, $client);
 		if ($type === NULL) {
 			return;

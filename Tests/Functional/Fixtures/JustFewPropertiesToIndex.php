@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\ElasticSearch\Tests\Functional\Fixtures;
+namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.ElasticSearch".   *
+ * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -12,7 +12,7 @@ namespace TYPO3\ElasticSearch\Tests\Functional\Fixtures;
  *                                                                        */
 
 use \TYPO3\Flow\Annotations as Flow;
-use \TYPO3\ElasticSearch\Annotations as ElasticSearch;
+use \Flowpack\ElasticSearch\Annotations as ElasticSearch;
 
 /**
  * This class contains just one property that has to be flagged as indexable.

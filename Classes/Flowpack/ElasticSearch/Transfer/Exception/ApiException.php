@@ -1,5 +1,5 @@
 <?php
-namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
+namespace Flowpack\ElasticSearch\Transfer\Exception;
 
 /*                                                                        *
  * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
@@ -11,12 +11,12 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
-
 /**
- * A twitter sample type
+ * This exception type is intended to map any error output that was returned by ElasticSearch itself
+ * If, for example, ElasticSearch returns {"error":"IndexMissingException[[foo_bar] missing]","status":404}
+ * this exception is raised.
  */
-class TwitterType extends \Flowpack\ElasticSearch\Domain\Model\AbstractType {
+class ApiException extends \Flowpack\ElasticSearch\Transfer\Exception {
 
 }
 

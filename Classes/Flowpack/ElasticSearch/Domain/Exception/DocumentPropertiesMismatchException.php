@@ -1,5 +1,5 @@
 <?php
-namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
+namespace Flowpack\ElasticSearch\Domain\Exception;
 
 /*                                                                        *
  * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
@@ -15,10 +15,20 @@ use Doctrine\ORM\Mapping as ORM;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
- * @Flow\Scope("singleton")
  */
-class TweetRepository  extends \TYPO3\Flow\Persistence\Repository {
+class DocumentPropertiesMismatchException extends \Flowpack\ElasticSearch\Exception {
 
+	/**
+	 * @var \TYPO3\Flow\Error\Result
+	 */
+	protected $errorResult;
+
+	/**
+	 * @param \TYPO3\Flow\Error\Result $result
+	 */
+	public function setErrorResult(\TYPO3\Flow\Error\Result $result) {
+		$this->errorResult = $result;
+	}
 }
 
 ?>

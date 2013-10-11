@@ -1,5 +1,5 @@
 =================================
-TYPO3.ElasticSearch documentation
+Flowpack.ElasticSearch documentation
 =================================
 
 This package provides an API for using Elasticsearch with Flow. The intention is to provide a simple,
@@ -36,7 +36,7 @@ During runtime, you have to provide the client's name you want to connect to, if
 Running the Functional Tests
 ============================
 For running the Functional Tests, the API will connect to the server and host you've set up in the ``Settings.yaml``
-directive ``TYPO3.ElasticSearch.clients.FunctionalTests`` (see above). The test scenario will try to create a temporary
+directive ``Flowpack.ElasticSearch.clients.FunctionalTests`` (see above). The test scenario will try to create a temporary
 test *index* named ``typo3_elasticsearch_functionaltests`` where it will work the test data on. If this index already
 exists, the test will stop with a notification in order not to destroy some real-life-data in the unlikely case it has
 that name.
@@ -51,7 +51,7 @@ inject it wherever you need::
 	class SampleClass {
 		/**
 		 * @Flow\Inject
-		 * @var \TYPO3\ElasticSearch\Client\ClientFactory
+		 * @var \Flowpack\ElasticSearch\Client\ClientFactory
 		 */
 		protected $clientFactory;
 
@@ -76,7 +76,7 @@ While a document itself is very generic (it consists of data, its mother *index*
 and reflects some real existing Model. Therefore the API provides an AbstractType where you as the developer inherit
 your specific, intended types from, for example::
 
-	class TwitterType extends \TYPO3\ElasticSearch\AbstractType {
+	class TwitterType extends \Flowpack\ElasticSearch\AbstractType {
 	}
 
 This class might even be empty like in this case, it just has to be there. Per default, the name of the type is
@@ -88,7 +88,7 @@ So for storing a Twitter document, follow this example::
 	class SampleClass {
 		/**
 		 * @Flow\Inject
-		 * @var \TYPO3\ElasticSearch\Client\ClientFactory
+		 * @var \Flowpack\ElasticSearch\Client\ClientFactory
 		 */
 		protected $clientFactory;
 
@@ -96,7 +96,7 @@ So for storing a Twitter document, follow this example::
 			$client = $this->clientFactory->create();
 			$tweetsIndex = $client->findIndex('tweets');
 			$twitterType = new TwitterType($tweetsIndex);
-			$document = new \TYPO3\ElasticSearch\Document($tweetsIndex, $twitterType, NULL, array(
+			$document = new \Flowpack\ElasticSearch\Document($tweetsIndex, $twitterType, NULL, array(
 				'user' => 'John',
 				'date' => '2012-06-12',
 				'text' => 'This is an example document data'

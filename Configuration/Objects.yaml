@@ -1,8 +1,8 @@
-TYPO3\ElasticSearch\Indexer\Object\ObjectIndexer:
+Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer:
   properties:
     client:
       object:
-        factoryObjectName: TYPO3\ElasticSearch\Domain\Factory\ClientFactory
+        factoryObjectName: Flowpack\ElasticSearch\Domain\Factory\ClientFactory
         arguments:
           1:
-            setting: TYPO3.ElasticSearch.realtimeIndexing.client
+            setting: Flowpack.ElasticSearch.realtimeIndexing.client

@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\ElasticSearch\Tests\Functional\Indexer\Object;
+namespace Flowpack\ElasticSearch\Tests\Functional\Indexer\Object;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.ElasticSearch".   *
+ * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -15,7 +15,7 @@ namespace TYPO3\ElasticSearch\Tests\Functional\Indexer\Object;
  */
 class IndexInformerTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	/**
-	 * @var \TYPO3\ElasticSearch\Indexer\Object\IndexInformer
+	 * @var \Flowpack\ElasticSearch\Indexer\Object\IndexInformer
 	 */
 	protected $informer;
 
@@ -23,15 +23,15 @@ class IndexInformerTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	 */
 	public function setUp() {
 		parent::setUp();
-		$this->informer = $this->objectManager->get('TYPO3\ElasticSearch\Indexer\Object\IndexInformer');
+		$this->informer = $this->objectManager->get('Flowpack\ElasticSearch\Indexer\Object\IndexInformer');
 	}
 
 	/**
 	 * @test
 	 */
 	public function classAnnotationTest() {
-		$actual = $this->informer->getClassAnnotation('TYPO3\ElasticSearch\Tests\Functional\Fixtures\JustFewPropertiesToIndex');
-		$this->assertInstanceOf('TYPO3\ElasticSearch\Annotations\Indexable', $actual);
+		$actual = $this->informer->getClassAnnotation('Flowpack\ElasticSearch\Tests\Functional\Fixtures\JustFewPropertiesToIndex');
+		$this->assertInstanceOf('Flowpack\ElasticSearch\Annotations\Indexable', $actual);
 		$this->assertSame('dummyindex', $actual->indexName);
 		$this->assertSame('sampletype', $actual->typeName);
 	}
@@ -40,7 +40,7 @@ class IndexInformerTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	 * @test
 	 */
 	public function classWithOnlyOnePropertyAnnotatedHasOnlyThisPropertyToBeIndexed() {
-		$actual = $this->informer->getClassProperties('TYPO3\ElasticSearch\Tests\Functional\Fixtures\JustFewPropertiesToIndex');
+		$actual = $this->informer->getClassProperties('Flowpack\ElasticSearch\Tests\Functional\Fixtures\JustFewPropertiesToIndex');
 		$this->assertCount(1, $actual);
 	}
 
@@ -48,7 +48,7 @@ class IndexInformerTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	 * @test
 	 */
 	public function classWithNoPropertyAnnotatedHasAllPropertiesToBeIndexed() {
-		$actual = $this->informer->getClassProperties('TYPO3\ElasticSearch\Tests\Functional\Fixtures\Tweet');
+		$actual = $this->informer->getClassProperties('Flowpack\ElasticSearch\Tests\Functional\Fixtures\Tweet');
 		$this->assertGreaterThan(1, $actual);
 	}
 }

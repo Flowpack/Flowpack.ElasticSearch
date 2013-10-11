@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\ElasticSearch\Tests\Functional\Domain;
+namespace Flowpack\ElasticSearch\Tests\Functional\Domain;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.ElasticSearch".   *
+ * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -16,12 +16,12 @@ namespace TYPO3\ElasticSearch\Tests\Functional\Domain;
 abstract class AbstractTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 
 	/**
-	 * @var \TYPO3\ElasticSearch\Domain\Factory\ClientFactory
+	 * @var \Flowpack\ElasticSearch\Domain\Factory\ClientFactory
 	 */
 	protected $clientFactory;
 
 	/**
-	 * @var \TYPO3\ElasticSearch\Domain\Model\Index
+	 * @var \Flowpack\ElasticSearch\Domain\Model\Index
 	 */
 	protected $testingIndex;
 
@@ -36,7 +36,7 @@ abstract class AbstractTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	final public function setUp() {
 		parent::setUp();
 
-		$this->clientFactory = $this->objectManager->get('TYPO3\ElasticSearch\Domain\Factory\ClientFactory');
+		$this->clientFactory = $this->objectManager->get('Flowpack\ElasticSearch\Domain\Factory\ClientFactory');
 		$client = $this->clientFactory->create();
 		$this->testingIndex = $client->findIndex('typo3_elasticsearch_functionaltests');
 

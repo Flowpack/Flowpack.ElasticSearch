@@ -1,5 +1,5 @@
 <?php
-namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
+namespace Flowpack\ElasticSearch\Indexer\Object\Signal;
 
 /*                                                                        *
  * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
@@ -17,7 +17,28 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * @Flow\Scope("singleton")
  */
-class TweetRepository  extends \TYPO3\Flow\Persistence\Repository {
+class SignalEmitter {
+
+	/**
+	 * @Flow\Signal
+	 * @param object $object The object that has been updated
+	 * @return void
+	 */
+	public function emitObjectUpdated($object) { }
+
+	/**
+	 * @Flow\Signal
+	 * @param object $object The object that has been updated
+	 * @return void
+	 */
+	public function emitObjectPersisted($object) { }
+
+	/**
+	 * @Flow\Signal
+	 * @param object $object The object that has been updated
+	 * @return void
+	 */
+	public function emitObjectRemoved($object) { }
 
 }
 

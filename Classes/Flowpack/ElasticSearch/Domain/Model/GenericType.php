@@ -1,5 +1,5 @@
 <?php
-namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
+namespace Flowpack\ElasticSearch\Domain\Model;
 
 /*                                                                        *
  * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
@@ -14,10 +14,17 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
 use \TYPO3\Flow\Annotations as Flow;
 
 /**
- * A twitter sample type
+ * An abstract document type. Implement your own or use the GenericType provided with this package.
  */
-class TwitterType extends \Flowpack\ElasticSearch\Domain\Model\AbstractType {
+class GenericType extends AbstractType {
 
+	/**
+	 * @param \Flowpack\ElasticSearch\Domain\Model\Index $index
+	 * @param string $name
+	 */
+	public function __construct(Index $index, $name) {
+		parent::__construct($index, $name);
+	}
 }
 
 ?>

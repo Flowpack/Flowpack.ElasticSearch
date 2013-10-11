@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\ElasticSearch\Tests\Functional\Domain;
+namespace Flowpack\ElasticSearch\Tests\Functional\Domain;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.ElasticSearch".   *
+ * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,11 +11,11 @@ namespace TYPO3\ElasticSearch\Tests\Functional\Domain;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\ElasticSearch\Tests\Functional\Fixtures\TwitterType;
+use \Flowpack\ElasticSearch\Tests\Functional\Fixtures\TwitterType;
 
 /**
  */
-class DocumentTest extends \TYPO3\ElasticSearch\Tests\Functional\Domain\AbstractTest {
+class DocumentTest extends \Flowpack\ElasticSearch\Tests\Functional\Domain\AbstractTest {
 
 	/**
 	 * Array that returns sample data. Intentionally returns only one record.
@@ -38,7 +38,7 @@ class DocumentTest extends \TYPO3\ElasticSearch\Tests\Functional\Domain\Abstract
 	 * @test
 	 */
 	public function idOfFreshNewDocumentIsPopulatedAfterStoring(array $data = NULL) {
-		$document = new \TYPO3\ElasticSearch\Domain\Model\Document(new TwitterType($this->testingIndex), $data);
+		$document = new \Flowpack\ElasticSearch\Domain\Model\Document(new TwitterType($this->testingIndex), $data);
 		$this->assertNull($document->getId());
 		$document->store();
 		$this->assertRegExp('/\w+/', $document->getId());
@@ -49,7 +49,7 @@ class DocumentTest extends \TYPO3\ElasticSearch\Tests\Functional\Domain\Abstract
 	 * @test
 	 */
 	public function versionOfFreshNewDocumentIsCreatedAfterStoringAndIncreasedAfterSubsequentStoring(array $data = NULL) {
-		$document = new \TYPO3\ElasticSearch\Domain\Model\Document(new TwitterType($this->testingIndex), $data);
+		$document = new \Flowpack\ElasticSearch\Domain\Model\Document(new TwitterType($this->testingIndex), $data);
 		$this->assertNull($document->getVersion());
 		$document->store();
 		$idAfterFirstStoring = $document->getId();
@@ -65,7 +65,7 @@ class DocumentTest extends \TYPO3\ElasticSearch\Tests\Functional\Domain\Abstract
 	 */
 	public function existingIdOfDocumentIsNotModifiedAfterStoring(array $data) {
 		$id = '42-1010-42';
-		$document = new \TYPO3\ElasticSearch\Domain\Model\Document(new TwitterType($this->testingIndex), $data, $id);
+		$document = new \Flowpack\ElasticSearch\Domain\Model\Document(new TwitterType($this->testingIndex), $data, $id);
 		$document->store();
 		$this->assertSame($id, $document->getId());
 	}

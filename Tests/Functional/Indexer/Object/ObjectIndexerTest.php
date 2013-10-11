@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\ElasticSearch\Tests\Functional\Indexer\Object;
+namespace Flowpack\ElasticSearch\Tests\Functional\Indexer\Object;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.ElasticSearch".   *
+ * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,8 +11,8 @@ namespace TYPO3\ElasticSearch\Tests\Functional\Indexer\Object;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\ElasticSearch\Tests\Functional\Fixtures\TweetRepository;
-use TYPO3\ElasticSearch\Tests\Functional\Fixtures\Tweet;
+use Flowpack\ElasticSearch\Tests\Functional\Fixtures\TweetRepository;
+use Flowpack\ElasticSearch\Tests\Functional\Fixtures\Tweet;
 
 /**
  */
@@ -29,7 +29,7 @@ class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	protected $testEntityRepository;
 
 	/**
-	 * @var \TYPO3\ElasticSearch\Domain\Model\Client
+	 * @var \Flowpack\ElasticSearch\Domain\Model\Client
 	 */
 	protected $testClient;
 
@@ -38,7 +38,7 @@ class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->testEntityRepository = new TweetRepository();
-		$this->testClient = $this->objectManager->get('TYPO3\ElasticSearch\Indexer\Object\ObjectIndexer')->getClient();
+		$this->testClient = $this->objectManager->get('Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer')->getClient();
 	}
 
 	/**
@@ -98,7 +98,7 @@ class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 			->findIndex('flow3_elasticsearch_functionaltests_twitter')
 			->findType('tweet')
 			->findDocumentById($identifier);
-		$this->assertInstanceOf('TYPO3\ElasticSearch\Domain\Model\Document', $initialDocument);
+		$this->assertInstanceOf('Flowpack\ElasticSearch\Domain\Model\Document', $initialDocument);
 
 		$persistedTestEntity = $this->testEntityRepository->findByIdentifier($identifier);
 		$this->testEntityRepository->remove($persistedTestEntity);

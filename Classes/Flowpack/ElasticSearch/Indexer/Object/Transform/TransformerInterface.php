@@ -1,5 +1,5 @@
 <?php
-namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
+namespace Flowpack\ElasticSearch\Indexer\Object\Transform;
 
 /*                                                                        *
  * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
@@ -14,9 +14,22 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
 use \TYPO3\Flow\Annotations as Flow;
 
 /**
- * A twitter sample type
  */
-class TwitterType extends \Flowpack\ElasticSearch\Domain\Model\AbstractType {
+interface TransformerInterface {
+
+	/**
+	 * Returns the Elasticsearch type this transform() method returns
+	 * @static
+	 * @abstract
+	 * @return string
+	 */
+	public static function getTargetMappingType();
+
+	/**
+	 * @static
+	 */
+	public static function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation);
+
 
 }
 

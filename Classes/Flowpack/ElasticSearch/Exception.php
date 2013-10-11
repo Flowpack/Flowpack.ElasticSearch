@@ -1,5 +1,5 @@
 <?php
-namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
+namespace Flowpack\ElasticSearch;
 
 /*                                                                        *
  * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
@@ -11,13 +11,9 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
-
 /**
- * A twitter sample type
+ * This package's base exception
  */
-class TwitterType extends \Flowpack\ElasticSearch\Domain\Model\AbstractType {
+class Exception extends \TYPO3\Flow\Exception {
 
 }
-
-?>

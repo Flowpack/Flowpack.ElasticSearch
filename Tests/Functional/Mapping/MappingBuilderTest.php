@@ -1,8 +1,8 @@
 <?php
-namespace TYPO3\ElasticSearch\Tests\Functional\Mapping;
+namespace Flowpack\ElasticSearch\Tests\Functional\Mapping;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "TYPO3.ElasticSearch".   *
+ * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -15,7 +15,7 @@ namespace TYPO3\ElasticSearch\Tests\Functional\Mapping;
  */
 class MappingBuilderTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	/**
-	 * @var \TYPO3\ElasticSearch\Mapping\EntityMappingBuilder
+	 * @var \Flowpack\ElasticSearch\Mapping\EntityMappingBuilder
 	 */
 	protected $mappingBuilder;
 
@@ -23,7 +23,7 @@ class MappingBuilderTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	 */
 	public function setUp() {
 		parent::setUp();
-		$this->mappingBuilder = $this->objectManager->get('TYPO3\ElasticSearch\Mapping\EntityMappingBuilder');
+		$this->mappingBuilder = $this->objectManager->get('Flowpack\ElasticSearch\Mapping\EntityMappingBuilder');
 	}
 
 	/**
@@ -32,7 +32,7 @@ class MappingBuilderTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
 	public function basicTest() {
 		$information = $this->mappingBuilder->buildMappingInformation();
 		$this->assertGreaterThanOrEqual(2, count($information));
-		$this->assertInstanceOf('TYPO3\ElasticSearch\Domain\Model\Mapping', $information[0]);
+		$this->assertInstanceOf('Flowpack\ElasticSearch\Domain\Model\Mapping', $information[0]);
 	}
 
 }

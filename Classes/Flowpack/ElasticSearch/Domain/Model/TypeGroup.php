@@ -1,5 +1,5 @@
 <?php
-namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
+namespace Flowpack\ElasticSearch\Domain\Model;
 
 /*                                                                        *
  * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
@@ -14,9 +14,30 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
 use \TYPO3\Flow\Annotations as Flow;
 
 /**
- * A twitter sample type
+ * A type group that is for requests against multiple types, like in localhost:9200/foo/onetype,anothertype/_search....
  */
-class TwitterType extends \Flowpack\ElasticSearch\Domain\Model\AbstractType {
+class TypeGroup extends AbstractType {
+
+	/**
+	 * @var array<AbstractType>
+	 */
+	protected $types = array();
+
+	/**
+	 * @param Index $index
+	 * @param string $name
+	 */
+	public function __construct(Index $index, array $types) {
+		parent::__construct($index);
+		$this->types = $types;
+
+		$names = array();
+		foreach ($this->types as $type) {
+			$names[] = $type->getName();
+		}
+		$this->name = implode(',', $names);
+	}
+
 
 }
 

@@ -1,4 +1,4 @@
-TYPO3:
+Flowpack:
   ElasticSearch:
     clients:
         # default bundle that will be used if no more specific bundle name was supplied.
@@ -11,10 +11,12 @@ TYPO3:
     realtimeIndexing:
       enabled: TRUE
       client: default
+
+TYPO3:
   Flow:
     persistence:
       doctrine:
         eventListeners:
           -
             events: ['postUpdate', 'postPersist', 'postRemove']
-            listener: 'TYPO3\ElasticSearch\Indexer\Object\Signal\Doctrine\EmitterAdapter'
+            listener: 'Flowpack\ElasticSearch\Indexer\Object\Signal\Doctrine\EmitterAdapter'

@@ -11,10 +11,8 @@ namespace Flowpack\ElasticSearch\Domain\Exception;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use Doctrine\ORM\Mapping as ORM;
-use TYPO3\Flow\Annotations as Flow;
-
 /**
+ * Signals a mismatch between the
  */
 class DocumentPropertiesMismatchException extends \Flowpack\ElasticSearch\Exception {
 
@@ -31,4 +29,3 @@ class DocumentPropertiesMismatchException extends \Flowpack\ElasticSearch\Except
 	}
 }
 
-?>

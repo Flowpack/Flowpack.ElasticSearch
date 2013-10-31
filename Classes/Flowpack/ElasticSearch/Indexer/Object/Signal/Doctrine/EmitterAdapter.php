@@ -11,9 +11,9 @@ namespace Flowpack\ElasticSearch\Indexer\Object\Signal\Doctrine;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use TYPO3\Flow\Annotations as Flow;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
  * @Flow\Scope("singleton")
@@ -49,7 +49,5 @@ class EmitterAdapter implements \Flowpack\ElasticSearch\Indexer\Object\Signal\Em
 	public function postRemove(LifecycleEventArgs $eventArguments) {
 		$this->signalEmitter->emitObjectRemoved($eventArguments->getEntity());
 	}
-
 }
 
-?>

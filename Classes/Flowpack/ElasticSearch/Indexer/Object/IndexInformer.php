@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Indexer\Object;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Provides information about the index rules of Objects
@@ -38,6 +38,7 @@ class IndexInformer {
 
 	/**
 	 * Returns the to-index classes and their annotation
+	 *
 	 * @return array
 	 */
 	public function getClassesAndAnnotations() {
@@ -47,6 +48,7 @@ class IndexInformer {
 				$classesAndAnnotations[$className] = $this->indexAnnotations[$className]['annotation'];
 			}
 		}
+
 		return $classesAndAnnotations;
 	}
 
@@ -58,6 +60,7 @@ class IndexInformer {
 		if (!isset($this->indexAnnotations[$className])) {
 			return NULL;
 		}
+
 		return $this->indexAnnotations[$className]['annotation'];
 	}
 
@@ -69,6 +72,7 @@ class IndexInformer {
 		if (!isset($this->indexAnnotations[$className])) {
 			return NULL;
 		}
+
 		return $this->indexAnnotations[$className]['properties'];
 	}
 
@@ -89,7 +93,7 @@ class IndexInformer {
 			}
 			$this->indexAnnotations[$className]['annotation'] = $this->reflectionService->getClassAnnotation($className, $annotationClassName);
 
-				// if no single properties are set to be indexed, consider all properties to be indexed.
+			// if no single properties are set to be indexed, consider all properties to be indexed.
 			$annotatedProperties = $this->reflectionService->getPropertyNamesByAnnotation($className, $annotationClassName);
 			if (!empty($annotatedProperties)) {
 				$this->indexAnnotations[$className]['properties'] = $annotatedProperties;
@@ -101,4 +105,4 @@ class IndexInformer {
 		}
 	}
 }
-?>
+

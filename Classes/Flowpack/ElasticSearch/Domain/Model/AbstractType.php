@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * An abstract document type. Implement your own or use the GenericType provided with this package.
@@ -50,6 +50,7 @@ abstract class AbstractType {
 
 	/**
 	 * Gets this type's name.
+	 *
 	 * @return string
 	 */
 	public function getName() {
@@ -87,6 +88,7 @@ abstract class AbstractType {
 	public function deleteDocumentById($id) {
 		$response = $this->request('DELETE', '/' . $id);
 		$treatedContent = $response->getTreatedContent();
+
 		return $response->getStatusCode() === 200 && $treatedContent['ok'] === TRUE && $treatedContent['found'] === TRUE;
 	}
 
@@ -99,6 +101,7 @@ abstract class AbstractType {
 			return NULL;
 		}
 		$treatedContent = $response->getTreatedContent();
+
 		return (integer)$treatedContent['count'];
 	}
 
@@ -106,7 +109,8 @@ abstract class AbstractType {
 	 * @param array $searchQuery The search query TODO: make it an object
 	 */
 	public function search(array $searchQuery) {
-		$response =  $this->request('GET', '/_search', array(), json_encode($searchQuery));
+		$response = $this->request('GET', '/_search', array(), json_encode($searchQuery));
+
 		return $response;
 	}
 
@@ -120,8 +124,8 @@ abstract class AbstractType {
 	 */
 	public function request($method, $path = NULL, $arguments = array(), $content = NULL) {
 		$path = '/' . $this->name . ($path ?: '');
+
 		return $this->index->request($method, $path, $arguments, $content);
 	}
 }
 
-?>

@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Indexer\Object\Transform;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * @Flow\Scope("singleton")
@@ -33,12 +33,11 @@ class CollectionStringCastTransformer implements TransformerInterface {
 	 */
 	public static function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation) {
 		$array = array();
-        foreach ($source as $item) {
-            $array[] = (string) $item;
-        }
+		foreach ($source as $item) {
+			$array[] = (string)$item;
+		}
 
-        return $array;
+		return $array;
 	}
 }
 
-?>

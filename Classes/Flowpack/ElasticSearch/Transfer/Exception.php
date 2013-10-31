@@ -60,4 +60,3 @@ class Exception extends \Flowpack\ElasticSearch\Exception {
 	}
 }
 
-?>

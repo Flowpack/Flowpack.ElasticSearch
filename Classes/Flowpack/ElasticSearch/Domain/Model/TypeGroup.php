@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A type group that is for requests against multiple types, like in localhost:9200/foo/onetype,anothertype/_search....
@@ -37,8 +37,5 @@ class TypeGroup extends AbstractType {
 		}
 		$this->name = implode(',', $names);
 	}
-
-
 }
 
-?>

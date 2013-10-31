@@ -11,8 +11,8 @@ namespace Flowpack\ElasticSearch\Mapping;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
 use Flowpack\ElasticSearch\Domain\Model;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * This collects mappings from a live instance
@@ -29,6 +29,7 @@ class BackendMappingBuilder {
 	/**
 	 * Gets populated to an array during buildMappingInformation(). Contains "empty" mappings that have no type
 	 * attached, in order to display these. If this stays NULL, the buildMappingInformation() has not yet been run.
+	 *
 	 * @var null|array
 	 */
 	protected $indicesWithoutTypeInformation = NULL;
@@ -86,8 +87,8 @@ class BackendMappingBuilder {
 		if ($this->indicesWithoutTypeInformation === NULL) {
 			throw new \Flowpack\ElasticSearch\Exception('For getting the indices having no mapping information attached, BackendMappingBuilder->buildMappingInformation() has to be run first.', 1339751812);
 		}
+
 		return $this->indicesWithoutTypeInformation;
 	}
 }
 
-?>

@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Command;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Provides CLI features for mapping handling
@@ -42,6 +42,7 @@ class MappingCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * Shows the status of the current mapping...
 	 *
 	 * @param string $clientName The client name for the configuration. Defaults to the default client configured.
+	 * @return void
 	 */
 	public function showStatusCommand($clientName = NULL) {
 		$entityMappingCollection = $this->entityMappingBuilder->buildMappingInformation();
@@ -90,6 +91,7 @@ class MappingCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * This command will adjust the backend's mapping to the mapping the entity status prescribes.
 	 *
 	 * @param string $clientName The client name for the configuration. Defaults to the default client configured.
+	 * @return void
 	 */
 	public function convergeCommand($clientName = NULL) {
 		$client = $this->clientFactory->create($clientName);
@@ -121,7 +123,7 @@ class MappingCommandController extends \TYPO3\Flow\Cli\CommandController {
 	}
 
 	/**
-
+	 * @return void
 	 */
 	protected function printLegend() {
 		$legendText = "
@@ -135,9 +137,8 @@ class MappingCommandController extends \TYPO3\Flow\Cli\CommandController {
 	}
 
 	/**
-	 * @param $entityValue
-	 * @param $backendValue
-	 *
+	 * @param mixed $entityValue
+	 * @param mixed $backendValue
 	 * @return string
 	 */
 	protected function markupDiffValue($entityValue, $backendValue) {
@@ -158,7 +159,6 @@ class MappingCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * Traverses through mappingInformation array and aggregates by index and type names
 	 *
 	 * @param \Flowpack\ElasticSearch\Mapping\MappingCollection $mappingCollection
-	 *
 	 * @throws \Flowpack\ElasticSearch\Exception
 	 * @return array with index names as keys, second level type names as keys
 	 */
@@ -181,4 +181,3 @@ class MappingCommandController extends \TYPO3\Flow\Cli\CommandController {
 	}
 }
 
-?>

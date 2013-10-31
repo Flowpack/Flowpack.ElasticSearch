@@ -12,10 +12,10 @@ namespace Flowpack\ElasticSearch\Indexer\Object;
  *                                                                        */
 
 use Doctrine\ORM\Mapping as ORM;
-use TYPO3\Flow\Annotations as Flow;
 use Flowpack\ElasticSearch\Domain\Model\Client;
 use Flowpack\ElasticSearch\Domain\Model\Document;
 use Flowpack\ElasticSearch\Domain\Model\GenericType;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * This serves functionality for indexing objects
@@ -65,6 +65,7 @@ class ObjectIndexer {
 
 	/**
 	 * Stores the objects which are already indexed in order to avoid duplicate indexing due to multiple notifications, for example
+	 *
 	 * @var array
 	 */
 	protected $handledObjects = array();
@@ -113,6 +114,7 @@ class ObjectIndexer {
 			}
 			$data[$propertyName] = $value;
 		}
+
 		return $data;
 	}
 
@@ -154,7 +156,7 @@ class ObjectIndexer {
 		$document = $type->findDocumentById($id);
 		if ($document !== NULL) {
 			$objectData = $this->getIndexablePropertiesAndValuesFromObject($object);
-            if (strcmp(json_encode($objectData), json_encode($document->getData())) === 0) {
+			if (strcmp(json_encode($objectData), json_encode($document->getData())) === 0) {
 				$actionType = NULL;
 			} else {
 				$actionType = self::ACTION_TYPE_UPDATE;
@@ -185,6 +187,7 @@ class ObjectIndexer {
 		}
 		$index = $client->findIndex($indexAnnotation->indexName);
 		$type = new GenericType($index, $indexAnnotation->typeName);
+
 		return $type;
 	}
 
@@ -198,4 +201,3 @@ class ObjectIndexer {
 	}
 }
 
-?>

@@ -11,8 +11,8 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
-use \Flowpack\ElasticSearch\Exception;
+use Flowpack\ElasticSearch\Exception;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Representation of an Index
@@ -26,6 +26,7 @@ class Index {
 
 	/**
 	 * The owner client of this index. Could be set later in order to allow creating pending Index objects
+	 *
 	 * @var \Flowpack\ElasticSearch\Domain\Model\Client
 	 */
 	protected $client;
@@ -69,6 +70,7 @@ class Index {
 	 */
 	public function exists() {
 		$response = $this->request('HEAD');
+
 		return $response->getStatusCode() === 200;
 	}
 
@@ -76,7 +78,7 @@ class Index {
 	 * @return void
 	 */
 	public function create() {
-			$this->request('PUT');
+		$this->request('PUT');
 	}
 
 	/**
@@ -97,9 +99,10 @@ class Index {
 	 */
 	public function request($method, $path = NULL, $arguments = array(), $content = NULL) {
 		if ($this->client === NULL) {
-			throw new Exception('The client of the index "' . $this->name. '" is not set, hence no requests can be done.');
+			throw new Exception('The client of the index "' . $this->name . '" is not set, hence no requests can be done.');
 		}
 		$path = '/' . $this->name . ($path ?: '');
+
 		return $this->client->request($method, $path, $arguments, $content);
 	}
 
@@ -118,4 +121,3 @@ class Index {
 	}
 }
 
-?>

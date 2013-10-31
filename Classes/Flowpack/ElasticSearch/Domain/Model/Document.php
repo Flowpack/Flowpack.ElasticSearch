@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A Document which itself holds the data
@@ -157,6 +157,7 @@ class Document {
 
 	/**
 	 * Gets a specific field's value from this' data
+	 *
 	 * @param string $fieldName
 	 * @param boolean $silent
 	 *
@@ -167,8 +168,8 @@ class Document {
 		if (!array_key_exists($fieldName, $this->data) && $silent === FALSE) {
 			throw new \Flowpack\ElasticSearch\Exception(sprintf('The field %s was not present in data of document in %s/%s.', $fieldName, $this->type->getIndex()->getName(), $this->type->getName()), 1340274696);
 		}
+
 		return $this->data[$fieldName];
 	}
 }
 
-?>

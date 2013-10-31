@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Mapping;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Builds the mapping information across the objects
@@ -45,6 +45,7 @@ class EntityMappingBuilder {
 
 	/**
 	 * Builds a Mapping collection from the annotation sources that are present
+	 *
 	 * @return \Flowpack\ElasticSearch\Mapping\MappingCollection<\Flowpack\ElasticSearch\Domain\Mapping>
 	 */
 	public function buildMappingInformation() {
@@ -103,8 +104,5 @@ class EntityMappingBuilder {
 			}
 		}
 	}
-
-
-
 }
-?>
+

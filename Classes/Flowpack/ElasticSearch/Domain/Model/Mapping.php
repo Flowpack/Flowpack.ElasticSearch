@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Reflects a Mapping of Elasticsearch
@@ -37,6 +37,7 @@ class Mapping {
 
 	/**
 	 * Gets a property setting by its path
+	 *
 	 * @param array|string $path
 	 * @return mixed
 	 */
@@ -78,8 +79,8 @@ class Mapping {
 		));
 		$content = json_encode($content);
 		$response = $this->type->request('PUT', '/_mapping', array(), $content);
+
 		return $response;
 	}
 }
 
-?>

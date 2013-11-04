@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Transfer;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Handles the requests
@@ -50,9 +50,8 @@ class RequestService {
 		}
 
 		$response = $this->browser->request($uri, $method, $arguments, array(), array(), $content);
+
 		return new Response($response, $this->browser->getLastRequest());
 	}
-
 }
 
-?>

@@ -12,10 +12,10 @@ namespace Flowpack\ElasticSearch\Domain\Factory;
  *                                                                        */
 
 use Doctrine\ORM\Mapping as ORM;
-use TYPO3\Flow\Annotations as Flow;
 use Flowpack\ElasticSearch\Domain\Model;
-use TYPO3\Flow\Error\Result as ErrorResult;
+use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Error\Error;
+use TYPO3\Flow\Error\Result as ErrorResult;
 
 /**
  * @Flow\Scope("singleton")
@@ -26,7 +26,6 @@ class DocumentFactory {
 	 * @param \Flowpack\ElasticSearch\Domain\Model\AbstractType $type
 	 * @param string $id
 	 * @param \Flowpack\ElasticSearch\Transfer\Response $response
-	 *
 	 * @throws \Flowpack\ElasticSearch\Domain\Exception\DocumentPropertiesMismatchException
 	 * @return \Flowpack\ElasticSearch\Domain\Model\Document
 	 */
@@ -56,8 +55,8 @@ class DocumentFactory {
 
 		$version = $content['_version'];
 		$data = $content['_source'];
+
 		return new Model\Document($type, $data, $id, $version);
 	}
 }
 
-?>

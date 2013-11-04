@@ -11,10 +11,11 @@ namespace Flowpack\ElasticSearch\Command;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Error\Result as ErrorResult;
-use TYPO3\Flow\Error\Error;
+use Flowpack\ElasticSearch\Domain\Model\Client;
 use Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer;
+use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Error\Error;
+use TYPO3\Flow\Error\Result as ErrorResult;
 
 /**
  * Provides CLI features for index handling
@@ -78,7 +79,8 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 			if (!$result->forProperty($className)->hasErrors()) {
 				$states = $this->getModificationsNeededStatesAndIdentifiers($client, $className);
 				if ($conductUpdate) {
-					$inserted = 0; $updated = 0;
+					$inserted = 0;
+					$updated = 0;
 					foreach ($states[ObjectIndexer::ACTION_TYPE_CREATE] AS $identifier) {
 						try {
 							$this->objectIndexer->indexObject($this->persistenceManager->getObjectByIdentifier($identifier, $className));
@@ -107,7 +109,7 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 			$this->outputLine();
 			$this->outputLine('The following errors occured:');
 			/** @var $error \TYPO3\Flow\Error\Error */
-			foreach ($result->getFlattenedErrors() AS $className => $errors) {
+			foreach ($result->getFlattenedErrors() as $className => $errors) {
 				foreach ($errors as $error) {
 					$this->outputLine();
 					$this->outputFormatted("<b>\x1b[41mError\x1b[0m</b> for \x1b[33m%s\x1b[0m:", array($className), 8);
@@ -118,12 +120,12 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 	}
 
 	/**
-	 * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
+	 * @param Client $client
 	 * @param string $className
 	 *
 	 * @return array
 	 */
-	protected function getModificationsNeededStatesAndIdentifiers(\Flowpack\ElasticSearch\Domain\Model\Client $client, $className) {
+	protected function getModificationsNeededStatesAndIdentifiers(Client $client, $className) {
 		$query = $this->persistenceManager->createQueryForType($className);
 		$states = array(
 			ObjectIndexer::ACTION_TYPE_CREATE => array(),
@@ -134,8 +136,8 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 			$state = $this->objectIndexer->objectIndexActionRequired($object, $client);
 			$states[$state][] = $this->persistenceManager->getIdentifierByObject($object);
 		}
+
 		return $states;
 	}
 }
 
-?>

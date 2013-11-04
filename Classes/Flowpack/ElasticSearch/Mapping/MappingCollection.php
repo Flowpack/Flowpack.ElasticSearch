@@ -17,11 +17,13 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  */
 class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection {
+
 	const TYPE_BACKEND = 'backend';
 	const TYPE_ENTITY = 'entity';
 
 	/**
 	 * One of self::TYPE_* constants
+	 *
 	 * @var string
 	 */
 	protected $type;
@@ -42,7 +44,7 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection {
 	/**
 	 * Returns a new collection of mappings of this collection that are not member of the $complementCollection.
 	 *
-	 * @param MappingCollection $complementCollection	 *
+	 * @param MappingCollection $complementCollection
 	 * @return \Flowpack\ElasticSearch\Mapping\MappingCollection
 	 */
 	public function diffAgainstCollection(MappingCollection $complementCollection) {
@@ -78,13 +80,14 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection {
 	 * @return mixed
 	 */
 	public function getMappingSetting(\Flowpack\ElasticSearch\Domain\Model\Mapping $inquirerMapping, $propertyName, $settingKey) {
-		foreach ($this AS $memberMapping) {
+		foreach ($this as $memberMapping) {
 			/** @var $memberMapping \Flowpack\ElasticSearch\Domain\Model\Mapping */
 			if ($inquirerMapping->getType()->getName() === $memberMapping->getType()->getName()
 				&& $inquirerMapping->getType()->getIndex()->getName() === $memberMapping->getType()->getIndex()->getName()) {
 					return $memberMapping->getPropertyByPath(array($propertyName, $settingKey));
 			}
 		}
+
 		return NULL;
 	}
 
@@ -110,4 +113,3 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection {
 	}
 }
 
-?>

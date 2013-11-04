@@ -88,9 +88,9 @@ ElasticSearch allows the mapping configuration done via annotations. See the exa
 Note that for mapping creation, the type will automatically be determined from the PHP type the property is of.
 
 Value transformations
-================
+=====================
 
-For some properties it'll become necessary to conduct specific conversions in order to meet the requirements of
+For some properties it'll be necessary to conduct specific conversions in order to meet the requirements of
 ElasticSearch. Declare custom type converters via their appropriate annotation::
 
 	/**
@@ -103,4 +103,4 @@ ElasticSearch. Declare custom type converters via their appropriate annotation::
 This will call the (supplied with the package) Date transformer and hand the converted value over to the ElasticSearch
 engine.
 
-.. [#suppProperties] *supported properties* are all scalar types and, as an exception,
+.. [#suppProperties] *supported properties* are all scalar types, unless value transformation is applied.

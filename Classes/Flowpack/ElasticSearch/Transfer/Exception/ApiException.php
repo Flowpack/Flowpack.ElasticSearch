@@ -20,4 +20,3 @@ class ApiException extends \Flowpack\ElasticSearch\Transfer\Exception {
 
 }
 
-?>

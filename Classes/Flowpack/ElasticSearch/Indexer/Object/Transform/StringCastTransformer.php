@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Indexer\Object\Transform;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * @Flow\Scope("singleton")
@@ -36,4 +36,3 @@ class StringCastTransformer implements TransformerInterface {
 	}
 }
 
-?>

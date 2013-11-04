@@ -22,7 +22,7 @@ final class Mapping {
 	/**
 	 * The name of the field that will be stored in the index.
 	 * Defaults to the property/field name.
-
+	 *
 	 * @var string
 	 * @see http://www.elasticsearch.org/guide/reference/mapping/core-types.html
 	 */
@@ -91,4 +91,3 @@ final class Mapping {
 	}
 }
 
-?>

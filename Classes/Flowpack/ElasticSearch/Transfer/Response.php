@@ -23,6 +23,7 @@ class Response {
 
 	/**
 	 * Contains the implementation-specific treated content
+	 *
 	 * @var mixed
 	 */
 	protected $treatedContent;
@@ -54,6 +55,7 @@ class Response {
 
 	/**
 	 * Shortcut to response's getStatusCode
+	 *
 	 * @return integer
 	 */
 	public function getStatusCode() {
@@ -75,4 +77,3 @@ class Response {
 	}
 }
 
-?>

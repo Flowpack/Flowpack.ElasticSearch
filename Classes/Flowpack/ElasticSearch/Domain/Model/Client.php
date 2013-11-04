@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A Client representation
@@ -56,6 +56,7 @@ class Client {
 		if (!array_key_exists($indexName, $this->indexCollection)) {
 			$this->indexCollection[$indexName] = new Index($indexName, $this);
 		}
+
 		return $this->indexCollection[$indexName];
 	}
 
@@ -72,8 +73,5 @@ class Client {
 	public function request($method, $path = NULL, $arguments = array(), $content = NULL) {
 		return $this->requestService->request($method, $this, $path, $arguments, $content);
 	}
-
-
 }
 
-?>

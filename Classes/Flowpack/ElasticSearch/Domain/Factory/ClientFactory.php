@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Factory;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use \TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Client factory
@@ -38,7 +38,9 @@ class ClientFactory {
 	 * @return \Flowpack\ElasticSearch\Domain\Model\Client
 	 */
 	public function create($bundle = NULL) {
-		if ($bundle === NULL) $bundle = 'default';
+		if ($bundle === NULL) {
+			$bundle = 'default';
+		}
 
 		if (!isset($this->settings['clients'][$bundle]) || !is_array($this->settings['clients'][$bundle])) {
 			throw new \Flowpack\ElasticSearch\Exception('The inquired client settings bundle "' . $bundle . '" is not present in setting "Flowpack.ElasticSearch.clients".', 1338890487);
@@ -49,6 +51,7 @@ class ClientFactory {
 
 		$client = new \Flowpack\ElasticSearch\Domain\Model\Client();
 		$client->setClientConfigurations($clientConfigurations);
+
 		return $client;
 	}
 
@@ -73,8 +76,8 @@ class ClientFactory {
 			}
 			$clientConfigurations[] = $configuration;
 		}
+
 		return $clientConfigurations;
 	}
 }
 
-?>

@@ -18,6 +18,10 @@ use TYPO3\Flow\Error\Error;
 use TYPO3\Flow\Error\Result as ErrorResult;
 
 /**
+ * Reconstitute a Document from the ElasticSearch index.
+ *
+ * TODO: maybe move into Document::createFromResponse()
+ *
  * @Flow\Scope("singleton")
  */
 class DocumentFactory {

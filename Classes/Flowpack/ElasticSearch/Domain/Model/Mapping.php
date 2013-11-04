@@ -71,13 +71,21 @@ class Mapping {
 	}
 
 	/**
+	 * Return the mapping which would be sent to the server as array
+	 *
+	 * @return array
+	 */
+	public function asArray() {
+		return array($this->type->getName() => array(
+			'properties' => $this->getProperties()
+		));
+	}
+
+	/**
 	 * Sets this mapping to the server
 	 */
 	public function apply() {
-		$content = array($this->type->getName() => array(
-			'properties' => $this->getProperties()
-		));
-		$content = json_encode($content);
+		$content = json_encode($this->asArray());
 		$response = $this->type->request('PUT', '/_mapping', array(), $content);
 
 		return $response;

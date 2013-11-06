@@ -89,6 +89,15 @@ class Index {
 	}
 
 	/**
+	 * Refresh the index
+	 *
+	 * @return void
+	 */
+	public function refresh() {
+		$this->request('POST', '/_refresh');
+	}
+
+	/**
 	 * @param string $method
 	 * @param string $path
 	 * @param array $arguments

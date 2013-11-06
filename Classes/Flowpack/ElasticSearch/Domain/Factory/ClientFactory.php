@@ -33,11 +33,11 @@ class ClientFactory {
 
 	/**
 	 * @param string $bundle
-	 *
+	 * @param string $clientClassName
 	 * @throws \Flowpack\ElasticSearch\Exception
 	 * @return \Flowpack\ElasticSearch\Domain\Model\Client
 	 */
-	public function create($bundle = NULL) {
+	public function create($bundle = NULL, $clientClassName = 'Flowpack\ElasticSearch\Domain\Model\Client') {
 		if ($bundle === NULL) {
 			$bundle = 'default';
 		}
@@ -49,7 +49,7 @@ class ClientFactory {
 
 		$clientConfigurations = $this->buildClientConfigurations($clientsSettings);
 
-		$client = new \Flowpack\ElasticSearch\Domain\Model\Client();
+		$client = new $clientClassName();
 		$client->setClientConfigurations($clientConfigurations);
 
 		return $client;

@@ -134,6 +134,8 @@ class Document {
 	}
 
 	/**
+	 * The contents of this document
+	 *
 	 * @return array
 	 */
 	public function getData() {
@@ -170,6 +172,13 @@ class Document {
 		}
 
 		return $this->data[$fieldName];
+	}
+
+	/**
+	 * @return \Flowpack\ElasticSearch\Domain\Model\AbstractType the type of this Document
+	 */
+	public function getType() {
+		return $this->type;
 	}
 }
 

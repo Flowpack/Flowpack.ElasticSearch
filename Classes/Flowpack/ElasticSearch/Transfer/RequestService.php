@@ -12,6 +12,7 @@ namespace Flowpack\ElasticSearch\Transfer;
  *                                                                        */
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Http\Client\CurlEngine;
 
 /**
  * Handles the requests
@@ -26,9 +27,25 @@ class RequestService {
 	protected $browser;
 
 	/**
+	 * @var array
+	 */
+	protected $settings;
+
+	/**
+	 * @param array $settings
+	 * @return void
+	 */
+	public function injectSettings(array $settings) {
+		$this->settings = $settings;
+	}
+
+	/**
+	 * @return void
 	 */
 	public function initializeObject() {
-		$this->browser->setRequestEngine(new \TYPO3\Flow\Http\Client\CurlEngine());
+		$requestEngine = new CurlEngine();
+		$requestEngine->setOption(CURLOPT_TIMEOUT, $this->settings['transfer']['connectionTimeout']);
+		$this->browser->setRequestEngine($requestEngine);
 	}
 
 	/**

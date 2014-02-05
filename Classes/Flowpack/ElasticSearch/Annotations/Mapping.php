@@ -75,6 +75,15 @@ final class Mapping {
 	public $analyzer;
 
 	/**
+	 * The type to use for this
+	 * Defaults to the property/field type.
+	 *
+	 * @var string
+	 * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-types.html
+	 */
+	public $type;
+
+	/**
 	 * The date format.
 	 * Defaults to `dateOptionalTime`.
 	 *

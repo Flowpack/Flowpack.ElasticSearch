@@ -83,10 +83,10 @@ class EntityMappingBuilder {
 	 */
 	protected function augmentMappingByProperty(\Flowpack\ElasticSearch\Domain\Model\Mapping $mapping, $className, $propertyName) {
 		list($propertyType) = $this->reflectionService->getPropertyTagValues($className, $propertyName, 'var');
-		if (\TYPO3\Flow\Utility\TypeHandling::isSimpleType($propertyType)) {
-			$mappingType = $propertyType;
-		} elseif (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, 'Flowpack\ElasticSearch\Annotations\Transform')) !== NULL) {
+		if (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, 'Flowpack\ElasticSearch\Annotations\Transform')) !== NULL) {
 			$mappingType = $this->transformerFactory->create($transformAnnotation->type)->getTargetMappingType();
+		} elseif (\TYPO3\Flow\Utility\TypeHandling::isSimpleType($propertyType)) {
+			$mappingType = $propertyType;
 		} elseif ($propertyType === '\DateTime') {
 			$mappingType = 'date';
 		} else {

@@ -7,7 +7,7 @@ The indexer allows collecting data that has to be indexed.
 Indexing annotations
 ====================
 
-The package introduces a new annotation called "Index". Use this annotation to define what objects/entities you want
+The package introduces a new annotation called "Indexable". Use this annotation to define what objects/entities you want
 to have indexed. If you annotate a class, all supported properties [#suppProperties]_ will be mapped. If you annotated
 single properties, only these will be indexed. However, you have to annotate the class in every case.
 
@@ -15,7 +15,7 @@ single properties, only these will be indexed. However, you have to annotate the
 
 	/**
 	 * @Flow\Entity
-	 * @ElasticSearch\Index("twitter", type="tweet")
+	 * @ElasticSearch\Indexable("twitter", typeName="tweet")
 	 */
 	class Tweet {
 
@@ -39,7 +39,7 @@ single properties, only these will be indexed. However, you have to annotate the
 
 	/**
 	 * @Flow\Entity
-	 * @ElasticSearch\Index("twitter", type="tweet")
+	 * @ElasticSearch\Indexable("twitter", typeName="tweet")
 	 */
 	class Tweet {
 
@@ -50,7 +50,7 @@ single properties, only these will be indexed. However, you have to annotate the
 
 		/**
 		 * @var string
-		 * @ElasticSearch\Index
+		 * @ElasticSearch\Indexable
 		 */
 		protected $message;
 

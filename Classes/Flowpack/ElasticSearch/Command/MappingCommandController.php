@@ -145,9 +145,21 @@ class MappingCommandController extends \TYPO3\Flow\Cli\CommandController {
 		$markup = '';
 		if ($entityValue === NULL || $backendValue === NULL || $entityValue === $backendValue) {
 			$markup .= "\x1b[" . ($entityValue ? '31' : '30') . ';' . ($backendValue ? '42' : '0') . 'm';
+			if (is_array($entityValue)) {
+				$entityValue = var_export($entityValue, TRUE);
+			}
+			if (is_array($backendValue)) {
+				$backendValue = var_export($backendValue, TRUE);
+			}
 			$markup .= $entityValue ? : $backendValue;
 			$markup .= "\x1b[0m";
 		} else {
+			if (is_array($entityValue)) {
+				$entityValue = var_export($entityValue, TRUE);
+			}
+			if (is_array($backendValue)) {
+				$backendValue = var_export($backendValue, TRUE);
+			}
 			$markup .= "\x1b[31m" . $entityValue . "\x1b[0m";
 			$markup .= "\x1b[30;42m" . $backendValue . "\x1b[0m";
 		}

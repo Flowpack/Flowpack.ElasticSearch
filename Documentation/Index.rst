@@ -12,7 +12,7 @@ Setting up the clients
 Usually you will only need one *client*. A *client* is one target the search communicates against, hence will consist
 of many *nodes*. Perform the setting in the appropriate ``Settings.yaml``::
 
-	TYPO3:
+	Flowpack:
 	  ElasticSearch:
 	    clients:
 	        # default bundle that will be used if no more specific bundle name was supplied.
@@ -80,7 +80,7 @@ While a document itself is very generic (it consists of data, its mother *index*
 and reflects some real existing Model. Therefore the API provides an AbstractType where you as the developer inherit
 your specific, intended types from, for example::
 
-	class TwitterType extends \Flowpack\ElasticSearch\AbstractType {
+	class TwitterType extends \Flowpack\ElasticSearch\Domain\Model\AbstractType {
 	}
 
 This class might even be empty like in this case, it just has to be there. Per default, the name of the type is

@@ -24,7 +24,7 @@ class DateTransformer implements TransformerInterface {
 	 * @static
 	 * @return string
 	 */
-	public static function getTargetMappingType() {
+	public function getTargetMappingType() {
 		return 'date';
 	}
 
@@ -34,8 +34,8 @@ class DateTransformer implements TransformerInterface {
 	 *
 	 * @return string
 	 */
-	public static function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation) {
-		return $source->format($annotation->options['format']);
+	public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation) {
+		return $source->format($annotation->options['format'] ?: 'Y-m-d');
 	}
 }
 

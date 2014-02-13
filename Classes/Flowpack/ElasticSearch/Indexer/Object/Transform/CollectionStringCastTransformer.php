@@ -24,14 +24,14 @@ class CollectionStringCastTransformer implements TransformerInterface {
 	 * @static
 	 * @return string
 	 */
-	public static function getTargetMappingType() {
-		return 'array';
+	public function getTargetMappingType() {
+		return 'string';
 	}
 
 	/**
 	 * @static
 	 */
-	public static function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation) {
+	public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation) {
 		$array = array();
 		foreach ($source as $item) {
 			$array[] = (string)$item;

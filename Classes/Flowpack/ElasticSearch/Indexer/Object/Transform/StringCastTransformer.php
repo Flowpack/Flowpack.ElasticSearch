@@ -24,14 +24,14 @@ class StringCastTransformer implements TransformerInterface {
 	 * @static
 	 * @return string
 	 */
-	public static function getTargetMappingType() {
+	public function getTargetMappingType() {
 		return 'string';
 	}
 
 	/**
 	 * @static
 	 */
-	public static function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation) {
+	public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation) {
 		return (string)$source;
 	}
 }

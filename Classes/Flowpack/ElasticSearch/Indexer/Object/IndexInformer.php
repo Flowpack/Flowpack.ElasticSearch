@@ -44,6 +44,7 @@ class IndexInformer {
 	public function getClassesAndAnnotations() {
 		static $classesAndAnnotations;
 		if ($classesAndAnnotations === NULL) {
+			$classesAndAnnotations = array();
 			foreach (array_keys($this->indexAnnotations) AS $className) {
 				$classesAndAnnotations[$className] = $this->indexAnnotations[$className]['annotation'];
 			}

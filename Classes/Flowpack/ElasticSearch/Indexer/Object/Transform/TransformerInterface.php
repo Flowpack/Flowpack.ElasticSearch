@@ -24,11 +24,11 @@ interface TransformerInterface {
 	 * @abstract
 	 * @return string
 	 */
-	public static function getTargetMappingType();
+	public function getTargetMappingType();
 
 	/**
 	 * @static
 	 */
-	public static function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation);
+	public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation);
 }
 

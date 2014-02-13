@@ -57,7 +57,7 @@ class BackendMappingBuilder {
 		$response = $this->client->request('GET', '/_mapping');
 		$mappingInformation = new MappingCollection(MappingCollection::TYPE_BACKEND);
 		$mappingInformation->setClient($this->client);
-		$indexNames = $this->indexInformer->getAllIndexName();
+		$indexNames = $this->indexInformer->getAllIndexNames();
 
 		foreach ($response->getTreatedContent() AS $indexName => $indexSettings) {
 			if (!in_array($indexName, $indexNames)) {

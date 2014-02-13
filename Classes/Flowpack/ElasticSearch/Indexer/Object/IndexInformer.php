@@ -59,7 +59,7 @@ class IndexInformer {
 	 *
 	 * @return array
 	 */
-	public function getAllIndexName() {
+	public function getAllIndexNames() {
 		$indexes = array();
 		foreach ($this->getClassesAndAnnotations() as $configuration) {
 			/** @var Indexable $configuration */

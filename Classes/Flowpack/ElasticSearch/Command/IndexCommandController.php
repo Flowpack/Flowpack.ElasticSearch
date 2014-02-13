@@ -12,10 +12,12 @@ namespace Flowpack\ElasticSearch\Command;
  *                                                                        */
 
 use Flowpack\ElasticSearch\Domain\Model\Client;
+use Flowpack\ElasticSearch\Domain\Model\Index;
 use Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Error\Error;
 use TYPO3\Flow\Error\Result as ErrorResult;
+use TYPO3\Flow\Exception;
 
 /**
  * Provides CLI features for index handling
@@ -47,6 +49,86 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * @var \Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer
 	 */
 	protected $objectIndexer;
+
+	/**
+	 * Creat a new index in ElasticSearch
+	 *
+	 * @param string $indexName The name of the new index
+	 * @param string $clientName The client name to use
+	 */
+	public function createCommand($indexName, $clientName = NULL) {
+		if (!in_array($indexName, $this->indexInformer->getAllIndexNames())) {
+			$this->outputFormatted("The index <b>%s</b> is not configured in the current application", array($indexName));
+			$this->quit(1);
+		}
+
+		$client = $this->clientFactory->create($clientName);
+		try {
+			$index = new Index($indexName, $client);
+			if ($index->exists()) {
+				$this->outputFormatted("The index <b>%s</b> exists", array($indexName));
+				$this->quit(1);
+			}
+			$index->create();
+			$this->outputFormatted("Index <b>%s</b> created with success", array($indexName));
+		} catch (Exception $exception) {
+			$this->outputFormatted("Unable to create an index named: <b>%s</b>", array($indexName));
+			$this->quit(1);
+		}
+	}
+
+	/**
+	 * Delete an index in ElasticSearch
+	 *
+	 * @param string $indexName The name of the index to be removed
+	 * @param string $clientName The client name to use
+	 */
+	public function deleteCommand($indexName, $clientName = NULL) {
+		if (!in_array($indexName, $this->indexInformer->getAllIndexNames())) {
+			$this->outputFormatted("The index <b>%s</b> is not configured in the current application", array($indexName));
+			$this->quit(1);
+		}
+
+		$client = $this->clientFactory->create($clientName);
+		try {
+			$index = new Index($indexName, $client);
+			if (!$index->exists()) {
+				$this->outputFormatted("The index <b>%s</b> does not exists", array($indexName));
+				$this->quit(1);
+			}
+			$index->delete();
+			$this->outputFormatted("Index <b>%s</b> deleted with success", array($indexName));
+		} catch (Exception $exception) {
+			$this->outputFormatted("Unable to delete an index named: <b>%s</b>", array($indexName));
+			$this->quit(1);
+		}
+	}
+
+	/**
+	 * Refresh an index in ElasticSearch
+	 *
+	 * @param string $indexName The name of the index to be removed
+	 * @param string $clientName The client name to use
+	 */
+	public function refreshCommand($indexName, $clientName = NULL) {
+		if (!in_array($indexName, $this->indexInformer->getAllIndexNames())) {
+			$this->outputFormatted("The index <b>%s</b> is not configured in the current application", array($indexName));
+		}
+
+		$client = $this->clientFactory->create($clientName);
+		try {
+			$index = new Index($indexName, $client);
+			if (!$index->exists()) {
+				$this->outputFormatted("The index <b>%s</b> does not exists", array($indexName));
+				$this->quit(1);
+			}
+			$index->refresh();
+			$this->outputFormatted("Index <b>%s</b> refreshed with success", array($indexName));
+		} catch (Exception $exception) {
+			$this->outputFormatted("Unable to refresh an index named: <b>%s</b>", array($indexName));
+			$this->quit(1);
+		}
+	}
 
 	/**
 	 * Shows the status of the current mapping

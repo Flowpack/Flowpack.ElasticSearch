@@ -103,16 +103,21 @@ class MappingCommandController extends \TYPO3\Flow\Cli\CommandController {
 		$additiveMappings = $entityMappingCollection->diffAgainstCollection($backendMappingCollection);
 		/** @var $mapping \Flowpack\ElasticSearch\Domain\Model\Mapping */
 		foreach ($additiveMappings AS $mapping) {
+			$index = $mapping->getType()->getIndex();
+			$index->setClient($client);
+			if (!$index->exists()) {
+				$this->outputFormatted('Index <b>%s</b> does not exist', array($index->getName()));
+				continue;
+			}
 			$this->outputLine('Attempt to apply properties to %s/%s: %s... ', array(
-				$mapping->getType()->getIndex()->getName(),
+				$index->getName(),
 				$mapping->getType()->getName(),
 				print_r($mapping->getProperties(), TRUE)
 			));
-			$mapping->getType()->getIndex()->setClient($client);
 			$response = $mapping->apply();
 			$treatedResponse = $response->getTreatedContent();
 			if ($response->getStatusCode() === 200 && isset($treatedResponse['ok']) && $treatedResponse['ok'] === TRUE) {
-				$this->outputLine('<b>OK</b>');
+				$this->outputFormatted('<b>OK</b>');
 			} else {
 				$this->outputFormatted('<b>NOT OK</b>, response code was %d, response body was: %s', array($response->getStatusCode(), $response->getOriginalResponse()->getContent()), 4);
 			}

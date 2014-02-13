@@ -12,6 +12,7 @@ namespace Flowpack\ElasticSearch\Mapping;
  *                                                                        */
 
 use Flowpack\ElasticSearch\Domain\Model;
+use Flowpack\ElasticSearch\Indexer\Object\IndexInformer;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
@@ -35,6 +36,12 @@ class BackendMappingBuilder {
 	protected $indicesWithoutTypeInformation = NULL;
 
 	/**
+	 * @Flow\Inject
+	 * @var IndexInformer
+	 */
+	protected $indexInformer;
+
+	/**
 	 * Builds a Mapping collection from the annotation sources that are present
 	 *
 	 * @throws \Flowpack\ElasticSearch\Exception
@@ -50,7 +57,12 @@ class BackendMappingBuilder {
 		$response = $this->client->request('GET', '/_mapping');
 		$mappingInformation = new MappingCollection(MappingCollection::TYPE_BACKEND);
 		$mappingInformation->setClient($this->client);
+		$indexNames = $this->indexInformer->getAllIndexName();
+
 		foreach ($response->getTreatedContent() AS $indexName => $indexSettings) {
+			if (!in_array($indexName, $indexNames)) {
+				continue;
+			}
 			$index = new Model\Index($indexName);
 			if (empty($indexSettings)) {
 				$this->indicesWithoutTypeInformation[] = $indexName;

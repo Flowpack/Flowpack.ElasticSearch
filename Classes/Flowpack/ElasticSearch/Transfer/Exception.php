@@ -36,7 +36,7 @@ class Exception extends \Flowpack\ElasticSearch\Exception {
 			$message = sprintf("[%s %s]: %s\n\nRequest data: %s",
 				$request->getMethod(),
 				$request->getUri(),
-				$message . '; Request body: ' . $response->getContent(),
+				$message . '; Response body: ' . $response->getContent(),
 
 				$request->getContent()
 			);

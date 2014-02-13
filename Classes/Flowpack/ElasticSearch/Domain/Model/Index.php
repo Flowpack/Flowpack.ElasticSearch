@@ -13,11 +13,52 @@ namespace Flowpack\ElasticSearch\Domain\Model;
 
 use Flowpack\ElasticSearch\Exception;
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Utility\Arrays;
 
 /**
  * Representation of an Index
  */
 class Index {
+
+	/**
+	 * @var array
+	 * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-update-settings.html
+	 */
+	protected $updatableSettings= array(
+		'index.number_of_replicas',
+		'index.auto_expand_replicas',
+		'index.blocks.read_only',
+		'index.blocks.read',
+		'index.blocks.write',
+		'index.blocks.metadata',
+		'index.refresh_interval',
+		'index.index_concurrency',
+		'index.codec',
+		'index.codec.bloom.load',
+		'index.fail_on_merge_failure',
+		'index.translog.flush_threshold_ops',
+		'index.translog.flush_threshold_size',
+		'index.translog.flush_threshold_period',
+		'index.translog.disable_flush',
+		'index.cache.filter.max_size',
+		'index.cache.filter.expire',
+		'index.gateway.snapshot_interval',
+		'index.routing.allocation.include',
+		'index.routing.allocation.exclude',
+		'index.routing.allocation.require',
+		'index.routing.allocation.disable_allocation',
+		'index.routing.allocation.disable_new_allocation',
+		'index.routing.allocation.disable_replica_allocation',
+		'index.routing.allocation.enable',
+		'index.routing.allocation.total_shards_per_node',
+		'index.recovery.initial_shards',
+		'index.gc_deletes',
+		'index.ttl.disable_purge',
+		'index.translog.fs.type',
+		'index.compound_format',
+		'index.compound_on_flush',
+		'index.warmer.enabled'
+	);
 
 	/**
 	 * @var string
@@ -27,17 +68,32 @@ class Index {
 	/**
 	 * The owner client of this index. Could be set later in order to allow creating pending Index objects
 	 *
-	 * @var \Flowpack\ElasticSearch\Domain\Model\Client
+	 * @var Client
 	 */
 	protected $client;
 
 	/**
+	 * @var array
+	 */
+	protected $settings;
+
+	/**
+	 * Inject the settings
+	 *
+	 * @param array $settings
+	 * @return void
+	 */
+	public function injectSettings(array $settings) {
+		$this->settings = $settings;
+	}
+
+	/**
 	 * @param $name
-	 * @param \Flowpack\ElasticSearch\Domain\Model\Client $client $client
+	 * @param Client $client $client
 	 *
 	 * @throws \Flowpack\ElasticSearch\Exception
 	 */
-	public function __construct($name, \Flowpack\ElasticSearch\Domain\Model\Client $client = NULL) {
+	public function __construct($name, Client $client = NULL) {
 		$name = trim($name);
 		if (strlen($name) < 1 || substr($name, 0, 1) === '_') {
 			throw new \Flowpack\ElasticSearch\Exception('The provided index name "' . $name . '" must not be empty and not start with an underscore.', 1340187948);
@@ -78,7 +134,22 @@ class Index {
 	 * @return void
 	 */
 	public function create() {
-		$this->request('PUT');
+		$this->request('PUT', NULL, array(), json_encode($this->getSettings()));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function updateSettings() {
+		$settings = $this->getSettings();
+		$updatableSettings = array();
+		foreach ($this->updatableSettings as $settingPath) {
+			$setting = Arrays::getValueByPath($settings, $settingPath);
+			if ($setting !== NULL) {
+				$updatableSettings = Arrays::setValueByPath($updatableSettings, $settingPath, $setting);
+			}
+		}
+		$this->request('PUT', '/_settings', array(), json_encode($updatableSettings));
 	}
 
 	/**
@@ -123,10 +194,22 @@ class Index {
 	}
 
 	/**
-	 * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
+	 * @param Client $client
 	 */
 	public function setClient($client) {
 		$this->client = $client;
+	}
+
+	/**
+	 * @return array|null
+	 */
+	protected function getSettings() {
+		if ($this->client instanceof Client) {
+			$settings = Arrays::getValueByPath($this->settings, 'indexes.' . $this->client->getBundle() . '.' . $this->name) ?: Arrays::getValueByPath($this->settings, 'indexes.default' . '.' . $this->name);
+		} else {
+			$settings = Arrays::getValueByPath($this->settings, 'indexes.default' . '.' . $this->name);
+		}
+		return $settings;
 	}
 }
 

@@ -78,6 +78,33 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 	}
 
 	/**
+	 * Update index settings
+	 *
+	 * @param string $indexName The name of the new index
+	 * @param string $clientName The client name to use
+	 */
+	public function updateSettingsCommand($indexName, $clientName = NULL) {
+		if (!in_array($indexName, $this->indexInformer->getAllIndexNames())) {
+			$this->outputFormatted("The index <b>%s</b> is not configured in the current application", array($indexName));
+			$this->quit(1);
+		}
+
+		$client = $this->clientFactory->create($clientName);
+		try {
+			$index = new Index($indexName, $client);
+			if (!$index->exists()) {
+				$this->outputFormatted("The index <b>%s</b> does not exists", array($indexName));
+				$this->quit(1);
+			}
+			$index->updateSettings();
+			$this->outputFormatted("Index settings <b>%s</b> updated with success", array($indexName));
+		} catch (Exception $exception) {
+			$this->outputFormatted("Unable to update settings for <b>%s</b> index", array($indexName));
+			$this->quit(1);
+		}
+	}
+
+	/**
 	 * Delete an index in ElasticSearch
 	 *
 	 * @param string $indexName The name of the index to be removed

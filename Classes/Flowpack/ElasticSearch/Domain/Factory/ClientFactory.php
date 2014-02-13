@@ -51,6 +51,7 @@ class ClientFactory {
 
 		$client = new $clientClassName();
 		$client->setClientConfigurations($clientConfigurations);
+		$client->setBundle($bundle);
 
 		return $client;
 	}

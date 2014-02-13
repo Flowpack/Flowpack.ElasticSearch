@@ -19,6 +19,11 @@ use TYPO3\Flow\Annotations as Flow;
 class Client {
 
 	/**
+	 * @var string
+	 */
+	protected $bundle = 'default';
+
+	/**
 	 * @Flow\Inject
 	 * @var \Flowpack\ElasticSearch\Transfer\RequestService
 	 */
@@ -33,6 +38,20 @@ class Client {
 	 * @var array
 	 */
 	protected $indexCollection = array();
+
+	/**
+	 * @param string $bundle
+	 */
+	public function setBundle($bundle) {
+		$this->bundle = $bundle;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getBundle() {
+		return $this->bundle;
+	}
 
 	/**
 	 * @param array $clientConfigurations

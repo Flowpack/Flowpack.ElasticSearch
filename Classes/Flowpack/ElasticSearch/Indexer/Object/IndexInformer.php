@@ -11,6 +11,7 @@ namespace Flowpack\ElasticSearch\Indexer\Object;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use Flowpack\ElasticSearch\Annotations\Indexable;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
@@ -51,6 +52,21 @@ class IndexInformer {
 		}
 
 		return $classesAndAnnotations;
+	}
+
+	/**
+	 * Returns all indexes name deplared in class annotations
+	 *
+	 * @return array
+	 */
+	public function getAllIndexNames() {
+		$indexes = array();
+		foreach ($this->getClassesAndAnnotations() as $configuration) {
+			/** @var Indexable $configuration */
+			$indexes[$configuration->indexName] = $configuration->indexName;
+		}
+
+		return array_keys($indexes);
 	}
 
 	/**

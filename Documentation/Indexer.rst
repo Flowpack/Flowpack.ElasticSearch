@@ -103,4 +103,42 @@ ElasticSearch. Declare custom type converters via their appropriate annotation::
 This will call the (supplied with the package) Date transformer and hand the converted value over to the ElasticSearch
 engine.
 
+Setting up the indexes
+======================
+
+As soon as you have proper configuration for your entities, you can create your index, with the CLI utility::
+
+	flow index:create --index-name twitter
+
+If you need advanced settings you can define them in your ``Settings.yaml``::
+
+	Flowpack:
+	  ElasticSearch:
+	  	indexes:
+		  default:
+			'twitter':
+			  analysis:
+				filter:
+				  elision:
+					type: 'elision'
+					articles: [ 'l', 'm', 't', 'qu', 'n', 's', 'j', 'd' ]
+			  analyzer:
+				custom_french_analyzer:
+				  tokenizer: 'letter'
+				  filter: [ 'asciifolding', 'lowercase', 'french_stem', 'elision', 'stop' ]
+				tag_analyzer:
+				  tokenizer: 'keyword'
+				  filter: [ 'asciifolding', 'lowercase' ]
+
+If you use multiple client configurations, please change the ``default`` key just below the ``indexes``.
+
+You can update the index configuration with the following CLI::
+
+	flow index:updateSettings --index-name twitter
+
+Please check the ElasticSearch configuration to know witch settings are updatable. For any other settings changes, you
+need to delete your indexes::
+
+	flow index:delete --index-name twitter
+
 .. [#suppProperties] *supported properties* are all scalar types, unless value transformation is applied.

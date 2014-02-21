@@ -21,7 +21,6 @@ class StringCastTransformer implements TransformerInterface {
 	/**
 	 * Returns the Elasticsearch type this transform() method returns
 	 *
-	 * @static
 	 * @return string
 	 */
 	public function getTargetMappingType() {
@@ -29,7 +28,9 @@ class StringCastTransformer implements TransformerInterface {
 	}
 
 	/**
-	 * @static
+	 * @param mixed $source
+	 * @param \Flowpack\ElasticSearch\Annotations\Transform $annotation
+	 * @return string
 	 */
 	public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation) {
 		return (string)$source;

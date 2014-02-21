@@ -20,14 +20,15 @@ interface TransformerInterface {
 	/**
 	 * Returns the Elasticsearch type this transform() method returns
 	 *
-	 * @static
 	 * @abstract
 	 * @return string
 	 */
 	public function getTargetMappingType();
 
 	/**
-	 * @static
+	 * @param mixed $source
+	 * @param \Flowpack\ElasticSearch\Annotations\Transform $annotation
+	 * @return mixed
 	 */
 	public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation);
 }

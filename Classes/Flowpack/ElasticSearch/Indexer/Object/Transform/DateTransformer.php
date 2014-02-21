@@ -21,7 +21,6 @@ class DateTransformer implements TransformerInterface {
 	/**
 	 * Returns the Elasticsearch type this transform() method returns
 	 *
-	 * @static
 	 * @return string
 	 */
 	public function getTargetMappingType() {

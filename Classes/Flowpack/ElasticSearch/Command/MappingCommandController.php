@@ -115,8 +115,7 @@ class MappingCommandController extends \TYPO3\Flow\Cli\CommandController {
 				print_r($mapping->getProperties(), TRUE)
 			));
 			$response = $mapping->apply();
-			$treatedResponse = $response->getTreatedContent();
-			if ($response->getStatusCode() === 200 && isset($treatedResponse['ok']) && $treatedResponse['ok'] === TRUE) {
+			if ($response->getStatusCode() === 200) {
 				$this->outputFormatted('<b>OK</b>');
 			} else {
 				$this->outputFormatted('<b>NOT OK</b>, response code was %d, response body was: %s', array($response->getStatusCode(), $response->getOriginalResponse()->getContent()), 4);

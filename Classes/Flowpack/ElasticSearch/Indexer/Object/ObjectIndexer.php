@@ -140,7 +140,7 @@ class ObjectIndexer {
 
 	/**
 	 * Returns if, and what, treatment an object requires regarding the index state,
-	 * i.e. it checks the given object agains the index and tells whether deletion, update or creation is required.
+	 * i.e. it checks the given object against the index and tells whether deletion, update or creation is required.
 	 *
 	 * @param $object
 	 * @param \Flowpack\ElasticSearch\Domain\Model\Client $client

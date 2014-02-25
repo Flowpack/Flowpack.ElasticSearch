@@ -89,7 +89,7 @@ abstract class AbstractType {
 		$response = $this->request('DELETE', '/' . $id);
 		$treatedContent = $response->getTreatedContent();
 
-		return $response->getStatusCode() === 200 && $treatedContent['ok'] === TRUE && $treatedContent['found'] === TRUE;
+		return $response->getStatusCode() === 200 && $treatedContent['found'] === TRUE;
 	}
 
 	/**
@@ -107,11 +107,10 @@ abstract class AbstractType {
 
 	/**
 	 * @param array $searchQuery The search query TODO: make it an object
+	 * @return \Flowpack\ElasticSearch\Transfer\Response
 	 */
 	public function search(array $searchQuery) {
-		$response = $this->request('GET', '/_search', array(), json_encode($searchQuery));
-
-		return $response;
+		return $this->request('GET', '/_search', array(), json_encode($searchQuery));
 	}
 
 	/**

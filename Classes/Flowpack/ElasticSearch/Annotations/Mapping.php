@@ -93,10 +93,24 @@ final class Mapping {
 	public $format;
 
 	/**
+	 * @var array
+	 * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/1.x/_multi_fields.html
+	 */
+	public $fields;
+
+	/**
 	 * Returns this class's properties as type/value array in order to directly use it for mapping information
 	 */
 	public function getPropertiesArray() {
-		return get_object_vars($this);
+		$properties = get_object_vars($this);
+		unset($properties['fields']);
+		return $properties;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getFields() {
+		return $this->fields;
 	}
 }
-

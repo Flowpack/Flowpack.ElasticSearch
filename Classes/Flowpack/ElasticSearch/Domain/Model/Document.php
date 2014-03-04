@@ -103,10 +103,6 @@ class Document {
 		$response = $this->request($method, $path, array(), json_encode($this->data));
 		$treatedContent = $response->getTreatedContent();
 
-		if ($treatedContent['ok'] !== TRUE) {
-			throw new \Flowpack\ElasticSearch\Exception('An error occured while trying to store a document.', 1339149673);
-		}
-
 		$this->id = $treatedContent['_id'];
 		$this->version = $treatedContent['_version'];
 		$this->dirty = FALSE;

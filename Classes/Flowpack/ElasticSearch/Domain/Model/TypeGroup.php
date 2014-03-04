@@ -25,7 +25,7 @@ class TypeGroup extends AbstractType {
 
 	/**
 	 * @param Index $index
-	 * @param string $name
+	 * @param array $types
 	 */
 	public function __construct(Index $index, array $types) {
 		parent::__construct($index);

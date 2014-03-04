@@ -51,7 +51,7 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 	protected $objectIndexer;
 
 	/**
-	 * Creat a new index in ElasticSearch
+	 * Create a new index in ElasticSearch
 	 *
 	 * @param string $indexName The name of the new index
 	 * @param string $clientName The client name to use
@@ -195,7 +195,7 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 							$this->objectIndexer->indexObject($this->persistenceManager->getObjectByIdentifier($identifier, $className));
 							$inserted++;
 						} catch (\Exception $exception) {
-							$result->forProperty($className)->addError(new Error('An error occured while trying to add an object to the ElasticSearch backend. The exception message was "%s".', 1340356330, array($exception->getMessage())));
+							$result->forProperty($className)->addError(new Error('An error occurred while trying to add an object to the ElasticSearch backend. The exception message was "%s".', 1340356330, array($exception->getMessage())));
 						}
 					}
 					foreach ($states[ObjectIndexer::ACTION_TYPE_UPDATE] AS $identifier) {
@@ -203,7 +203,7 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 							$this->objectIndexer->indexObject($this->persistenceManager->getObjectByIdentifier($identifier, $className));
 							$updated++;
 						} catch (\Exception $exception) {
-							$result->forProperty($className)->addError(new Error('An error occured while trying to update an object to the ElasticSearch backend. The exception message was "%s".', 1340358590, array($exception->getMessage())));
+							$result->forProperty($className)->addError(new Error('An error occurred while trying to update an object to the ElasticSearch backend. The exception message was "%s".', 1340358590, array($exception->getMessage())));
 						}
 					}
 					$this->outputFormatted("Objects inserted: <b>%s</b>", array($inserted), 8);
@@ -216,7 +216,7 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 		if ($result->hasErrors()) {
 			$this->outputLine();
-			$this->outputLine('The following errors occured:');
+			$this->outputLine('The following errors occurred:');
 			/** @var $error \TYPO3\Flow\Error\Error */
 			foreach ($result->getFlattenedErrors() as $className => $errors) {
 				foreach ($errors as $error) {

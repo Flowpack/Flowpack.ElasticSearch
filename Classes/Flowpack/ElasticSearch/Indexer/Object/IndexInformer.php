@@ -13,6 +13,8 @@ namespace Flowpack\ElasticSearch\Indexer\Object;
 
 use Flowpack\ElasticSearch\Annotations\Indexable;
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Object\ObjectManagerInterface;
+use TYPO3\Flow\Reflection\ReflectionService;
 
 /**
  * Provides information about the index rules of Objects
@@ -22,9 +24,15 @@ class IndexInformer {
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Reflection\ReflectionService
+	 * @var ReflectionService
 	 */
 	protected $reflectionService;
+
+	/**
+	 * @Flow\Inject
+	 * @var ObjectManagerInterface
+	 */
+	protected $objectManager;
 
 	/**
 	 * @var array
@@ -34,7 +42,7 @@ class IndexInformer {
 	/**
 	 */
 	public function initializeObject() {
-		$this->buildIndexClassesAndProperties();
+		$this->indexAnnotations = self::buildIndexClassesAndProperties($this->objectManager);
 	}
 
 	/**
@@ -71,7 +79,7 @@ class IndexInformer {
 
 	/**
 	 * @param string $className
-	 * @return \Flowpack\ElasticSearch\Annotations\Indexable The annotation for this class
+	 * @return Indexable The annotation for this class
 	 */
 	public function getClassAnnotation($className) {
 		if (!isset($this->indexAnnotations[$className])) {
@@ -100,26 +108,35 @@ class IndexInformer {
 	 * Each property might either have TRUE as value, or also an annotation instance, if given.
 	 *
 	 * @throws \Flowpack\ElasticSearch\Exception
-	 * @return array multidim array
+	 * @param ObjectManagerInterface $objectManager
+	 * @return array
+	 * @Flow\CompileStatic
 	 */
-	protected function buildIndexClassesAndProperties() {
+	static public function buildIndexClassesAndProperties($objectManager) {
+		/** @var ReflectionService $reflectionService */
+		$reflectionService = $objectManager->get('TYPO3\Flow\Reflection\ReflectionService');
+
+		$indexAnnotations = array();
+
 		$annotationClassName = 'Flowpack\ElasticSearch\Annotations\Indexable';
-		foreach ($this->reflectionService->getClassNamesByAnnotation($annotationClassName) AS $className) {
-			if ($this->reflectionService->isClassAbstract($className)) {
+		foreach ($reflectionService->getClassNamesByAnnotation($annotationClassName) AS $className) {
+			if ($reflectionService->isClassAbstract($className)) {
 				throw new \Flowpack\ElasticSearch\Exception(sprintf('The class with name "%s" is annotated with %s, but is abstract. Indexable classes must not be abstract.', $className, $annotationClassName), 1339595182);
 			}
-			$this->indexAnnotations[$className]['annotation'] = $this->reflectionService->getClassAnnotation($className, $annotationClassName);
+			$indexAnnotations[$className]['annotation'] = $reflectionService->getClassAnnotation($className, $annotationClassName);
 
 			// if no single properties are set to be indexed, consider all properties to be indexed.
-			$annotatedProperties = $this->reflectionService->getPropertyNamesByAnnotation($className, $annotationClassName);
+			$annotatedProperties = $reflectionService->getPropertyNamesByAnnotation($className, $annotationClassName);
 			if (!empty($annotatedProperties)) {
-				$this->indexAnnotations[$className]['properties'] = $annotatedProperties;
+				$indexAnnotations[$className]['properties'] = $annotatedProperties;
 			} else {
-				foreach ($this->reflectionService->getClassPropertyNames($className) AS $propertyName) {
-					$this->indexAnnotations[$className]['properties'][] = $propertyName;
+				foreach ($reflectionService->getClassPropertyNames($className) AS $propertyName) {
+					$indexAnnotations[$className]['properties'][] = $propertyName;
 				}
 			}
 		}
+
+		return $indexAnnotations;
 	}
 }
 

@@ -11,6 +11,7 @@ namespace Flowpack\ElasticSearch\Command;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use Flowpack\ElasticSearch\Annotations\Indexable;
 use Flowpack\ElasticSearch\Domain\Model\Client;
 use Flowpack\ElasticSearch\Domain\Model\Index;
 use Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer;
@@ -158,18 +159,38 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 	}
 
 	/**
+	 * List available document type
+	 */
+	public function showConfiguredTypesCommand() {
+		$classesAndAnnotations = $this->indexInformer->getClassesAndAnnotations();
+		$this->outputFormatted("<b>Available document type</b>");
+		/** @var $annotation \Flowpack\ElasticSearch\Annotations\Indexable */
+		foreach ($classesAndAnnotations as $className => $annotation) {
+			$this->outputFormatted("%s", array($className), 4);
+		}
+	}
+
+	/**
 	 * Shows the status of the current mapping
 	 *
+	 * @param string $object Class name of a domain object. If given, will only work on this single object
 	 * @param boolean $conductUpdate Set to TRUE to conduct the required corrections
 	 * @param string $clientName The client name to use
 	 */
-	public function statusCommand($conductUpdate = FALSE, $clientName = NULL) {
+	public function statusCommand($object = NULL, $conductUpdate = FALSE, $clientName = NULL) {
 		$result = new ErrorResult();
 
 		$client = $this->clientFactory->create($clientName);
+
 		$classesAndAnnotations = $this->indexInformer->getClassesAndAnnotations();
-		/** @var $annotation \Flowpack\ElasticSearch\Annotations\Indexable */
-		foreach ($classesAndAnnotations as $className => $annotation) {
+		if ($object !== NULL) {
+			if (!isset($classesAndAnnotations[$object])) {
+				$this->outputFormatted("Error: Object '<b>%s</b>' is not configured correctly, check the Indexable annotation.", array($object));
+				$this->quit(1);
+			}
+			$classesAndAnnotations = array($object => $classesAndAnnotations[$object]);
+		}
+		array_walk($classesAndAnnotations, function (Indexable $annotation, $className) use ($result, $client, $conductUpdate) {
 			$this->outputFormatted("Object \x1b[33m%s\x1b[0m", array($className), 4);
 			$this->outputFormatted("Index <b>%s</b> Type <b>%s</b>", array($annotation->indexName, $annotation->typeName), 8);
 			$count = $client->findIndex($annotation->indexName)->findType($annotation->typeName)->count();
@@ -212,7 +233,7 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 					$this->outputFormatted("Modifications needed: <b>create</b> %d, <b>update</b> %d", array(count($states[ObjectIndexer::ACTION_TYPE_CREATE]), count($states[ObjectIndexer::ACTION_TYPE_UPDATE])), 8);
 				}
 			}
-		}
+		});
 
 		if ($result->hasErrors()) {
 			$this->outputLine();

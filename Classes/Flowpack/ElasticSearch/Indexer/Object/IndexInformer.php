@@ -12,8 +12,10 @@ namespace Flowpack\ElasticSearch\Indexer\Object;
  *                                                                        */
 
 use Flowpack\ElasticSearch\Annotations\Indexable;
+use Flowpack\ElasticSearch\Domain\Model\Client;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Object\ObjectManagerInterface;
+use TYPO3\Flow\Persistence\PersistenceManagerInterface;
 use TYPO3\Flow\Reflection\ReflectionService;
 
 /**
@@ -30,9 +32,21 @@ class IndexInformer {
 
 	/**
 	 * @Flow\Inject
+	 * @var PersistenceManagerInterface
+	 */
+	protected $persistenceManager;
+
+	/**
+	 * @Flow\Inject
 	 * @var ObjectManagerInterface
 	 */
 	protected $objectManager;
+
+	/**
+	 * @Flow\Inject
+	 * @var ObjectIndexer
+	 */
+	protected $objectIndexer;
 
 	/**
 	 * @var array
@@ -137,6 +151,34 @@ class IndexInformer {
 		}
 
 		return $indexAnnotations;
+	}
+
+	/**
+	 * @param string $className
+	 * @param integer $batchSize
+	 * @param integer $offset
+	 * @param Client $client
+	 * @return array
+	 * @api
+	 */
+	public function getModificationsNeededStatesAndObjects($className, $batchSize, $offset, Client $client) {
+		$query = $this->persistenceManager->createQueryForType($className)
+			->setLimit($batchSize)
+			->setOffset($offset);
+
+		$states = array(
+			ObjectIndexer::ACTION_TYPE_CREATE => array(),
+			ObjectIndexer::ACTION_TYPE_UPDATE => array(),
+			ObjectIndexer::ACTION_TYPE_DELETE => array(),
+		);
+		foreach ($query->execute() as $object) {
+			$state = $this->objectIndexer->objectIndexActionRequired($object, $client);
+			if ($state !== NULL) {
+				$states[$state][] = $object;
+			}
+		}
+
+		return $states;
 	}
 }
 

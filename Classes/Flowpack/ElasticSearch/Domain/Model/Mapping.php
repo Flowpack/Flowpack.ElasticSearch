@@ -29,6 +29,12 @@ class Mapping {
 	protected $properties = array();
 
 	/**
+	 * see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-root-object-type.html#_dynamic_templates
+	 * @var array
+	 */
+	protected $dynamicTemplates = array();
+
+	/**
 	 * @param \Flowpack\ElasticSearch\Domain\Model\AbstractType $type
 	 */
 	public function __construct(AbstractType $type) {
@@ -77,6 +83,7 @@ class Mapping {
 	 */
 	public function asArray() {
 		return array($this->type->getName() => array(
+			'dynamic_templates' => $this->getDynamicTemplates(),
 			'properties' => $this->getProperties()
 		));
 	}
@@ -90,5 +97,23 @@ class Mapping {
 
 		return $response;
 	}
-}
 
+	/**
+	 * @return array
+	 */
+	public function getDynamicTemplates() {
+		return $this->dynamicTemplates;
+	}
+
+	/**
+	 * Dynamic templates allow to define mapping templates
+	 *
+	 * @param $dynamicTemplateName
+	 * @param array $mappingConfiguration
+	 */
+	public function addDynamicTemplate($dynamicTemplateName, array $mappingConfiguration) {
+		$this->dynamicTemplates[] = array(
+			$dynamicTemplateName => $mappingConfiguration
+		);
+	}
+}

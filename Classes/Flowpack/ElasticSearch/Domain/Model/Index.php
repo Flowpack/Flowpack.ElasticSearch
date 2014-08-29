@@ -66,6 +66,11 @@ class Index {
 	protected $name;
 
 	/**
+	 * @var string
+	 */
+	protected $settingsKey;
+
+	/**
 	 * The owner client of this index. Could be set later in order to allow creating pending Index objects
 	 *
 	 * @var Client
@@ -101,6 +106,7 @@ class Index {
 			throw new \Flowpack\ElasticSearch\Exception('The provided index name "' . $name . '" must be all lowercase.', 1340187956);
 		}
 		$this->name = $name;
+		$this->settingsKey = $name;
 		$this->client = $client;
 	}
 
@@ -201,13 +207,20 @@ class Index {
 	}
 
 	/**
+	 * @param $settingsKey
+	 */
+	public function setSettingsKey($settingsKey) {
+		$this->settingsKey = $settingsKey;
+	}
+
+	/**
 	 * @return array|null
 	 */
 	protected function getSettings() {
 		if ($this->client instanceof Client) {
-			$settings = Arrays::getValueByPath($this->settings, 'indexes.' . $this->client->getBundle() . '.' . $this->name) ?: Arrays::getValueByPath($this->settings, 'indexes.default' . '.' . $this->name);
+			$settings = Arrays::getValueByPath($this->settings, 'indexes.' . $this->client->getBundle() . '.' . $this->settingsKey) ?: Arrays::getValueByPath($this->settings, 'indexes.default' . '.' . $this->settingsKey);
 		} else {
-			$settings = Arrays::getValueByPath($this->settings, 'indexes.default' . '.' . $this->name);
+			$settings = Arrays::getValueByPath($this->settings, 'indexes.default' . '.' . $this->settingsKey);
 		}
 		return $settings;
 	}

@@ -61,7 +61,7 @@ single properties, only these will be indexed. However, you have to annotate the
 	}
 
 Mapping annotations
-====================
+===================
 
 ElasticSearch allows the mapping configuration done via annotations. See the example how to define mapping annotations:
 

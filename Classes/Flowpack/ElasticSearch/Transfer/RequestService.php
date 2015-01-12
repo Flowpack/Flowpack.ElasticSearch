@@ -66,8 +66,14 @@ class RequestService {
 		if ($path !== NULL) {
 			$uri->setPath($uri->getPath() . $path);
 		}
-		\TYPO3\Flow\var_dump((string)$uri);
 
+		if ($uri->getUsername()){
+			$requestEngine = new CurlEngine();
+			$requestEngine->setOption(CURLOPT_USERPWD, $uri->getUsername() . ':' . $uri->getPassword() );
+			$requestEngine->setOption(CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+			$requestEngine->setOption(CURLOPT_VERBOSE, TRUE);
+			$this->browser->setRequestEngine($requestEngine);
+		}
 
 		$response = $this->browser->request($uri, $method, $arguments, array(), array(), $content);
 

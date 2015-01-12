@@ -31,6 +31,19 @@ In this example setup, there's one *client* with two *nodes*, both at ``localhos
 at port ``9201``. The ``FunctionalTests`` client is a reserved one that acts for functional testing. If you like to
 have a dedicated server (recommended) for running the Functional Tests, set it up here.
 
+If your Elasticsearch installation requires authentication, you can define it in the client configuration,
+by defining the field ``username`` with your username, and ``password`` with your password.
+
+	Flowpack:
+	  ElasticSearch:
+	    clients:
+	        # default bundle that will be used if no more specific bundle name was supplied.
+	      default:
+	        - host: localhost
+	          port: 9200
+	          username: username
+	          password: password
+
 During runtime, you have to provide the client's name you want to connect to, if it is not `default`.
 
 Running the Functional Tests

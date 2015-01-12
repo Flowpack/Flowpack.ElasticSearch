@@ -62,9 +62,12 @@ class RequestService {
 		$clientConfiguration = $clientConfigurations[0];
 
 		$uri = clone $clientConfiguration->getUri();
+
 		if ($path !== NULL) {
 			$uri->setPath($uri->getPath() . $path);
 		}
+		\TYPO3\Flow\var_dump((string)$uri);
+
 
 		$response = $this->browser->request($uri, $method, $arguments, array(), array(), $content);
 

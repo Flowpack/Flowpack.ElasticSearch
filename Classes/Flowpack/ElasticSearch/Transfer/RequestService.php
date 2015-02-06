@@ -67,11 +67,10 @@ class RequestService {
 			$uri->setPath($uri->getPath() . $path);
 		}
 
-		if ($uri->getUsername()){
+		if ($uri->getUsername()) {
 			$requestEngine = new CurlEngine();
 			$requestEngine->setOption(CURLOPT_USERPWD, $uri->getUsername() . ':' . $uri->getPassword() );
 			$requestEngine->setOption(CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-			$requestEngine->setOption(CURLOPT_VERBOSE, TRUE);
 			$this->browser->setRequestEngine($requestEngine);
 		}
 

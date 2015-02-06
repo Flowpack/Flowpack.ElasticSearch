@@ -34,7 +34,7 @@ have a dedicated server (recommended) for running the Functional Tests, set it u
 If your Elasticsearch installation requires authentication, you can define it in the client configuration,
 by defining the field ``username`` with your username, and ``password`` with your password.
 
-	Flowpack:
+     Flowpack:
 	  ElasticSearch:
 	    clients:
 	        # default bundle that will be used if no more specific bundle name was supplied.

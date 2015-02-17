@@ -5,11 +5,8 @@ Flowpack:
       default:
         - host: localhost
           port: 9200
-        - host: localhost
-          port: 9201
 
     realtimeIndexing:
-      enabled: TRUE
       client: default
     transfer:
       # The timeout in sections for connections between Flow and Elastic Search:

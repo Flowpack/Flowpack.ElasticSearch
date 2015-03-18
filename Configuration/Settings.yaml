@@ -17,6 +17,6 @@ TYPO3:
     persistence:
       doctrine:
         eventListeners:
-          -
+          'Flowpack\ElasticSearch\Indexer\Object\Signal\Doctrine\EmitterAdapter':
             events: ['postUpdate', 'postPersist', 'postRemove']
             listener: 'Flowpack\ElasticSearch\Indexer\Object\Signal\Doctrine\EmitterAdapter'

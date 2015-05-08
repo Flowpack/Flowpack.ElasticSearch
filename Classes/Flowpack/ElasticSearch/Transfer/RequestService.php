@@ -52,7 +52,7 @@ class RequestService {
 	 * @param string $method
 	 * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
 	 * @param string $path
-	 * @param array $arguments
+	 * @param array $arguments for the Elasticsearch REST API query string
 	 * @param string $content
 	 *
 	 * @return \Flowpack\ElasticSearch\Transfer\Response
@@ -66,7 +66,9 @@ class RequestService {
 			$uri->setPath($uri->getPath() . $path);
 		}
 
-		$response = $this->browser->request($uri, $method, $arguments, array(), array(), $content);
+		if ($arguments) $uri->setQuery(http_build_query($arguments));
+
+		$response = $this->browser->request($uri, $method, array(), array(), array(), $content);
 
 		return new Response($response, $this->browser->getLastRequest());
 	}

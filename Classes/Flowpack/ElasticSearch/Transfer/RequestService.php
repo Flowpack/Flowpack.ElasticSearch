@@ -66,6 +66,13 @@ class RequestService {
 			$uri->setPath($uri->getPath() . $path);
 		}
 
+		if ($uri->getUsername()) {
+			$requestEngine = new CurlEngine();
+			$requestEngine->setOption(CURLOPT_USERPWD, $uri->getUsername() . ':' . $uri->getPassword() );
+			$requestEngine->setOption(CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+			$this->browser->setRequestEngine($requestEngine);
+		}
+
 		$response = $this->browser->request($uri, $method, $arguments, array(), array(), $content);
 
 		return new Response($response, $this->browser->getLastRequest());

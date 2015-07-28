@@ -27,7 +27,7 @@ class IndexerAspect {
 	protected $objectIndexer;
 
 	/**
-	 * @Flow\AfterReturning("setting(TYPO3.TYPO3CR.Search.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(add|update)())")
+	 * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(add|update)())")
 	 * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
 	 * @return string
 	 */
@@ -38,7 +38,7 @@ class IndexerAspect {
 	}
 
 	/**
-	 * @Flow\AfterReturning("setting(TYPO3.TYPO3CR.Search.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(remove)())")
+	 * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(remove)())")
 	 * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
 	 * @return string
 	 */

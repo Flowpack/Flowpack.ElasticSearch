@@ -45,7 +45,7 @@ class Package extends BasePackage {
 	 */
 	public function prepareRealtimeIndexing(\TYPO3\Flow\Core\Bootstrap $bootstrap) {
 		$this->configurationManager = $bootstrap->getObjectManager()->get('TYPO3\Flow\Configuration\ConfigurationManager');
-		$settings = $this->configurationManager->getConfiguration(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.TYPO3CR.Search');
+		$settings = $this->configurationManager->getConfiguration(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, $this->getPackageKey());
 		if (isset($settings['realtimeIndexing']['enabled']) && $settings['realtimeIndexing']['enabled'] === TRUE) {
 			$bootstrap->getSignalSlotDispatcher()->connect('Flowpack\ElasticSearch\Indexer\Object\Signal\SignalEmitter', 'objectUpdated', 'Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer', 'indexObject');
 			$bootstrap->getSignalSlotDispatcher()->connect('Flowpack\ElasticSearch\Indexer\Object\Signal\SignalEmitter', 'objectPersisted', 'Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer', 'indexObject');

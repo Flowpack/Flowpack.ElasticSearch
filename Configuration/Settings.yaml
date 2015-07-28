@@ -7,6 +7,7 @@ Flowpack:
           port: 9200
 
     realtimeIndexing:
+      enabled: TRUE
       client: default
     transfer:
       # The timeout in sections for connections between Flow and Elastic Search:

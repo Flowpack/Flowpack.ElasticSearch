@@ -53,7 +53,7 @@ class RequestService {
 	 * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
 	 * @param string $path
 	 * @param array $arguments
-	 * @param string $content
+	 * @param string|array $content
 	 *
 	 * @return \Flowpack\ElasticSearch\Transfer\Response
 	 */
@@ -66,7 +66,8 @@ class RequestService {
 			$uri->setPath($uri->getPath() . $path);
 		}
 
-		$response = $this->browser->request($uri, $method, $arguments, array(), array(), $content);
+		$response = $this->browser->request($uri, $method, $arguments, array(), array(),
+			is_array($content) ? json_encode($content) : $content);
 
 		return new Response($response, $this->browser->getLastRequest());
 	}

@@ -85,7 +85,7 @@ class Client {
 	 * @param string $method
 	 * @param string $path
 	 * @param array $arguments
-	 * @param string $content
+	 * @param string|array $content
 	 *
 	 * @return \Flowpack\ElasticSearch\Transfer\Response
 	 */

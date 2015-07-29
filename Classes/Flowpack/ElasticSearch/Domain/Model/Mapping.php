@@ -12,6 +12,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  *                                                                        */
 
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Utility\Arrays;
 
 /**
  * Reflects a Mapping of Elasticsearch
@@ -33,6 +34,15 @@ class Mapping {
 	 * @var array
 	 */
 	protected $dynamicTemplates = array();
+
+	/**
+	 * This is the full / raw ElasticSearch mapping which is merged with the properties and dynamicTemplates.
+	 *
+	 * It can be used to specify arbitrary ElasticSearch mapping options, like f.e. configuring the _all field.
+	 *
+	 * @var array
+	 */
+	protected $fullMapping = array();
 
 	/**
 	 * @param \Flowpack\ElasticSearch\Domain\Model\AbstractType $type
@@ -82,10 +92,10 @@ class Mapping {
 	 * @return array
 	 */
 	public function asArray() {
-		return array($this->type->getName() => array(
+		return array($this->type->getName() => Arrays::arrayMergeRecursiveOverrule(array(
 			'dynamic_templates' => $this->getDynamicTemplates(),
 			'properties' => $this->getProperties()
-		));
+		), $this->fullMapping));
 	}
 
 	/**
@@ -115,5 +125,24 @@ class Mapping {
 		$this->dynamicTemplates[] = array(
 			$dynamicTemplateName => $mappingConfiguration
 		);
+	}
+
+	/**
+	 * This is the full / raw ElasticSearch mapping which is merged with the properties and dynamicTemplates.
+	 *
+	 * It can be used to specify arbitrary ElasticSearch mapping options, like f.e. configuring the _all field.
+	 *
+	 * @param array $fullMapping
+	 */
+	public function setFullMapping(array $fullMapping) {
+		$this->fullMapping = $fullMapping;
+	}
+
+	/**
+	 * see {@link setFullMapping} for documentation
+	 * @return array
+	 */
+	public function getFullMapping() {
+		return $this->fullMapping;
 	}
 }

@@ -84,7 +84,7 @@ class ObjectIndexer {
 		if (isset($this->handledObjects[$objectHash])) {
 			return;
 		}
-		$this->handledObjects[$objectHash] = $object;
+		$this->handledObjects[$objectHash] = TRUE;
 
 		$type = $this->getIndexTypeForObject($object, $client);
 		if ($type === NULL) {

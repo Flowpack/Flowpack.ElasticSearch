@@ -11,10 +11,15 @@ namespace Flowpack\ElasticSearch\Mapping;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use Flowpack\ElasticSearch\Annotations\Indexable;
 use Flowpack\ElasticSearch\Annotations\Mapping as MappingAnnotation;
 use Flowpack\ElasticSearch\Domain\Model\Mapping;
+use Flowpack\ElasticSearch\Exception as ElasticSearchException;
+use Flowpack\ElasticSearch\Indexer\Object\Transform\AbstractObjectTransformer;
+use Flowpack\ElasticSearch\Indexer\Object\Transform\TargetMappingInterface;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Utility\Arrays;
+use TYPO3\Flow\Utility\TypeHandling;
 
 /**
  * Builds the mapping information across the objects
@@ -62,10 +67,10 @@ class EntityMappingBuilder {
 
 	/**
 	 * @param string $className
-	 * @param \Flowpack\ElasticSearch\Annotations\Indexable $annotation
+	 * @param Indexable $annotation
 	 * @return Mapping
 	 */
-	protected function buildMappingFromClassAndAnnotation($className, \Flowpack\ElasticSearch\Annotations\Indexable $annotation) {
+	protected function buildMappingFromClassAndAnnotation($className, Indexable $annotation) {
 		$index = new \Flowpack\ElasticSearch\Domain\Model\Index($annotation->indexName);
 		$type = new \Flowpack\ElasticSearch\Domain\Model\GenericType($index, $annotation->typeName);
 		$mapping = new Mapping($type);
@@ -81,22 +86,31 @@ class EntityMappingBuilder {
 	 * @param string $className
 	 * @param string $propertyName
 	 *
-	 * @throws \Flowpack\ElasticSearch\Exception
+	 * @throws ElasticSearchException
 	 * @return void
 	 */
 	protected function augmentMappingByProperty(Mapping $mapping, $className, $propertyName) {
+		$targetMapping = array();
 		list($propertyType) = $this->reflectionService->getPropertyTagValues($className, $propertyName, 'var');
 		if (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, 'Flowpack\ElasticSearch\Annotations\Transform')) !== NULL) {
-			$mappingType = $this->transformerFactory->create($transformAnnotation->type)->getTargetMappingType();
-		} elseif (\TYPO3\Flow\Utility\TypeHandling::isSimpleType($propertyType)) {
+			$transformerObject = $this->transformerFactory->create($transformAnnotation->type);
+			$mappingType = $transformerObject->getTargetMappingType();
+			if ($transformerObject instanceof TargetMappingInterface) {
+				$targetMapping = $transformerObject->getTargetMapping();
+			}
+		} elseif (TypeHandling::isSimpleType($propertyType)) {
 			$mappingType = $propertyType;
 		} elseif ($propertyType === '\DateTime') {
 			$mappingType = 'date';
 		} else {
-			throw new \Flowpack\ElasticSearch\Exception('Mapping is only supported for simple types and DateTime objects; "' . $propertyType . '" given but without a Transform directive.');
+			throw new ElasticSearchException('Mapping is only supported for simple types and DateTime objects; "' . $propertyType . '" given but without a Transform directive.');
 		}
 
-		$mapping->setPropertyByPath($propertyName, array('type' => $mappingType));
+		if ($mappingType !== NULL) {
+			$mapping->setPropertyByPath($propertyName, Arrays::arrayMergeRecursiveOverrule(array('type' => $mappingType), $targetMapping));
+		} else {
+			$mapping->setPropertyByPath($propertyName, $targetMapping);
+		}
 
 		$annotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, 'Flowpack\ElasticSearch\Annotations\Mapping');
 
@@ -106,10 +120,10 @@ class EntityMappingBuilder {
 				foreach ($annotation->getFields() as $multiFieldAnnotation) {
 					$multiFieldIndexName = trim($multiFieldAnnotation->index_name);
 					if ($multiFieldIndexName === '') {
-						throw new \Flowpack\ElasticSearch\Exception('Multi field require an unique index name "' . $className . '::' . $propertyName . '".');
+						throw new ElasticSearchException('Multi field require an unique index name "' . $className . '::' . $propertyName . '".');
 					}
 					if (isset($multiFields[$multiFieldIndexName])) {
-						throw new \Flowpack\ElasticSearch\Exception('Duplicate index name in the same multi field is not allowed "' . $className . '::' . $propertyName . '".');
+						throw new ElasticSearchException('Duplicate index name in the same multi field is not allowed "' . $className . '::' . $propertyName . '".');
 					}
 					$multiFieldAnnotation->type = $mappingType;
 					$multiFields[$multiFieldIndexName] = $this->processMappingAnnotation($multiFieldAnnotation);

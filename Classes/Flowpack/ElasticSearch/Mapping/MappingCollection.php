@@ -16,100 +16,105 @@ use TYPO3\Flow\Annotations as Flow;
 
 /**
  */
-class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection {
+class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection
+{
+    const TYPE_BACKEND = 'backend';
+    const TYPE_ENTITY = 'entity';
 
-	const TYPE_BACKEND = 'backend';
-	const TYPE_ENTITY = 'entity';
+    /**
+     * One of self::TYPE_* constants
+     *
+     * @var string
+     */
+    protected $type;
 
-	/**
-	 * One of self::TYPE_* constants
-	 *
-	 * @var string
-	 */
-	protected $type;
+    /**
+     * @var \Flowpack\ElasticSearch\Domain\Model\Client
+     */
+    protected $client;
 
-	/**
-	 * @var \Flowpack\ElasticSearch\Domain\Model\Client
-	 */
-	protected $client;
+    /**
+     * @param string $type
+     */
+    public function __construct($type = null)
+    {
+        parent::__construct(array());
+        $this->type = $type;
+    }
 
-	/**
-	 * @param string $type
-	 */
-	public function __construct($type = NULL) {
-		parent::__construct(array());
-		$this->type = $type;
-	}
+    /**
+     * Returns a new collection of mappings of this collection that are not member of the $complementCollection.
+     *
+     * @param MappingCollection $complementCollection
+     * @return \Flowpack\ElasticSearch\Mapping\MappingCollection
+     */
+    public function diffAgainstCollection(MappingCollection $complementCollection)
+    {
+        $returnMappings = new \Flowpack\ElasticSearch\Mapping\MappingCollection();
+        foreach ($this as $entityMapping) {
+            /** @var $entityMapping \Flowpack\ElasticSearch\Domain\Model\Mapping */
+            $mapping = new \Flowpack\ElasticSearch\Domain\Model\Mapping(clone $entityMapping->getType());
+            $saveMapping = false;
+            foreach ($entityMapping->getProperties() as $propertyName => $propertySettings) {
+                foreach ($propertySettings as $entitySettingKey => $entitySettingValue) {
+                    $backendSettingValue = $complementCollection->getMappingSetting($entityMapping, $propertyName, $entitySettingKey);
+                    if ($entitySettingValue !== $backendSettingValue) {
+                        $mapping->setPropertyByPath(array($propertyName, $entitySettingKey), $entitySettingValue);
+                        $saveMapping = true;
+                    }
+                }
+            }
+            if ($saveMapping) {
+                $returnMappings->add($mapping);
+            }
+        }
 
-	/**
-	 * Returns a new collection of mappings of this collection that are not member of the $complementCollection.
-	 *
-	 * @param MappingCollection $complementCollection
-	 * @return \Flowpack\ElasticSearch\Mapping\MappingCollection
-	 */
-	public function diffAgainstCollection(MappingCollection $complementCollection) {
-		$returnMappings = new \Flowpack\ElasticSearch\Mapping\MappingCollection();
-		foreach ($this AS $entityMapping) {
-			/** @var $entityMapping \Flowpack\ElasticSearch\Domain\Model\Mapping */
-			$mapping = new \Flowpack\ElasticSearch\Domain\Model\Mapping(clone $entityMapping->getType());
-			$saveMapping = FALSE;
-			foreach ($entityMapping->getProperties() AS $propertyName => $propertySettings) {
-				foreach ($propertySettings AS $entitySettingKey => $entitySettingValue) {
-					$backendSettingValue = $complementCollection->getMappingSetting($entityMapping, $propertyName, $entitySettingKey);
-					if ($entitySettingValue !== $backendSettingValue) {
-						$mapping->setPropertyByPath(array($propertyName, $entitySettingKey), $entitySettingValue);
-						$saveMapping = TRUE;
-					}
-				}
-			}
-			if ($saveMapping) {
-				$returnMappings->add($mapping);
-			}
-		}
+        return $returnMappings;
+    }
 
-		return $returnMappings;
-	}
+    /**
+     * Tells whether a member of this collection has a specific index/type/property settings value
+     *
+     * @param \Flowpack\ElasticSearch\Domain\Model\Mapping $inquirerMapping
+     * @param string $propertyName
+     * @param $settingKey
+     *
+     * @return mixed
+     */
+    public function getMappingSetting(\Flowpack\ElasticSearch\Domain\Model\Mapping $inquirerMapping, $propertyName, $settingKey)
+    {
+        foreach ($this as $memberMapping) {
+            /** @var $memberMapping \Flowpack\ElasticSearch\Domain\Model\Mapping */
+            if ($inquirerMapping->getType()->getName() === $memberMapping->getType()->getName()
+                && $inquirerMapping->getType()->getIndex()->getName() === $memberMapping->getType()->getIndex()->getName()) {
+                return $memberMapping->getPropertyByPath(array($propertyName, $settingKey));
+            }
+        }
 
-	/**
-	 * Tells whether a member of this collection has a specific index/type/property settings value
-	 *
-	 * @param \Flowpack\ElasticSearch\Domain\Model\Mapping $inquirerMapping
-	 * @param string $propertyName
-	 * @param $settingKey
-	 *
-	 * @return mixed
-	 */
-	public function getMappingSetting(\Flowpack\ElasticSearch\Domain\Model\Mapping $inquirerMapping, $propertyName, $settingKey) {
-		foreach ($this as $memberMapping) {
-			/** @var $memberMapping \Flowpack\ElasticSearch\Domain\Model\Mapping */
-			if ($inquirerMapping->getType()->getName() === $memberMapping->getType()->getName()
-				&& $inquirerMapping->getType()->getIndex()->getName() === $memberMapping->getType()->getIndex()->getName()) {
-					return $memberMapping->getPropertyByPath(array($propertyName, $settingKey));
-			}
-		}
+        return null;
+    }
 
-		return NULL;
-	}
+    /**
+     * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
+     */
+    public function setClient(\Flowpack\ElasticSearch\Domain\Model\Client $client)
+    {
+        $this->client = $client;
+    }
 
-	/**
-	 * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
-	 */
-	public function setClient(\Flowpack\ElasticSearch\Domain\Model\Client $client) {
-		$this->client = $client;
-	}
+    /**
+     * @return \Flowpack\ElasticSearch\Domain\Model\Client
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
 
-	/**
-	 * @return \Flowpack\ElasticSearch\Domain\Model\Client
-	 */
-	public function getClient() {
-		return $this->client;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getType() {
-		return $this->type;
-	}
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 }
-

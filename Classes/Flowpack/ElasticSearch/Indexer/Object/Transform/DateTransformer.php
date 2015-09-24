@@ -16,25 +16,26 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * @Flow\Scope("singleton")
  */
-class DateTransformer implements TransformerInterface {
+class DateTransformer implements TransformerInterface
+{
+    /**
+     * Returns the Elasticsearch type this transform() method returns
+     *
+     * @return string
+     */
+    public function getTargetMappingType()
+    {
+        return 'date';
+    }
 
-	/**
-	 * Returns the Elasticsearch type this transform() method returns
-	 *
-	 * @return string
-	 */
-	public function getTargetMappingType() {
-		return 'date';
-	}
-
-	/**
-	 * @param \DateTime $source
-	 * @param \Flowpack\ElasticSearch\Annotations\Transform $annotation
-	 *
-	 * @return string
-	 */
-	public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation) {
-		return $source->format($annotation->options['format'] ?: 'Y-m-d');
-	}
+    /**
+     * @param \DateTime $source
+     * @param \Flowpack\ElasticSearch\Annotations\Transform $annotation
+     *
+     * @return string
+     */
+    public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation)
+    {
+        return $source->format($annotation->options['format'] ?: 'Y-m-d');
+    }
 }
-

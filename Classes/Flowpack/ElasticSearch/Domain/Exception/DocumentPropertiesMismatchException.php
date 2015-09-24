@@ -14,18 +14,18 @@ namespace Flowpack\ElasticSearch\Domain\Exception;
 /**
  * Signals a mismatch between the
  */
-class DocumentPropertiesMismatchException extends \Flowpack\ElasticSearch\Exception {
+class DocumentPropertiesMismatchException extends \Flowpack\ElasticSearch\Exception
+{
+    /**
+     * @var \TYPO3\Flow\Error\Result
+     */
+    protected $errorResult;
 
-	/**
-	 * @var \TYPO3\Flow\Error\Result
-	 */
-	protected $errorResult;
-
-	/**
-	 * @param \TYPO3\Flow\Error\Result $result
-	 */
-	public function setErrorResult(\TYPO3\Flow\Error\Result $result) {
-		$this->errorResult = $result;
-	}
+    /**
+     * @param \TYPO3\Flow\Error\Result $result
+     */
+    public function setErrorResult(\TYPO3\Flow\Error\Result $result)
+    {
+        $this->errorResult = $result;
+    }
 }
-

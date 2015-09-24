@@ -16,8 +16,6 @@ use \TYPO3\Flow\Annotations as Flow;
 /**
  * A twitter sample type
  */
-class TwitterType extends \Flowpack\ElasticSearch\Domain\Model\AbstractType {
-
+class TwitterType extends \Flowpack\ElasticSearch\Domain\Model\AbstractType
+{
 }
-
-?>

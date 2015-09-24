@@ -13,26 +13,28 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Mapping;
 
 /**
  */
-class MappingBuilderTest extends \TYPO3\Flow\Tests\FunctionalTestCase {
-	/**
-	 * @var \Flowpack\ElasticSearch\Mapping\EntityMappingBuilder
-	 */
-	protected $mappingBuilder;
+class MappingBuilderTest extends \TYPO3\Flow\Tests\FunctionalTestCase
+{
+    /**
+     * @var \Flowpack\ElasticSearch\Mapping\EntityMappingBuilder
+     */
+    protected $mappingBuilder;
 
-	/**
-	 */
-	public function setUp() {
-		parent::setUp();
-		$this->mappingBuilder = $this->objectManager->get('Flowpack\ElasticSearch\Mapping\EntityMappingBuilder');
-	}
+    /**
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->mappingBuilder = $this->objectManager->get('Flowpack\ElasticSearch\Mapping\EntityMappingBuilder');
+    }
 
-	/**
-	 * @test
-	 */
-	public function basicTest() {
-		$information = $this->mappingBuilder->buildMappingInformation();
-		$this->assertGreaterThanOrEqual(2, count($information));
-		$this->assertInstanceOf('Flowpack\ElasticSearch\Domain\Model\Mapping', $information[0]);
-	}
-
+    /**
+     * @test
+     */
+    public function basicTest()
+    {
+        $information = $this->mappingBuilder->buildMappingInformation();
+        $this->assertGreaterThanOrEqual(2, count($information));
+        $this->assertInstanceOf('Flowpack\ElasticSearch\Domain\Model\Mapping', $information[0]);
+    }
 }

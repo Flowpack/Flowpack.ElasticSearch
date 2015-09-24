@@ -16,81 +16,86 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * A Client representation
  */
-class Client {
+class Client
+{
+    /**
+     * @var string
+     */
+    protected $bundle = 'default';
 
-	/**
-	 * @var string
-	 */
-	protected $bundle = 'default';
+    /**
+     * @Flow\Inject
+     * @var \Flowpack\ElasticSearch\Transfer\RequestService
+     */
+    protected $requestService;
 
-	/**
-	 * @Flow\Inject
-	 * @var \Flowpack\ElasticSearch\Transfer\RequestService
-	 */
-	protected $requestService;
+    /**
+     * @var array
+     */
+    protected $clientConfigurations;
 
-	/**
-	 * @var array
-	 */
-	protected $clientConfigurations;
+    /**
+     * @var array
+     */
+    protected $indexCollection = array();
 
-	/**
-	 * @var array
-	 */
-	protected $indexCollection = array();
+    /**
+     * @param string $bundle
+     */
+    public function setBundle($bundle)
+    {
+        $this->bundle = $bundle;
+    }
 
-	/**
-	 * @param string $bundle
-	 */
-	public function setBundle($bundle) {
-		$this->bundle = $bundle;
-	}
+    /**
+     * @return string
+     */
+    public function getBundle()
+    {
+        return $this->bundle;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getBundle() {
-		return $this->bundle;
-	}
+    /**
+     * @param array $clientConfigurations
+     */
+    public function setClientConfigurations($clientConfigurations)
+    {
+        $this->clientConfigurations = $clientConfigurations;
+    }
 
-	/**
-	 * @param array $clientConfigurations
-	 */
-	public function setClientConfigurations($clientConfigurations) {
-		$this->clientConfigurations = $clientConfigurations;
-	}
+    /**
+     * @return array
+     */
+    public function getClientConfigurations()
+    {
+        return $this->clientConfigurations;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getClientConfigurations() {
-		return $this->clientConfigurations;
-	}
+    /**
+     * @param string $indexName
+     * @return \Flowpack\ElasticSearch\Domain\Model\Index
+     */
+    public function findIndex($indexName)
+    {
+        if (!array_key_exists($indexName, $this->indexCollection)) {
+            $this->indexCollection[$indexName] = new Index($indexName, $this);
+        }
 
-	/**
-	 * @param string $indexName
-	 * @return \Flowpack\ElasticSearch\Domain\Model\Index
-	 */
-	public function findIndex($indexName) {
-		if (!array_key_exists($indexName, $this->indexCollection)) {
-			$this->indexCollection[$indexName] = new Index($indexName, $this);
-		}
+        return $this->indexCollection[$indexName];
+    }
 
-		return $this->indexCollection[$indexName];
-	}
-
-	/**
-	 * Passes a request through to the request service
-	 *
-	 * @param string $method
-	 * @param string $path
-	 * @param array $arguments
-	 * @param string|array $content
-	 *
-	 * @return \Flowpack\ElasticSearch\Transfer\Response
-	 */
-	public function request($method, $path = NULL, $arguments = array(), $content = NULL) {
-		return $this->requestService->request($method, $this, $path, $arguments, $content);
-	}
+    /**
+     * Passes a request through to the request service
+     *
+     * @param string $method
+     * @param string $path
+     * @param array $arguments
+     * @param string|array $content
+     *
+     * @return \Flowpack\ElasticSearch\Transfer\Response
+     */
+    public function request($method, $path = null, $arguments = array(), $content = null)
+    {
+        return $this->requestService->request($method, $this, $path, $arguments, $content);
+    }
 }
-

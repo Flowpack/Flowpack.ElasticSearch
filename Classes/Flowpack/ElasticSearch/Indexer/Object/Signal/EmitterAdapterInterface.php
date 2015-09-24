@@ -17,7 +17,6 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * Marker interface for the Persistence signal emitter
  */
-interface EmitterAdapterInterface {
-
+interface EmitterAdapterInterface
+{
 }
-

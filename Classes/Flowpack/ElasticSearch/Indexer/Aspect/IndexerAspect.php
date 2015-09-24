@@ -18,34 +18,35 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Aspect
  */
-class IndexerAspect {
+class IndexerAspect
+{
+    /**
+     * @Flow\Inject
+     * @var \Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer
+     */
+    protected $objectIndexer;
 
-	/**
-	 * @Flow\Inject
-	 * @var \Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer
-	 */
-	protected $objectIndexer;
+    /**
+     * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(add|update)())")
+     * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
+     * @return string
+     */
+    public function updateObjectToIndex(\TYPO3\Flow\Aop\JoinPointInterface $joinPoint)
+    {
+        $arguments = $joinPoint->getMethodArguments();
+        $object = reset($arguments);
+        $this->objectIndexer->indexObject($object);
+    }
 
-	/**
-	 * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(add|update)())")
-	 * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
-	 * @return string
-	 */
-	public function updateObjectToIndex(\TYPO3\Flow\Aop\JoinPointInterface $joinPoint) {
-		$arguments = $joinPoint->getMethodArguments();
-		$object = reset($arguments);
-		$this->objectIndexer->indexObject($object);
-	}
-
-	/**
-	 * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(remove)())")
-	 * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
-	 * @return string
-	 */
-	public function removeObjectFromIndex(\TYPO3\Flow\Aop\JoinPointInterface $joinPoint) {
-		$arguments = $joinPoint->getMethodArguments();
-		$object = reset($arguments);
-		$this->objectIndexer->removeObject($object);
-	}
+    /**
+     * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(remove)())")
+     * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
+     * @return string
+     */
+    public function removeObjectFromIndex(\TYPO3\Flow\Aop\JoinPointInterface $joinPoint)
+    {
+        $arguments = $joinPoint->getMethodArguments();
+        $object = reset($arguments);
+        $this->objectIndexer->removeObject($object);
+    }
 }
-

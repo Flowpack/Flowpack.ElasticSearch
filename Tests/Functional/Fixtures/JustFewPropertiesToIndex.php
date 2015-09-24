@@ -20,23 +20,21 @@ use \Flowpack\ElasticSearch\Annotations as ElasticSearch;
  * @Flow\Entity
  * @ElasticSearch\Indexable(indexName="dummyindex", typeName="sampletype")
  */
-class JustFewPropertiesToIndex {
+class JustFewPropertiesToIndex
+{
+    /**
+     * @var string
+     * @ElasticSearch\Indexable
+     */
+    protected $value1;
 
-	/**
-	 * @var string
-	 * @ElasticSearch\Indexable
-	 */
-	protected $value1;
+    /**
+     * @var string
+     */
+    protected $value2;
 
-	/**
-	 * @var string
-	 */
-	protected $value2;
-
-	/**
-	 * @var string
-	 */
-	protected $value3;
+    /**
+     * @var string
+     */
+    protected $value3;
 }
-
-?>

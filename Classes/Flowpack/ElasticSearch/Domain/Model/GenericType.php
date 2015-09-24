@@ -16,14 +16,14 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * An abstract document type. Implement your own or use the GenericType provided with this package.
  */
-class GenericType extends AbstractType {
-
-	/**
-	 * @param \Flowpack\ElasticSearch\Domain\Model\Index $index
-	 * @param string $name
-	 */
-	public function __construct(Index $index, $name) {
-		parent::__construct($index, $name);
-	}
+class GenericType extends AbstractType
+{
+    /**
+     * @param \Flowpack\ElasticSearch\Domain\Model\Index $index
+     * @param string $name
+     */
+    public function __construct(Index $index, $name)
+    {
+        parent::__construct($index, $name);
+    }
 }
-

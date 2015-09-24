@@ -20,67 +20,71 @@ use \Flowpack\ElasticSearch\Annotations as ElasticSearch;
  * @Flow\Entity
  * @ElasticSearch\Indexable(indexName="flow3_elasticsearch_functionaltests_twitter", typeName="tweet")
  */
-class Tweet {
+class Tweet
+{
+    /**
+     * @var string
+     * @ElasticSearch\Mapping(boost=2.0, term_vector="with_offsets")
+     */
+    protected $username;
 
-	/**
-	 * @var string
-	 * @ElasticSearch\Mapping(boost=2.0, term_vector="with_offsets")
-	 */
-	protected $username;
+    /**
+     * @var string
+     */
+    protected $message;
 
-	/**
-	 * @var string
-	 */
-	protected $message;
+    /**
+     * @var \DateTime
+     * @ElasticSearch\Mapping(format="YYYY-MM-dd")
+     * @ElasticSearch\Transform("Date", options={ "format"="Y-m-d" })
+     */
+    protected $date;
 
-	/**
-	 * @var \DateTime
-	 * @ElasticSearch\Mapping(format="YYYY-MM-dd")
-	 * @ElasticSearch\Transform("Date", options={ "format"="Y-m-d" })
-	 */
-	protected $date;
+    /**
+     * @param \DateTime $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    }
 
-	/**
-	 * @param \DateTime $date
-	 */
-	public function setDate($date) {
-		$this->date = $date;
-	}
+    /**
+     * @param string $message
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+    }
 
-	/**
-	 * @param string $message
-	 */
-	public function setMessage($message) {
-		$this->message = $message;
-	}
+    /**
+     * @param string $username
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
 
-	/**
-	 * @param string $username
-	 */
-	public function setUsername($username) {
-		$this->username = $username;
-	}
+    /**
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
 
-	/**
-	 * @return \DateTime
-	 */
-	public function getDate() {
-		return $this->date;
-	}
+    /**
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getMessage() {
-		return $this->message;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUsername() {
-		return $this->username;
-	}
+    /**
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
 }
-
-?>

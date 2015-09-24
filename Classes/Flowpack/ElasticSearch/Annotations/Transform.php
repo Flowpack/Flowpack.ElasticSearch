@@ -17,16 +17,15 @@ use Doctrine\Common\Annotations\Annotation as DoctrineAnnotation;
  * @Annotation
  * @DoctrineAnnotation\Target("PROPERTY")
  */
-final class Transform {
+final class Transform
+{
+    /**
+     * @var string
+     */
+    public $type;
 
-	/**
-	 * @var string
-	 */
-	public $type;
-
-	/**
-	 * @var array
-	 */
-	public $options;
+    /**
+     * @var array
+     */
+    public $options;
 }
-

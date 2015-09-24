@@ -17,28 +17,32 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * @Flow\Scope("singleton")
  */
-class SignalEmitter {
+class SignalEmitter
+{
+    /**
+     * @Flow\Signal
+     * @param object $object The object that has been updated
+     * @return void
+     */
+    public function emitObjectUpdated($object)
+    {
+    }
 
-	/**
-	 * @Flow\Signal
-	 * @param object $object The object that has been updated
-	 * @return void
-	 */
-	public function emitObjectUpdated($object) { }
+    /**
+     * @Flow\Signal
+     * @param object $object The object that has been updated
+     * @return void
+     */
+    public function emitObjectPersisted($object)
+    {
+    }
 
-	/**
-	 * @Flow\Signal
-	 * @param object $object The object that has been updated
-	 * @return void
-	 */
-	public function emitObjectPersisted($object) { }
-
-	/**
-	 * @Flow\Signal
-	 * @param object $object The object that has been updated
-	 * @return void
-	 */
-	public function emitObjectRemoved($object) { }
-
+    /**
+     * @Flow\Signal
+     * @param object $object The object that has been updated
+     * @return void
+     */
+    public function emitObjectRemoved($object)
+    {
+    }
 }
-

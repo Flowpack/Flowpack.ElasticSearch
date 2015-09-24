@@ -17,20 +17,19 @@ use Doctrine\Common\Annotations\Annotation as DoctrineAnnotation;
  * @Annotation
  * @DoctrineAnnotation\Target({"CLASS", "PROPERTY"})
  */
-final class Indexable {
+final class Indexable
+{
+    /**
+     * The name of the index this object has to be stored to, if target is CLASS
+     *
+     * @var string
+     */
+    public $indexName;
 
-	/**
-	 * The name of the index this object has to be stored to, if target is CLASS
-	 *
-	 * @var string
-	 */
-	public $indexName;
-
-	/**
-	 * The type this object has to be stored as, if target is CLASS
-	 *
-	 * @var string
-	 */
-	public $typeName;
+    /**
+     * The type this object has to be stored as, if target is CLASS
+     *
+     * @var string
+     */
+    public $typeName;
 }
-

@@ -15,21 +15,20 @@ use TYPO3\Flow\Annotations as Flow;
 
 /**
  */
-interface TransformerInterface {
+interface TransformerInterface
+{
+    /**
+     * Returns the Elasticsearch type this transform() method returns
+     *
+     * @abstract
+     * @return string
+     */
+    public function getTargetMappingType();
 
-	/**
-	 * Returns the Elasticsearch type this transform() method returns
-	 *
-	 * @abstract
-	 * @return string
-	 */
-	public function getTargetMappingType();
-
-	/**
-	 * @param mixed $source
-	 * @param \Flowpack\ElasticSearch\Annotations\Transform $annotation
-	 * @return mixed
-	 */
-	public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation);
+    /**
+     * @param mixed $source
+     * @param \Flowpack\ElasticSearch\Annotations\Transform $annotation
+     * @return mixed
+     */
+    public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation);
 }
-

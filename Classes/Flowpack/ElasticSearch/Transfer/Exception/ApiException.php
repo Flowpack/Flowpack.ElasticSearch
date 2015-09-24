@@ -16,7 +16,6 @@ namespace Flowpack\ElasticSearch\Transfer\Exception;
  * If, for example, ElasticSearch returns {"error":"IndexMissingException[[foo_bar] missing]","status":404}
  * this exception is raised.
  */
-class ApiException extends \Flowpack\ElasticSearch\Transfer\Exception {
-
+class ApiException extends \Flowpack\ElasticSearch\Transfer\Exception
+{
 }
-

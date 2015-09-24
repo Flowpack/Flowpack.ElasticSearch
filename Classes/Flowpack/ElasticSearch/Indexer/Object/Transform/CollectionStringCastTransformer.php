@@ -16,29 +16,30 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * @Flow\Scope("singleton")
  */
-class CollectionStringCastTransformer implements TransformerInterface {
+class CollectionStringCastTransformer implements TransformerInterface
+{
+    /**
+     * Returns the Elasticsearch type this transform() method returns
+     *
+     * @return string
+     */
+    public function getTargetMappingType()
+    {
+        return 'string';
+    }
 
-	/**
-	 * Returns the Elasticsearch type this transform() method returns
-	 *
-	 * @return string
-	 */
-	public function getTargetMappingType() {
-		return 'string';
-	}
+    /**
+     * @param mixed $source
+     * @param \Flowpack\ElasticSearch\Annotations\Transform $annotation
+     * @return array
+     */
+    public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation)
+    {
+        $array = array();
+        foreach ($source as $item) {
+            $array[] = (string)$item;
+        }
 
-	/**
-	 * @param mixed $source
-	 * @param \Flowpack\ElasticSearch\Annotations\Transform $annotation
-	 * @return array
-	 */
-	public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation) {
-		$array = array();
-		foreach ($source as $item) {
-			$array[] = (string)$item;
-		}
-
-		return $array;
-	}
+        return $array;
+    }
 }
-

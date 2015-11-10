@@ -64,13 +64,6 @@ class ObjectIndexer {
 	protected $client;
 
 	/**
-	 * Stores the objects which are already indexed in order to avoid duplicate indexing due to multiple notifications, for example
-	 *
-	 * @var array
-	 */
-	protected $handledObjects = array();
-
-	/**
 	 * (Re-) indexes an object to the ElasticSearch index, no matter if the change is actually required.
 	 *
 	 * @param object $object
@@ -80,12 +73,6 @@ class ObjectIndexer {
 	 * @return void
 	 */
 	public function indexObject($object, $signalInformation = NULL, Client $client = NULL) {
-		$objectHash = spl_object_hash($object);
-		if (isset($this->handledObjects[$objectHash])) {
-			return;
-		}
-		$this->handledObjects[$objectHash] = true;
-
 		$type = $this->getIndexTypeForObject($object, $client);
 		if ($type === NULL) {
 			return NULL;
@@ -124,12 +111,6 @@ class ObjectIndexer {
 	 * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
 	 */
 	public function removeObject($object, $signalInformation = NULL, Client $client = NULL) {
-		$objectHash = spl_object_hash($object);
-		if (isset($this->handledObjects[$objectHash])) {
-			return;
-		}
-		$this->handledObjects[$objectHash] = true;
-
 		$type = $this->getIndexTypeForObject($object, $client);
 		if ($type === NULL) {
 			return;

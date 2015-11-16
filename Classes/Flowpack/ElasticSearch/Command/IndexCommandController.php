@@ -12,13 +12,21 @@ namespace Flowpack\ElasticSearch\Command;
  *                                                                        */
 
 use Flowpack\ElasticSearch\Annotations\Indexable;
+use Flowpack\ElasticSearch\Domain\Factory\ClientFactory;
 use Flowpack\ElasticSearch\Domain\Model\Client;
 use Flowpack\ElasticSearch\Domain\Model\Index;
+use Flowpack\ElasticSearch\Indexer\Object\IndexInformer;
 use Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer;
+use Flowpack\ElasticSearch\Service\IndexerService;
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Configuration\ConfigurationManager;
+use TYPO3\Flow\Core\Booting\Scripts;
 use TYPO3\Flow\Error\Error;
 use TYPO3\Flow\Error\Result as ErrorResult;
 use TYPO3\Flow\Exception;
+use TYPO3\Flow\Log\SystemLoggerInterface;
+use TYPO3\Flow\Persistence\PersistenceManagerInterface;
+use TYPO3\Flow\Utility\Arrays;
 
 /**
  * Provides CLI features for index handling
@@ -29,25 +37,37 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 	/**
 	 * @Flow\Inject
-	 * @var \Flowpack\ElasticSearch\Domain\Factory\ClientFactory
+	 * @var ClientFactory
 	 */
 	protected $clientFactory;
 
 	/**
 	 * @Flow\Inject
-	 * @var \Flowpack\ElasticSearch\Indexer\Object\IndexInformer
+	 * @var IndexInformer
 	 */
 	protected $indexInformer;
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Persistence\PersistenceManagerInterface
+	 * @var PersistenceManagerInterface
 	 */
 	protected $persistenceManager;
 
 	/**
 	 * @Flow\Inject
-	 * @var \Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer
+	 * @var ConfigurationManager
+	 */
+	protected $configurationManager;
+
+	/**
+	 * @Flow\Inject
+	 * @var SystemLoggerInterface
+	 */
+	protected $systemLogger;
+
+	/**
+	 * @Flow\Inject
+	 * @var ObjectIndexer
 	 */
 	protected $objectIndexer;
 
@@ -176,8 +196,9 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * @param string $object Class name of a domain object. If given, will only work on this single object
 	 * @param boolean $conductUpdate Set to TRUE to conduct the required corrections
 	 * @param string $clientName The client name to use
+	 * @param integer $batchSize The number of record processed per batch
 	 */
-	public function statusCommand($object = NULL, $conductUpdate = FALSE, $clientName = NULL) {
+	public function statusCommand($object = NULL, $conductUpdate = FALSE, $clientName = NULL, $batchSize = 200) {
 		$result = new ErrorResult();
 
 		$client = $this->clientFactory->create($clientName);
@@ -190,7 +211,7 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 			}
 			$classesAndAnnotations = array($object => $classesAndAnnotations[$object]);
 		}
-		array_walk($classesAndAnnotations, function (Indexable $annotation, $className) use ($result, $client, $conductUpdate) {
+		array_walk($classesAndAnnotations, function (Indexable $annotation, $className) use ($result, $client, $conductUpdate, $batchSize, $clientName) {
 			$this->outputFormatted("Object \x1b[33m%s\x1b[0m", array($className), 4);
 			$this->outputFormatted("Index <b>%s</b> Type <b>%s</b>", array($annotation->indexName, $annotation->typeName), 8);
 			$count = $client->findIndex($annotation->indexName)->findType($annotation->typeName)->count();
@@ -207,67 +228,67 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController {
 			}
 			$this->outputFormatted("Documents in Persistence: <b>%s</b>", array($count !== NULL ? $count : "\x1b[41mError\x1b[0m"), 8);
 			if (!$result->forProperty($className)->hasErrors()) {
-				$states = $this->getModificationsNeededStatesAndIdentifiers($client, $className);
-				if ($conductUpdate) {
-					$inserted = 0;
-					$updated = 0;
-					foreach ($states[ObjectIndexer::ACTION_TYPE_CREATE] AS $identifier) {
-						try {
-							$this->objectIndexer->indexObject($this->persistenceManager->getObjectByIdentifier($identifier, $className));
-							$inserted++;
-						} catch (\Exception $exception) {
-							$result->forProperty($className)->addError(new Error('An error occurred while trying to add an object to the ElasticSearch backend. The exception message was "%s".', 1340356330, array($exception->getMessage())));
-						}
+				$numberOfBatch = ceil($count / $batchSize);
+				$settings = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS);
+				$batchIdentifier = uniqid();
+				$startTime = microtime(TRUE);
+				$this->systemLogger->log(sprintf('Update process for "%s" started, batch: %s, count: %s, numberOfBatch: %s, batchSize: %s', $className, $batchIdentifier, $count, $numberOfBatch, $batchSize), LOG_INFO, NULL, 'ElasticSearch');
+				for ($i = 0; $i < $numberOfBatch; $i++) {
+					$offset = $i * $batchSize;
+					$arguments = array(
+						'className' => $className,
+						'batchSize' => $batchSize,
+						'offset' => $offset,
+						'batchIdentifier' => $batchIdentifier,
+						'conductUpdate' => $conductUpdate
+					);
+					if ($clientName !== NULL) {
+						$arguments['clientName'] = $clientName;
 					}
-					foreach ($states[ObjectIndexer::ACTION_TYPE_UPDATE] AS $identifier) {
-						try {
-							$this->objectIndexer->indexObject($this->persistenceManager->getObjectByIdentifier($identifier, $className));
-							$updated++;
-						} catch (\Exception $exception) {
-							$result->forProperty($className)->addError(new Error('An error occurred while trying to update an object to the ElasticSearch backend. The exception message was "%s".', 1340358590, array($exception->getMessage())));
-						}
+
+					if (!Scripts::executeCommand('flowpack.elasticsearch:index:statusInternal', Arrays::getValueByPath($settings, 'TYPO3.Flow'), TRUE, $arguments)) {
+						$this->systemLogger->log(sprintf('Unable to conduct update for "%s" ended, batch: %s, duration: %s', $className, $batchIdentifier, microtime(TRUE) - $startTime), LOG_CRIT, NULL, 'ElasticSearch');
+						$this->outputFormatted("Error: Unable to conduct update, check your logs for error details.", array(), 8);
+						$this->quit(1);
 					}
-					$this->outputFormatted("Objects inserted: <b>%s</b>", array($inserted), 8);
-					$this->outputFormatted("Objects updated: <b>%s</b>", array($updated), 8);
-				} else {
-					$this->outputFormatted("Modifications needed: <b>create</b> %d, <b>update</b> %d", array(count($states[ObjectIndexer::ACTION_TYPE_CREATE]), count($states[ObjectIndexer::ACTION_TYPE_UPDATE])), 8);
 				}
+				$this->systemLogger->log(sprintf('Update process for "%s" ended, batch: %s, duration: %s', $className, $batchIdentifier, microtime(TRUE) - $startTime), LOG_INFO, NULL, 'ElasticSearch');
+
 			}
 		});
-
-		if ($result->hasErrors()) {
-			$this->outputLine();
-			$this->outputLine('The following errors occurred:');
-			/** @var $error \TYPO3\Flow\Error\Error */
-			foreach ($result->getFlattenedErrors() as $className => $errors) {
-				foreach ($errors as $error) {
-					$this->outputLine();
-					$this->outputFormatted("<b>\x1b[41mError\x1b[0m</b> for \x1b[33m%s\x1b[0m:", array($className), 8);
-					$this->outputFormatted((string)$error, array(), 4);
-				}
-			}
-		}
 	}
 
 	/**
-	 * @param Client $client
-	 * @param string $className
-	 *
-	 * @return array
+	 * @param string $className Class name of a domain object. If given, will only work on this single object
+	 * @param integer $batchSize The number of record processed per batch
+	 * @param integer $offset Batch offset
+	 * @param string $batchIdentifier Batch identifier
+	 * @param string $clientName The client name to use
+	 * @param boolean $conductUpdate Set to TRUE to conduct the required corrections
+	 * @Flow\Internal
 	 */
-	protected function getModificationsNeededStatesAndIdentifiers(Client $client, $className) {
-		$query = $this->persistenceManager->createQueryForType($className);
-		$states = array(
-			ObjectIndexer::ACTION_TYPE_CREATE => array(),
-			ObjectIndexer::ACTION_TYPE_UPDATE => array(),
-			ObjectIndexer::ACTION_TYPE_DELETE => array(),
-		);
-		foreach ($query->execute() as $object) {
-			$state = $this->objectIndexer->objectIndexActionRequired($object, $client);
-			$states[$state][] = $this->persistenceManager->getIdentifierByObject($object);
+	public function statusInternalCommand($className, $batchSize, $offset, $batchIdentifier, $clientName = NULL, $conductUpdate = FALSE) {
+		$states = $this->indexInformer->getModificationsNeededStatesAndObjects($className, $batchSize, $offset, $this->clientFactory->create($clientName));
+		$created = $updated = 0;
+		$run = $offset / $batchSize;
+		if ($conductUpdate) {
+			foreach ($states[ObjectIndexer::ACTION_TYPE_CREATE] AS $object) {
+				try {
+					$this->objectIndexer->indexObject($object);
+					$created++;
+				} catch (\Exception $exception) {
+					$this->systemLogger->log(sprintf('An error occurred while trying to add an object of type "%s" to the ElasticSearch backend. The exception message was "%s" (%s), run: %s, batch: %s', $className, $exception->getCode(), $exception->getMessage(), $run, $batchIdentifier), LOG_ERR, NULL, 'ElasticSearch');
+				}
+			}
+			foreach ($states[ObjectIndexer::ACTION_TYPE_UPDATE] AS $object) {
+				try {
+					$this->objectIndexer->indexObject($object);
+					$updated++;
+				} catch (\Exception $exception) {
+					$this->systemLogger->log(sprintf('An error occurred while trying to update an object of type "%s" to the ElasticSearch backend. The exception message was "%s" (%s), run: %s, batch: %s', $className, $exception->getCode(), $exception->getMessage(), $run, $batchIdentifier), LOG_ERR, NULL, 'ElasticSearch');
+				}
+			}
+			$this->systemLogger->log(sprintf('Batch update process for "%s", objects created: %s, objects updated: %s, run: %s, batch: %s', $className, $created, $updated, $run, $batchIdentifier), LOG_INFO, NULL, 'ElasticSearch');
 		}
-
-		return $states;
 	}
 }
-

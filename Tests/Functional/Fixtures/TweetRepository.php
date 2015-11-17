@@ -1,15 +1,15 @@
 <?php
 namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU General Public License, either version 3 of the   *
- * License, or (at your option) any later version.                        *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the Flowpack.ElasticSearch package.
+ *
+ * (c) Contributors of the Flowpack Team - flowpack.org
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
 use Doctrine\ORM\Mapping as ORM;
 use TYPO3\Flow\Annotations as Flow;
@@ -17,8 +17,6 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * @Flow\Scope("singleton")
  */
-class TweetRepository  extends \TYPO3\Flow\Persistence\Repository {
-
+class TweetRepository  extends \TYPO3\Flow\Persistence\Repository
+{
 }
-
-?>

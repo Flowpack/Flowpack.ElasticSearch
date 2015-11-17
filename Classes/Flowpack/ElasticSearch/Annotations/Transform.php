@@ -1,15 +1,15 @@
 <?php
 namespace Flowpack\ElasticSearch\Annotations;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the Flowpack.ElasticSearch package.
+ *
+ * (c) Contributors of the Flowpack Team - flowpack.org
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
 use Doctrine\Common\Annotations\Annotation as DoctrineAnnotation;
 
@@ -17,16 +17,15 @@ use Doctrine\Common\Annotations\Annotation as DoctrineAnnotation;
  * @Annotation
  * @DoctrineAnnotation\Target("PROPERTY")
  */
-final class Transform {
+final class Transform
+{
+    /**
+     * @var string
+     */
+    public $type;
 
-	/**
-	 * @var string
-	 */
-	public $type;
-
-	/**
-	 * @var array
-	 */
-	public $options;
+    /**
+     * @var array
+     */
+    public $options;
 }
-

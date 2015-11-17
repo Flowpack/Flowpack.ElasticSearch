@@ -1,15 +1,15 @@
 <?php
 namespace Flowpack\ElasticSearch\Transfer;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "Flowpack.ElasticSearch".*
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- *  of the License, or (at your option) any later version.                *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
+/*
+ * This file is part of the Flowpack.ElasticSearch package.
+ *
+ * (c) Contributors of the Flowpack Team - flowpack.org
+ *
+ * This package is Open Source Software. For the full copyright and license
+ * information, please view the LICENSE file which was distributed with this
+ * source code.
+ */
 
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Http\Client\CurlEngine;
@@ -18,58 +18,60 @@ use TYPO3\Flow\Http\Client\CurlEngine;
  * Handles the requests
  * @Flow\scope("singleton")
  */
-class RequestService {
+class RequestService
+{
+    /**
+     * @Flow\Inject
+     * @var \TYPO3\Flow\Http\Client\Browser
+     */
+    protected $browser;
 
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Http\Client\Browser
-	 */
-	protected $browser;
+    /**
+     * @var array
+     */
+    protected $settings;
 
-	/**
-	 * @var array
-	 */
-	protected $settings;
+    /**
+     * @param array $settings
+     * @return void
+     */
+    public function injectSettings(array $settings)
+    {
+        $this->settings = $settings;
+    }
 
-	/**
-	 * @param array $settings
-	 * @return void
-	 */
-	public function injectSettings(array $settings) {
-		$this->settings = $settings;
-	}
+    /**
+     * @return void
+     */
+    public function initializeObject()
+    {
+        $requestEngine = new CurlEngine();
+        $requestEngine->setOption(CURLOPT_TIMEOUT, $this->settings['transfer']['connectionTimeout']);
+        $this->browser->setRequestEngine($requestEngine);
+    }
 
-	/**
-	 * @return void
-	 */
-	public function initializeObject() {
-		$requestEngine = new CurlEngine();
-		$requestEngine->setOption(CURLOPT_TIMEOUT, $this->settings['transfer']['connectionTimeout']);
-		$this->browser->setRequestEngine($requestEngine);
-	}
+    /**
+     * @param string $method
+     * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
+     * @param string $path
+     * @param array $arguments
+     * @param string|array $content
+     *
+     * @return \Flowpack\ElasticSearch\Transfer\Response
+     */
+    public function request($method, \Flowpack\ElasticSearch\Domain\Model\Client $client, $path = null, $arguments = array(), $content = null)
+    {
+        $clientConfigurations = $client->getClientConfigurations();
+        $clientConfiguration = $clientConfigurations[0];
 
-	/**
-	 * @param string $method
-	 * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
-	 * @param string $path
-	 * @param array $arguments
-	 * @param string|array $content
-	 *
-	 * @return \Flowpack\ElasticSearch\Transfer\Response
-	 */
-	public function request($method, \Flowpack\ElasticSearch\Domain\Model\Client $client, $path = NULL, $arguments = array(), $content = NULL) {
-		$clientConfigurations = $client->getClientConfigurations();
-		$clientConfiguration = $clientConfigurations[0];
+        $uri = clone $clientConfiguration->getUri();
+        if ($path !== null) {
+            $uri->setPath($uri->getPath() . $path);
+        }
 
-		$uri = clone $clientConfiguration->getUri();
-		if ($path !== NULL) {
-			$uri->setPath($uri->getPath() . $path);
-		}
+        $response = $this->browser->request($uri, $method, $arguments, array(), array(),
+            is_array($content) ? json_encode($content) : $content);
 
-		$response = $this->browser->request($uri, $method, $arguments, array(), array(),
-			is_array($content) ? json_encode($content) : $content);
-
-		return new Response($response, $this->browser->getLastRequest());
-	}
+        return new Response($response, $this->browser->getLastRequest());
+    }
 }
-

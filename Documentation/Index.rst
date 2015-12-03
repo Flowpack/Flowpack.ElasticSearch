@@ -36,7 +36,7 @@ During runtime, you have to provide the client's name you want to connect to, if
 When access to the Elasticsearch instance is protected through HTTP Basic Auth, you can provide the necessary username
 and password in your client settings::
 
- 	Flowpack:
+	Flowpack:
 	  ElasticSearch:
 	    clients:
 	        # default bundle that will be used if no more specific bundle name was supplied.

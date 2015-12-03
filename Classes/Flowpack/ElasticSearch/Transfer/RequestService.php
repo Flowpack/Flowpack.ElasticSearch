@@ -69,6 +69,12 @@ class RequestService
             $uri->setPath($uri->getPath() . $path);
         }
 
+        if ($uri->getUsername()) {
+            $requestEngine = $this->browser->getRequestEngine();
+            $requestEngine->setOption(CURLOPT_USERPWD, $uri->getUsername() . ':' . $uri->getPassword() );
+            $requestEngine->setOption(CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        }
+
         $response = $this->browser->request($uri, $method, $arguments, array(), array(),
             is_array($content) ? json_encode($content) : $content);
 

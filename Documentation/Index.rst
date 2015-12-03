@@ -33,6 +33,19 @@ have a dedicated server (recommended) for running the Functional Tests, set it u
 
 During runtime, you have to provide the client's name you want to connect to, if it is not `default`.
 
+When access to the Elasticsearch instance is protected through HTTP Basic Auth, you can provide the necessary username
+and password in your client settings::
+
+	Flowpack:
+	  ElasticSearch:
+	    clients:
+	        # default bundle that will be used if no more specific bundle name was supplied.
+	      default:
+	        - host: localhost
+	          port: 9200
+	          username: john
+	          password: mysecretpassword
+
 Running the Functional Tests
 ============================
 

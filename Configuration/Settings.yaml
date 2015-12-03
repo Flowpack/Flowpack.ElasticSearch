@@ -5,6 +5,8 @@ Flowpack:
       default:
         - host: localhost
           port: 9200
+          username: ''
+          password: ''
 
     realtimeIndexing:
       enabled: TRUE

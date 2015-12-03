@@ -34,6 +34,16 @@ class ClientConfiguration
     protected $scheme = 'http';
 
     /**
+     * @var string
+     */
+    protected $username = '';
+
+    /**
+     * @var string
+     */
+    protected $password = '';
+
+    /**
      * @param string $host
      */
     public function setHost($host)
@@ -82,6 +92,48 @@ class ClientConfiguration
     }
 
     /**
+     * Returns username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Sets username
+     *
+     * @param string $username
+     * @return void
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * Returns password
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Sets password
+     *
+     * @param string $password
+     * @return void
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    /**
      * @return \TYPO3\Flow\Http\Uri
      */
     public function getUri()
@@ -90,6 +142,8 @@ class ClientConfiguration
         $uri->setScheme($this->scheme);
         $uri->setHost($this->host);
         $uri->setPort($this->port);
+        $uri->setUsername($this->username);
+        $uri->setPassword($this->password);
 
         return $uri;
     }

@@ -41,8 +41,9 @@ and password in your client settings::
 	    clients:
 	        # default bundle that will be used if no more specific bundle name was supplied.
 	      default:
-	        - host: localhost
-	          port: 9200
+	        - host: my.elasticsearch-service.com
+	          port: 443
+	          scheme: https
 	          username: john
 	          password: mysecretpassword
 

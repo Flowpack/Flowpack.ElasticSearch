@@ -11,8 +11,10 @@ namespace Flowpack\ElasticSearch\Transfer;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Domain\Model\Client\ClientConfiguration;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Http\Client\CurlEngine;
+use TYPO3\Flow\Http\Request;
 
 /**
  * Handles the requests
@@ -63,21 +65,27 @@ class RequestService
     {
         $clientConfigurations = $client->getClientConfigurations();
         $clientConfiguration = $clientConfigurations[0];
+        /** @var ClientConfiguration $clientConfiguration */
 
         $uri = clone $clientConfiguration->getUri();
         if ($path !== null) {
             $uri->setPath($uri->getPath() . $path);
         }
 
+        $request = Request::create($uri, $method, $arguments, array(), array());
+        // In some cases, $content will contain "null" as a string. Better be safe and handle this weird case:
+        if ($content === 'null') {
+            $request->setContent(null);
+        } else {
+            $request->setContent((is_array($content) ? json_encode($content) : $content));
+        }
         if ($uri->getUsername()) {
-            $requestEngine = $this->browser->getRequestEngine();
-            $requestEngine->setOption(CURLOPT_USERPWD, $uri->getUsername() . ':' . $uri->getPassword() );
-            $requestEngine->setOption(CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            $requestUri = $request->getUri();
+            $requestUri->setUsername($uri->getUsername());
+            $requestUri->setPassword($uri->getPassword());
         }
 
-        $response = $this->browser->request($uri, $method, $arguments, array(), array(),
-            is_array($content) ? json_encode($content) : $content);
-
+        $response = $this->browser->sendRequest($request);
         return new Response($response, $this->browser->getLastRequest());
     }
 }

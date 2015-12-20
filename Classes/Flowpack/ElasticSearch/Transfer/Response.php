@@ -47,7 +47,8 @@ class Response
             }
 
             if (array_key_exists('error', $treatedContent)) {
-                throw new Exception\ApiException($treatedContent['error'], 1338977435, $response, $request);
+                $exceptionMessage = print_r($treatedContent['error'], true);
+                throw new Exception\ApiException($exceptionMessage, 1338977435, $response, $request);
             }
         }
 

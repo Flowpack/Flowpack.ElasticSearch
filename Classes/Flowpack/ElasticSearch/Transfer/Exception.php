@@ -34,7 +34,7 @@ class Exception extends \Flowpack\ElasticSearch\Exception
         $this->response = $response;
         $this->request = $request;
         if ($request !== null) {
-            $message = sprintf("[%s %s]: %s\n\nRequest data: %s",
+            $message = sprintf("Elasticsearch request failed.\n[%s %s]: %s\n\nRequest data: %s",
                 $request->getMethod(),
                 $request->getUri(),
                 $message . '; Response body: ' . $response->getContent(),

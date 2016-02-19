@@ -115,7 +115,6 @@ class IndexInformer
      * @throws \Flowpack\ElasticSearch\Exception
      * @param ObjectManagerInterface $objectManager
      * @return array
-     * @Flow\CompileStatic
      */
     public static function buildIndexClassesAndProperties($objectManager)
     {

@@ -188,16 +188,22 @@ class Index
      * @param string $path
      * @param array $arguments
      * @param string $content
+     * @param boolean $prefixIndex
      *
      * @throws \Flowpack\ElasticSearch\Exception
      * @return \Flowpack\ElasticSearch\Transfer\Response
      */
-    public function request($method, $path = null, $arguments = array(), $content = null)
+    public function request($method, $path = null, $arguments = array(), $content = null, $prefixIndex = true)
     {
         if ($this->client === null) {
             throw new Exception('The client of the index "' . $this->name . '" is not set, hence no requests can be done.');
         }
-        $path = '/' . $this->name . ($path ?: '');
+        $path = ($path ? trim($path) : '');
+        if ($prefixIndex === true) {
+            $path = '/' . $this->name . $path;
+        } else {
+            $path = '/' . $path;
+        }
 
         return $this->client->request($method, $path, $arguments, $content);
     }

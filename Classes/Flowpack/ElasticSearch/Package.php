@@ -35,7 +35,7 @@ class Package extends BasePackage
         $dispatcher = $bootstrap->getSignalSlotDispatcher();
         $package = $this;
         $dispatcher->connect('TYPO3\Flow\Core\Booting\Sequence', 'afterInvokeStep', function (\TYPO3\Flow\Core\Booting\Step $step) use ($package, $bootstrap) {
-            if ($step->getIdentifier() === 'typo3.flow:persistence') {
+            if ($step->getIdentifier() === 'typo3.flow:objectmanagement:runtime') {
                 $package->prepareRealtimeIndexing($bootstrap);
             }
         });

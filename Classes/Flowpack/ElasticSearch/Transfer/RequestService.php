@@ -69,6 +69,10 @@ class RequestService
 
         $uri = clone $clientConfiguration->getUri();
         if ($path !== null) {
+            if (strpos($path, '?') !== false) {
+                list($path, $query) = explode('?', $path);
+                $uri->setQuery($query);
+            }
             $uri->setPath($uri->getPath() . $path);
         }
 

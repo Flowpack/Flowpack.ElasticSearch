@@ -98,10 +98,15 @@ class ObjectIndexer
         $className = TypeHandling::getTypeForValue($object);
         $data = [];
         foreach ($this->indexInformer->getClassProperties($className) as $propertyName) {
-            $value = \TYPO3\Flow\Reflection\ObjectAccess::getProperty($object, $propertyName);
-            if (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, 'Flowpack\ElasticSearch\Annotations\Transform')) !== null) {
+            if (ObjectAccess::isPropertyGettable($object, $propertyName) === false) {
+                continue;
+            }
+
+            $value = ObjectAccess::getProperty($object, $propertyName);
+            if (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, TransformAnnotation::class)) !== null) {
                 $value = $this->transformerFactory->create($transformAnnotation->type)->transformByAnnotation($value, $transformAnnotation);
             }
+
             $data[$propertyName] = $value;
         }
 
@@ -166,7 +171,7 @@ class ObjectIndexer
         if ($client === null) {
             $client = $this->client;
         }
-        $className = $this->reflectionService->getClassNameByObject($object);
+        $className = TypeHandling::getTypeForValue($object);
         $indexAnnotation = $this->indexInformer->getClassAnnotation($className);
         if ($indexAnnotation === null) {
             return null;

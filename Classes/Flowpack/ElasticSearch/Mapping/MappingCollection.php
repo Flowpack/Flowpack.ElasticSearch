@@ -12,6 +12,7 @@ namespace Flowpack\ElasticSearch\Mapping;
  */
 
 use Doctrine\ORM\Mapping as ORM;
+use Flowpack\ElasticSearch\Domain\Model\Mapping;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
@@ -52,8 +53,8 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection
     {
         $returnMappings = new \Flowpack\ElasticSearch\Mapping\MappingCollection();
         foreach ($this as $entityMapping) {
-            /** @var $entityMapping \Flowpack\ElasticSearch\Domain\Model\Mapping */
-            $mapping = new \Flowpack\ElasticSearch\Domain\Model\Mapping(clone $entityMapping->getType());
+            /** @var $entityMapping Mapping */
+            $mapping = new Mapping(clone $entityMapping->getType());
             $saveMapping = false;
             foreach ($entityMapping->getProperties() as $propertyName => $propertySettings) {
                 foreach ($propertySettings as $entitySettingKey => $entitySettingValue) {
@@ -75,16 +76,15 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection
     /**
      * Tells whether a member of this collection has a specific index/type/property settings value
      *
-     * @param \Flowpack\ElasticSearch\Domain\Model\Mapping $inquirerMapping
+     * @param Mapping $inquirerMapping
      * @param string $propertyName
-     * @param $settingKey
-     *
+     * @param string $settingKey
      * @return mixed
      */
-    public function getMappingSetting(\Flowpack\ElasticSearch\Domain\Model\Mapping $inquirerMapping, $propertyName, $settingKey)
+    public function getMappingSetting(Mapping $inquirerMapping, $propertyName, $settingKey)
     {
         foreach ($this as $memberMapping) {
-            /** @var $memberMapping \Flowpack\ElasticSearch\Domain\Model\Mapping */
+            /** @var $memberMapping Mapping */
             if ($inquirerMapping->getType()->getName() === $memberMapping->getType()->getName()
                 && $inquirerMapping->getType()->getIndex()->getName() === $memberMapping->getType()->getIndex()->getName()) {
                 return $memberMapping->getPropertyByPath(array($propertyName, $settingKey));
@@ -96,6 +96,7 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection
 
     /**
      * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
+     * @return void
      */
     public function setClient(\Flowpack\ElasticSearch\Domain\Model\Client $client)
     {

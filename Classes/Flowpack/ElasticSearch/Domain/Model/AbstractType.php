@@ -70,8 +70,7 @@ abstract class AbstractType
     /**
      * Returns a document
      *
-     * @param $id
-     *
+     * @param string $id
      * @return \Flowpack\ElasticSearch\Domain\Model\Document
      */
     public function findDocumentById($id)
@@ -86,7 +85,7 @@ abstract class AbstractType
     }
 
     /**
-     * @param $id
+     * @param string $id
      * @return boolean ...whether the deletion is considered successful
      */
     public function deleteDocumentById($id)
@@ -125,10 +124,9 @@ abstract class AbstractType
      * @param string $path
      * @param array $arguments
      * @param string $content
-     *
      * @return \Flowpack\ElasticSearch\Transfer\Response
      */
-    public function request($method, $path = null, $arguments = array(), $content = null)
+    public function request($method, $path = null, array $arguments = array(), $content = null)
     {
         $path = '/' . $this->name . ($path ?: '');
 

@@ -11,20 +11,23 @@ namespace Flowpack\ElasticSearch\Domain\Exception;
  * source code.
  */
 
+use TYPO3\Flow\Error\Result;
+
 /**
  * Signals a mismatch between the
  */
 class DocumentPropertiesMismatchException extends \Flowpack\ElasticSearch\Exception
 {
     /**
-     * @var \TYPO3\Flow\Error\Result
+     * @var Result
      */
     protected $errorResult;
 
     /**
-     * @param \TYPO3\Flow\Error\Result $result
+     * @param Result $result
+     * @return void
      */
-    public function setErrorResult(\TYPO3\Flow\Error\Result $result)
+    public function setErrorResult(Result $result)
     {
         $this->errorResult = $result;
     }

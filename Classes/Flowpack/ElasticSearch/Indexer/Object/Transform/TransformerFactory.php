@@ -27,9 +27,8 @@ class TransformerFactory
 
     /**
      * @param string $annotatedTransformer Either a full qualified class name or a shortened one which is seeked in the current package.
-     *
-     * @throws \Flowpack\ElasticSearch\Exception
      * @return \Flowpack\ElasticSearch\Indexer\Object\Transform\TransformerInterface
+     * @throws \Flowpack\ElasticSearch\Exception
      */
     public function create($annotatedTransformer)
     {

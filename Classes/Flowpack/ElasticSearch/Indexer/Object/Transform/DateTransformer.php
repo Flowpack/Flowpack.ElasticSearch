@@ -31,7 +31,6 @@ class DateTransformer implements TransformerInterface
     /**
      * @param \DateTime $source
      * @param \Flowpack\ElasticSearch\Annotations\Transform $annotation
-     *
      * @return string
      */
     public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation)

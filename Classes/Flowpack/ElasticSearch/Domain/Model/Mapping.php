@@ -20,7 +20,7 @@ use TYPO3\Flow\Utility\Arrays;
 class Mapping
 {
     /**
-     * @var \Flowpack\ElasticSearch\Domain\Model\AbstractType
+     * @var AbstractType
      */
     protected $type;
 
@@ -45,7 +45,7 @@ class Mapping
     protected $fullMapping = array();
 
     /**
-     * @param \Flowpack\ElasticSearch\Domain\Model\AbstractType $type
+     * @param AbstractType $type
      */
     public function __construct(AbstractType $type)
     {
@@ -60,7 +60,7 @@ class Mapping
      */
     public function getPropertyByPath($path)
     {
-        return \TYPO3\Flow\Utility\Arrays::getValueByPath($this->properties, $path);
+        return Arrays::getValueByPath($this->properties, $path);
     }
 
     /**
@@ -72,7 +72,7 @@ class Mapping
      */
     public function setPropertyByPath($path, $value)
     {
-        $this->properties = \TYPO3\Flow\Utility\Arrays::setValueByPath($this->properties, $path, $value);
+        $this->properties = Arrays::setValueByPath($this->properties, $path, $value);
     }
 
     /**
@@ -84,7 +84,7 @@ class Mapping
     }
 
     /**
-     * @return \Flowpack\ElasticSearch\Domain\Model\AbstractType
+     * @return AbstractType
      */
     public function getType()
     {
@@ -106,6 +106,8 @@ class Mapping
 
     /**
      * Sets this mapping to the server
+     *
+     * @return \Flowpack\ElasticSearch\Transfer\Response
      */
     public function apply()
     {
@@ -126,8 +128,9 @@ class Mapping
     /**
      * Dynamic templates allow to define mapping templates
      *
-     * @param $dynamicTemplateName
+     * @param string $dynamicTemplateName
      * @param array $mappingConfiguration
+     * @return void
      */
     public function addDynamicTemplate($dynamicTemplateName, array $mappingConfiguration)
     {
@@ -142,6 +145,7 @@ class Mapping
      * It can be used to specify arbitrary ElasticSearch mapping options, like f.e. configuring the _all field.
      *
      * @param array $fullMapping
+     * @return void
      */
     public function setFullMapping(array $fullMapping)
     {
@@ -149,7 +153,8 @@ class Mapping
     }
 
     /**
-     * see {@link setFullMapping} for documentation
+     * See {@link setFullMapping} for documentation
+     *
      * @return array
      */
     public function getFullMapping()

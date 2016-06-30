@@ -18,7 +18,7 @@ use \Flowpack\ElasticSearch\Annotations as ElasticSearch;
  * An object for the "twitter" index, representing a "tweet" document.
  *
  * @Flow\Entity
- * @ElasticSearch\Indexable(indexName="flow3_elasticsearch_functionaltests_twitter", typeName="tweet")
+ * @ElasticSearch\Indexable(indexName="flow_elasticsearch_functionaltests_twitter", typeName="tweet")
  */
 class Tweet
 {

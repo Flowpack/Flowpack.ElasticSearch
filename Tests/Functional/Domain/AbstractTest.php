@@ -11,12 +11,14 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Domain;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Domain\Factory\ClientFactory;
+
 /**
  */
 abstract class AbstractTest extends \TYPO3\Flow\Tests\FunctionalTestCase
 {
     /**
-     * @var \Flowpack\ElasticSearch\Domain\Factory\ClientFactory
+     * @var ClientFactory
      */
     protected $clientFactory;
 
@@ -37,7 +39,7 @@ abstract class AbstractTest extends \TYPO3\Flow\Tests\FunctionalTestCase
     {
         parent::setUp();
 
-        $this->clientFactory = $this->objectManager->get('Flowpack\ElasticSearch\Domain\Factory\ClientFactory');
+        $this->clientFactory = $this->objectManager->get(ClientFactory::class);
         $client = $this->clientFactory->create();
         $this->testingIndex = $client->findIndex('typo3_elasticsearch_functionaltests');
 

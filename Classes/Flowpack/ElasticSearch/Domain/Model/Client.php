@@ -91,10 +91,9 @@ class Client
      * @param string $path
      * @param array $arguments
      * @param string|array $content
-     *
      * @return \Flowpack\ElasticSearch\Transfer\Response
      */
-    public function request($method, $path = null, $arguments = array(), $content = null)
+    public function request($method, $path = null, array $arguments = array(), $content = null)
     {
         return $this->requestService->request($method, $this, $path, $arguments, $content);
     }

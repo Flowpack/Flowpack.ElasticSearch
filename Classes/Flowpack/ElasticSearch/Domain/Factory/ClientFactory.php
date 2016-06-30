@@ -37,6 +37,7 @@ class ClientFactory
      * @param string $clientClassName
      * @throws \Flowpack\ElasticSearch\Exception
      * @return \Flowpack\ElasticSearch\Domain\Model\Client
+     * @return void
      */
     public function create($bundle = null, $clientClassName = 'Flowpack\ElasticSearch\Domain\Model\Client')
     {
@@ -59,12 +60,11 @@ class ClientFactory
     }
 
     /**
-     * @param $clientsSettings
-     *
+     * @param array $clientsSettings
      * @return array
      * @throws \Flowpack\ElasticSearch\Exception
      */
-    protected function buildClientConfigurations($clientsSettings)
+    protected function buildClientConfigurations(array $clientsSettings)
     {
         $clientConfigurations = array();
         foreach ($clientsSettings as $clientSettings) {

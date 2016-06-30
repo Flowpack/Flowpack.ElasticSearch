@@ -67,6 +67,13 @@ class ObjectIndexer
     protected $client;
 
     /**
+     * Stores the objects which are already indexed in order to avoid duplicate indexing due to multiple notifications, for example
+     *
+     * @var array
+     */
+    protected $handledObjects = [];
+
+    /**
      * (Re-) indexes an object to the ElasticSearch index, no matter if the change is actually required.
      *
      * @param object $object
@@ -76,13 +83,18 @@ class ObjectIndexer
      */
     public function indexObject($object, $signalInformation = null, Client $client = null)
     {
+        $id = $this->persistenceManager->getIdentifierByObject($object);
+        if (isset($this->handledObjects[$id])) {
+            return;
+        }
+        $this->handledObjects[$id] = true;
+
         $type = $this->getIndexTypeForObject($object, $client);
         if ($type === null) {
             return null;
         }
         $data = $this->getIndexablePropertiesAndValuesFromObject($object);
 
-        $id = $this->persistenceManager->getIdentifierByObject($object);
         $document = new Document($type, $data, $id);
         $document->store();
     }
@@ -121,11 +133,17 @@ class ObjectIndexer
      */
     public function removeObject($object, $signalInformation = null, Client $client = null)
     {
+        $id = $this->persistenceManager->getIdentifierByObject($object);
+        if (isset($this->handledObjects[$id])) {
+            return;
+        }
+        $this->handledObjects[$id] = true;
+
         $type = $this->getIndexTypeForObject($object, $client);
         if ($type === null) {
             return;
         }
-        $id = $this->persistenceManager->getIdentifierByObject($object);
+
         $type->deleteDocumentById($id);
     }
 
@@ -190,5 +208,15 @@ class ObjectIndexer
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * Clears the indexing state.
+     *
+     * @return void
+     */
+    public function clearState()
+    {
+        $this->handledObjects = [];
     }
 }

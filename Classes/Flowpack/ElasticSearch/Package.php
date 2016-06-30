@@ -56,6 +56,7 @@ class Package extends BasePackage
             $bootstrap->getSignalSlotDispatcher()->connect(SignalEmitter::class, 'objectUpdated', ObjectIndexer::class, 'indexObject');
             $bootstrap->getSignalSlotDispatcher()->connect(SignalEmitter::class, 'objectPersisted', ObjectIndexer::class, 'indexObject');
             $bootstrap->getSignalSlotDispatcher()->connect(SignalEmitter::class, 'objectRemoved', ObjectIndexer::class, 'removeObject');
+            $bootstrap->getSignalSlotDispatcher()->connect(SignalEmitter::class, 'allObjectsPersisted', ObjectIndexer::class, 'clearState');
         }
     }
 }

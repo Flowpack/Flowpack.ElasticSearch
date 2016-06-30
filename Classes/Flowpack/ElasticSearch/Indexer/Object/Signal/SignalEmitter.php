@@ -45,4 +45,12 @@ class SignalEmitter
     public function emitObjectRemoved($object)
     {
     }
+
+    /**
+     * @Flow\Signal
+     * @return void
+     */
+    public function emitAllObjectsPersisted()
+    {
+    }
 }

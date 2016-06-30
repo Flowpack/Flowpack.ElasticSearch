@@ -89,9 +89,7 @@ class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase
             ->findType('tweet')
             ->findDocumentById($identifier);
 
-        // the version increments by two, since we index via AOP and via Doctrine lifecycle events
-        // see https://github.com/Flowpack/Flowpack.ElasticSearch/pull/36
-        $this->assertSame($initialVersion + 2, $changedDocument->getVersion());
+        $this->assertSame($initialVersion + 1, $changedDocument->getVersion());
         $this->assertSame($changedDocument->getField('message'), 'changed message.');
     }
 

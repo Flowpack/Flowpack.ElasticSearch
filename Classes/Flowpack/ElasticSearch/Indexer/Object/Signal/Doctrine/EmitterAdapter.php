@@ -12,6 +12,7 @@ namespace Flowpack\ElasticSearch\Indexer\Object\Signal\Doctrine;
  */
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use TYPO3\Flow\Annotations as Flow;
 
@@ -51,5 +52,14 @@ class EmitterAdapter implements \Flowpack\ElasticSearch\Indexer\Object\Signal\Em
     public function postRemove(LifecycleEventArgs $eventArguments)
     {
         $this->signalEmitter->emitObjectRemoved($eventArguments->getEntity());
+    }
+
+    /**
+     * @param PostFlushEventArgs $eventArguments
+     * @return void
+     */
+    public function postFlush(PostFlushEventArgs $eventArguments)
+    {
+        $this->signalEmitter->emitAllObjectsPersisted();
     }
 }

@@ -29,7 +29,7 @@ class IndexerAspect
     /**
      * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(add|update)())")
      * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
-     * @return string
+     * @return void
      */
     public function updateObjectToIndex(\TYPO3\Flow\Aop\JoinPointInterface $joinPoint)
     {
@@ -39,14 +39,24 @@ class IndexerAspect
     }
 
     /**
-     * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(remove)())")
+     * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->remove())")
      * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
-     * @return string
+     * @return void
      */
     public function removeObjectFromIndex(\TYPO3\Flow\Aop\JoinPointInterface $joinPoint)
     {
         $arguments = $joinPoint->getMethodArguments();
         $object = reset($arguments);
         $this->objectIndexer->removeObject($object);
+    }
+
+    /**
+     * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->persistAll())")
+     * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
+     * @return void
+     */
+    public function clearIndexingState(\TYPO3\Flow\Aop\JoinPointInterface $joinPoint)
+    {
+        $this->objectIndexer->clearState();
     }
 }

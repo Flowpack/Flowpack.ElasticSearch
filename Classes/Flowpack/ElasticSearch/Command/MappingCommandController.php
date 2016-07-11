@@ -11,6 +11,7 @@ namespace Flowpack\ElasticSearch\Command;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Mapping\MappingCollection;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
@@ -178,11 +179,11 @@ class MappingCommandController extends \TYPO3\Flow\Cli\CommandController
     /**
      * Traverses through mappingInformation array and aggregates by index and type names
      *
-     * @param \Flowpack\ElasticSearch\Mapping\MappingCollection $mappingCollection
+     * @param MappingCollection $mappingCollection
      * @throws \Flowpack\ElasticSearch\Exception
      * @return array with index names as keys, second level type names as keys
      */
-    protected function buildArrayFromMappingCollection(\Flowpack\ElasticSearch\Mapping\MappingCollection $mappingCollection)
+    protected function buildArrayFromMappingCollection(MappingCollection $mappingCollection)
     {
         $return = array();
 

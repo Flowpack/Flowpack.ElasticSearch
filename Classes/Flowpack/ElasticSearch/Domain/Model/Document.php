@@ -19,7 +19,7 @@ use TYPO3\Flow\Annotations as Flow;
 class Document
 {
     /**
-     * @var \Flowpack\ElasticSearch\Domain\Model\AbstractType
+     * @var AbstractType
      */
     protected $type;
 
@@ -52,10 +52,10 @@ class Document
     protected $dirty = true;
 
     /**
-     * @param \Flowpack\ElasticSearch\Domain\Model\AbstractType $type
+     * @param AbstractType $type
      * @param array $data
      * @param string $id
-     * @param null $version
+     * @param integer $version
      */
     public function __construct(AbstractType $type, array $data = null, $id = null, $version = null)
     {
@@ -68,6 +68,8 @@ class Document
     /**
      * When cloning (locally), the cloned object doesn't represent a stored one anymore,
      * so reset id, version and the dirty state.
+     *
+     * @return void
      */
     public function __clone()
     {
@@ -81,10 +83,9 @@ class Document
      * @param string $path
      * @param array $arguments
      * @param string $content
-     *
      * @return \Flowpack\ElasticSearch\Transfer\Response
      */
-    protected function request($method, $path = null, $arguments = array(), $content = null)
+    protected function request($method, $path = null, array $arguments = array(), $content = null)
     {
         return $this->type->request($method, $path, $arguments, $content);
     }
@@ -114,6 +115,7 @@ class Document
 
     /**
      * @param boolean $dirty
+     * @return void
      */
     protected function setDirty($dirty = true)
     {
@@ -148,8 +150,9 @@ class Document
 
     /**
      * @param array $data
+     * @return void
      */
-    public function setData($data)
+    public function setData(array $data)
     {
         $this->data = $data;
         $this->setDirty();
@@ -168,7 +171,6 @@ class Document
      *
      * @param string $fieldName
      * @param boolean $silent
-     *
      * @throws \Flowpack\ElasticSearch\Exception
      * @return mixed
      */
@@ -182,7 +184,7 @@ class Document
     }
 
     /**
-     * @return \Flowpack\ElasticSearch\Domain\Model\AbstractType the type of this Document
+     * @return AbstractType the type of this Document
      */
     public function getType()
     {

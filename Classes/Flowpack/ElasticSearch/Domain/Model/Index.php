@@ -96,7 +96,6 @@ class Index
     /**
      * @param $name
      * @param Client $client $client
-     *
      * @throws \Flowpack\ElasticSearch\Exception
      */
     public function __construct($name, Client $client = null)
@@ -113,7 +112,7 @@ class Index
     }
 
     /**
-     * @param $typeName
+     * @param string $typeName
      * @return \Flowpack\ElasticSearch\Domain\Model\AbstractType
      */
     public function findType($typeName)
@@ -123,7 +122,6 @@ class Index
 
     /**
      * @param array<AbstractType> $types
-     *
      * @return TypeGroup
      */
     public function findTypeGroup(array $types)
@@ -189,11 +187,10 @@ class Index
      * @param array $arguments
      * @param string $content
      * @param boolean $prefixIndex
-     *
-     * @throws \Flowpack\ElasticSearch\Exception
      * @return \Flowpack\ElasticSearch\Transfer\Response
+     * @throws \Flowpack\ElasticSearch\Exception
      */
-    public function request($method, $path = null, $arguments = array(), $content = null, $prefixIndex = true)
+    public function request($method, $path = null, array $arguments = array(), $content = null, $prefixIndex = true)
     {
         if ($this->client === null) {
             throw new Exception('The client of the index "' . $this->name . '" is not set, hence no requests can be done.');
@@ -218,6 +215,7 @@ class Index
 
     /**
      * @param Client $client
+     * @return void
      */
     public function setClient($client)
     {
@@ -225,7 +223,8 @@ class Index
     }
 
     /**
-     * @param $settingsKey
+     * @param string $settingsKey
+     * @return void
      */
     public function setSettingsKey($settingsKey)
     {

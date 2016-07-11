@@ -18,6 +18,7 @@ use TYPO3\Flow\Http\Request;
 
 /**
  * Handles the requests
+ *
  * @Flow\scope("singleton")
  */
 class RequestService
@@ -58,8 +59,7 @@ class RequestService
      * @param string $path
      * @param array $arguments
      * @param string|array $content
-     *
-     * @return \Flowpack\ElasticSearch\Transfer\Response
+     * @return Response
      */
     public function request($method, \Flowpack\ElasticSearch\Domain\Model\Client $client, $path = null, $arguments = array(), $content = null)
     {

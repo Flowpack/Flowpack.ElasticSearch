@@ -27,7 +27,13 @@ class Exception extends \Flowpack\ElasticSearch\Exception
     protected $request;
 
     /**
+     * Exception constructor.
      *
+     * @param string $message
+     * @param integer $code
+     * @param \TYPO3\Flow\Http\Response $response
+     * @param \TYPO3\Flow\Http\Request $request
+     * @param \Exception $previous
      */
     public function __construct($message, $code, \TYPO3\Flow\Http\Response $response, \TYPO3\Flow\Http\Request $request = null, \Exception $previous = null)
     {

@@ -23,7 +23,7 @@ use TYPO3\Flow\Annotations as Flow;
 class BackendMappingBuilder
 {
     /**
-     * @var \Flowpack\ElasticSearch\Domain\Model\Client
+     * @var Model\Client
      */
     protected $client;
 
@@ -44,8 +44,8 @@ class BackendMappingBuilder
     /**
      * Builds a Mapping collection from the annotation sources that are present
      *
-     * @throws \Flowpack\ElasticSearch\Exception
      * @return \Flowpack\ElasticSearch\Mapping\MappingCollection<\Flowpack\ElasticSearch\Domain\Model\Mapping>
+     * @throws \Flowpack\ElasticSearch\Exception
      */
     public function buildMappingInformation()
     {
@@ -86,7 +86,8 @@ class BackendMappingBuilder
     }
 
     /**
-     * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
+     * @param Model\Client $client
+     * @return void
      */
     public function setClient(Model\Client $client)
     {
@@ -94,8 +95,8 @@ class BackendMappingBuilder
     }
 
     /**
-     * @throws \Flowpack\ElasticSearch\Exception
      * @return array
+     * @throws \Flowpack\ElasticSearch\Exception
      */
     public function getIndicesWithoutTypeInformation()
     {

@@ -1,10 +1,11 @@
 {
     "name": "flowpack/elasticsearch",
     "type": "typo3-flow-package",
-    "description": "This package provides wrapper functionality for the elasticsearch engine.",
+    "license": "MIT",
+    "description": "This package provides wrapper functionality for the Elasticsearch engine.",
     "require": {
         "ext-curl": "*",
-        "typo3/flow": "*"
+        "typo3/flow": "~3.0"
     },
     "autoload": {
         "psr-0": {

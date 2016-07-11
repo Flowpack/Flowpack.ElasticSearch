@@ -19,7 +19,7 @@ use TYPO3\Flow\Annotations as Flow;
 class GenericType extends AbstractType
 {
     /**
-     * @param \Flowpack\ElasticSearch\Domain\Model\Index $index
+     * @param Index $index
      * @param string $name
      */
     public function __construct(Index $index, $name)

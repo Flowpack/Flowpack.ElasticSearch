@@ -11,6 +11,7 @@ namespace Flowpack\ElasticSearch\Mapping;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Annotations\Indexable as IndexableAnnotation;
 use Flowpack\ElasticSearch\Annotations\Mapping as MappingAnnotation;
 use Flowpack\ElasticSearch\Domain\Model\Mapping;
 use TYPO3\Flow\Annotations as Flow;
@@ -63,10 +64,10 @@ class EntityMappingBuilder
 
     /**
      * @param string $className
-     * @param \Flowpack\ElasticSearch\Annotations\Indexable $annotation
+     * @param IndexableAnnotation $annotation
      * @return Mapping
      */
-    protected function buildMappingFromClassAndAnnotation($className, \Flowpack\ElasticSearch\Annotations\Indexable $annotation)
+    protected function buildMappingFromClassAndAnnotation($className, IndexableAnnotation $annotation)
     {
         $index = new \Flowpack\ElasticSearch\Domain\Model\Index($annotation->indexName);
         $type = new \Flowpack\ElasticSearch\Domain\Model\GenericType($index, $annotation->typeName);
@@ -82,9 +83,8 @@ class EntityMappingBuilder
      * @param Mapping $mapping
      * @param string $className
      * @param string $propertyName
-     *
-     * @throws \Flowpack\ElasticSearch\Exception
      * @return void
+     * @throws \Flowpack\ElasticSearch\Exception
      */
     protected function augmentMappingByProperty(Mapping $mapping, $className, $propertyName)
     {
@@ -106,6 +106,7 @@ class EntityMappingBuilder
         if ($annotation instanceof MappingAnnotation) {
             $mapping->setPropertyByPath($propertyName, $this->processMappingAnnotation($annotation, $mapping->getPropertyByPath($propertyName)));
             if ($annotation->getFields()) {
+                $multiFields = [];
                 foreach ($annotation->getFields() as $multiFieldAnnotation) {
                     $multiFieldIndexName = trim($multiFieldAnnotation->index_name);
                     if ($multiFieldIndexName === '') {
@@ -127,7 +128,7 @@ class EntityMappingBuilder
      * @param array $propertyMapping
      * @return array
      */
-    protected function processMappingAnnotation(MappingAnnotation $annotation, $propertyMapping = array())
+    protected function processMappingAnnotation(MappingAnnotation $annotation, array $propertyMapping = array())
     {
         foreach ($annotation->getPropertiesArray() as $mappingDirective => $directiveValue) {
             if ($directiveValue === null) {

@@ -11,8 +11,11 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Indexer\Object;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Domain\Model\Document;
+use Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer;
 use Flowpack\ElasticSearch\Tests\Functional\Fixtures\TweetRepository;
 use Flowpack\ElasticSearch\Tests\Functional\Fixtures\Tweet;
+use TYPO3\Flow\Utility\Algorithms;
 
 /**
  */
@@ -39,7 +42,7 @@ class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase
     {
         parent::setUp();
         $this->testEntityRepository = new TweetRepository();
-        $this->testClient = $this->objectManager->get('Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer')->getClient();
+        $this->testClient = $this->objectManager->get(ObjectIndexer::class)->getClient();
     }
 
     /**
@@ -51,7 +54,7 @@ class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase
         $documentId = $this->persistenceManager->getIdentifierByObject($testEntity);
 
         $resultDocument = $this->testClient
-            ->findIndex('flow3_elasticsearch_functionaltests_twitter')
+            ->findIndex('flow_elasticsearch_functionaltests_twitter')
             ->findType('tweet')
             ->findDocumentById($documentId);
         $resultData = $resultDocument->getData();
@@ -69,7 +72,7 @@ class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase
         $identifier = $this->persistenceManager->getIdentifierByObject($testEntity);
 
         $initialVersion = $this->testClient
-            ->findIndex('flow3_elasticsearch_functionaltests_twitter')
+            ->findIndex('flow_elasticsearch_functionaltests_twitter')
             ->findType('tweet')
             ->findDocumentById($identifier)
             ->getVersion();
@@ -82,11 +85,13 @@ class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase
         $this->persistenceManager->clearState();
 
         $changedDocument = $this->testClient
-            ->findIndex('flow3_elasticsearch_functionaltests_twitter')
+            ->findIndex('flow_elasticsearch_functionaltests_twitter')
             ->findType('tweet')
             ->findDocumentById($identifier);
 
-        $this->assertSame($initialVersion + 1, $changedDocument->getVersion());
+        // the version increments by two, since we index via AOP and via Doctrine lifecycle events
+        // see https://github.com/Flowpack/Flowpack.ElasticSearch/pull/36
+        $this->assertSame($initialVersion + 2, $changedDocument->getVersion());
         $this->assertSame($changedDocument->getField('message'), 'changed message.');
     }
 
@@ -99,10 +104,10 @@ class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase
         $identifier = $this->persistenceManager->getIdentifierByObject($testEntity);
 
         $initialDocument = $this->testClient
-            ->findIndex('flow3_elasticsearch_functionaltests_twitter')
+            ->findIndex('flow_elasticsearch_functionaltests_twitter')
             ->findType('tweet')
             ->findDocumentById($identifier);
-        $this->assertInstanceOf('Flowpack\ElasticSearch\Domain\Model\Document', $initialDocument);
+        $this->assertInstanceOf(Document::class, $initialDocument);
 
         $persistedTestEntity = $this->testEntityRepository->findByIdentifier($identifier);
         $this->testEntityRepository->remove($persistedTestEntity);
@@ -110,7 +115,7 @@ class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase
         $this->persistenceManager->clearState();
 
         $foundDocument = $this->testClient
-            ->findIndex('flow3_elasticsearch_functionaltests_twitter')
+            ->findIndex('flow_elasticsearch_functionaltests_twitter')
             ->findType('tweet')
             ->findDocumentById($identifier);
         $this->assertNull($foundDocument);
@@ -122,8 +127,8 @@ class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase
     {
         $testEntity = new Tweet();
         $testEntity->setDate(new \DateTime());
-        $testEntity->setMessage('This is a test message ' . \TYPO3\Flow\Utility\Algorithms::generateRandomString(8));
-        $testEntity->setUsername('Zak McKracken' . \TYPO3\Flow\Utility\Algorithms::generateRandomString(8));
+        $testEntity->setMessage('This is a test message ' . Algorithms::generateRandomString(8));
+        $testEntity->setUsername('Zak McKracken' . Algorithms::generateRandomString(8));
 
         $this->testEntityRepository->add($testEntity);
         $this->persistenceManager->persistAll();

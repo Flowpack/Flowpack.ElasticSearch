@@ -45,6 +45,7 @@ class ClientConfiguration
 
     /**
      * @param string $host
+     * @return void
      */
     public function setHost($host)
     {
@@ -61,6 +62,7 @@ class ClientConfiguration
 
     /**
      * @param int $port
+     * @return void
      */
     public function setPort($port)
     {
@@ -77,6 +79,7 @@ class ClientConfiguration
 
     /**
      * @param string $scheme
+     * @return void
      */
     public function setScheme($scheme)
     {

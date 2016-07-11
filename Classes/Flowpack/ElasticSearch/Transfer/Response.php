@@ -31,7 +31,6 @@ class Response
     /**
      * @param \TYPO3\Flow\Http\Response $response
      * @param \TYPO3\Flow\Http\Request $request
-     *
      * @throws \Flowpack\ElasticSearch\Transfer\Exception
      * @throws \Flowpack\ElasticSearch\Transfer\Exception\ApiException
      */

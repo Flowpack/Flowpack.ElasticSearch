@@ -11,6 +11,7 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Domain;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Domain\Model\Document;
 use \Flowpack\ElasticSearch\Tests\Functional\Fixtures\TwitterType;
 
 /**
@@ -40,7 +41,7 @@ class DocumentTest extends \Flowpack\ElasticSearch\Tests\Functional\Domain\Abstr
      */
     public function idOfFreshNewDocumentIsPopulatedAfterStoring(array $data = null)
     {
-        $document = new \Flowpack\ElasticSearch\Domain\Model\Document(new TwitterType($this->testingIndex), $data);
+        $document = new Document(new TwitterType($this->testingIndex), $data);
         $this->assertNull($document->getId());
         $document->store();
         $this->assertRegExp('/\w+/', $document->getId());
@@ -52,7 +53,7 @@ class DocumentTest extends \Flowpack\ElasticSearch\Tests\Functional\Domain\Abstr
      */
     public function versionOfFreshNewDocumentIsCreatedAfterStoringAndIncreasedAfterSubsequentStoring(array $data = null)
     {
-        $document = new \Flowpack\ElasticSearch\Domain\Model\Document(new TwitterType($this->testingIndex), $data);
+        $document = new Document(new TwitterType($this->testingIndex), $data);
         $this->assertNull($document->getVersion());
         $document->store();
         $idAfterFirstStoring = $document->getId();
@@ -69,7 +70,7 @@ class DocumentTest extends \Flowpack\ElasticSearch\Tests\Functional\Domain\Abstr
     public function existingIdOfDocumentIsNotModifiedAfterStoring(array $data)
     {
         $id = '42-1010-42';
-        $document = new \Flowpack\ElasticSearch\Domain\Model\Document(new TwitterType($this->testingIndex), $data, $id);
+        $document = new Document(new TwitterType($this->testingIndex), $data, $id);
         $document->store();
         $this->assertSame($id, $document->getId());
     }

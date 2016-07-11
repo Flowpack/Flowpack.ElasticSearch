@@ -40,6 +40,7 @@ class IndexInformer
     protected $indexAnnotations = array();
 
     /**
+     * @return void
      */
     public function initializeObject()
     {
@@ -112,18 +113,18 @@ class IndexInformer
      * The annotation contains the class's annotation, while properties contains each property that has to be indexed.
      * Each property might either have TRUE as value, or also an annotation instance, if given.
      *
-     * @throws \Flowpack\ElasticSearch\Exception
      * @param ObjectManagerInterface $objectManager
      * @return array
+     * @throws \Flowpack\ElasticSearch\Exception
      */
     public static function buildIndexClassesAndProperties($objectManager)
     {
         /** @var ReflectionService $reflectionService */
-        $reflectionService = $objectManager->get('TYPO3\Flow\Reflection\ReflectionService');
+        $reflectionService = $objectManager->get(\TYPO3\Flow\Reflection\ReflectionService::class);
 
         $indexAnnotations = array();
 
-        $annotationClassName = 'Flowpack\ElasticSearch\Annotations\Indexable';
+        $annotationClassName = \Flowpack\ElasticSearch\Annotations\Indexable::class;
         foreach ($reflectionService->getClassNamesByAnnotation($annotationClassName) as $className) {
             if ($reflectionService->isClassAbstract($className)) {
                 throw new \Flowpack\ElasticSearch\Exception(sprintf('The class with name "%s" is annotated with %s, but is abstract. Indexable classes must not be abstract.', $className, $annotationClassName), 1339595182);

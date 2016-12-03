@@ -15,7 +15,7 @@ use Flowpack\ElasticSearch\Annotations\Indexable as IndexableAnnotation;
 use Flowpack\ElasticSearch\Annotations\Mapping as MappingAnnotation;
 use Flowpack\ElasticSearch\Domain\Model\Mapping;
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Utility\Arrays;
+use Neos\Utility\Arrays;
 
 /**
  * Builds the mapping information across the objects
@@ -91,7 +91,7 @@ class EntityMappingBuilder
         list($propertyType) = $this->reflectionService->getPropertyTagValues($className, $propertyName, 'var');
         if (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, 'Flowpack\ElasticSearch\Annotations\Transform')) !== null) {
             $mappingType = $this->transformerFactory->create($transformAnnotation->type)->getTargetMappingType();
-        } elseif (\Neos\Flow\Utility\TypeHandling::isSimpleType($propertyType)) {
+        } elseif (\Neos\Utility\TypeHandling::isSimpleType($propertyType)) {
             $mappingType = $propertyType;
         } elseif ($propertyType === '\DateTime') {
             $mappingType = 'date';

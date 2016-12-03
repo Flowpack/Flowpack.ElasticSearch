@@ -13,7 +13,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
 
 use Flowpack\ElasticSearch\Exception;
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Utility\Arrays;
+use Neos\Utility\Arrays;
 
 /**
  * Representation of an Index

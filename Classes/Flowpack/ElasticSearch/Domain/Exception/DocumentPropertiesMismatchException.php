@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Exception;
  * source code.
  */
 
-use Neos\Flow\Error\Result;
+use Neos\Error\Messages\Result;
 
 /**
  * Signals a mismatch between the

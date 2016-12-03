@@ -16,8 +16,8 @@ use Flowpack\ElasticSearch\Domain\Model\Client;
 use Flowpack\ElasticSearch\Domain\Model\Index;
 use Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer;
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Error\Error;
-use Neos\Flow\Error\Result as ErrorResult;
+use Neos\Error\Messages\Error;
+use Neos\Error\Messages\Result as ErrorResult;
 use Neos\Flow\Exception;
 
 /**
@@ -251,7 +251,7 @@ class IndexCommandController extends \Neos\Flow\Cli\CommandController
         if ($result->hasErrors()) {
             $this->outputLine();
             $this->outputLine('The following errors occurred:');
-            /** @var $error \Neos\Flow\Error\Error */
+            /** @var $error \Neos\Error\Messages\Error */
             foreach ($result->getFlattenedErrors() as $className => $errors) {
                 foreach ($errors as $error) {
                     $this->outputLine();

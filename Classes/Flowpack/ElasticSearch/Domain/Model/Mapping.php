@@ -12,7 +12,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  */
 
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Utility\Arrays;
+use Neos\Utility\Arrays;
 
 /**
  * Reflects a Mapping of Elasticsearch

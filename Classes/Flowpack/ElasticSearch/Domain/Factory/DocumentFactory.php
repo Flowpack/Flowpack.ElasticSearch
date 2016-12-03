@@ -14,8 +14,8 @@ namespace Flowpack\ElasticSearch\Domain\Factory;
 use Doctrine\ORM\Mapping as ORM;
 use Flowpack\ElasticSearch\Domain\Model;
 use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Error\Error;
-use Neos\Flow\Error\Result as ErrorResult;
+use Neos\Error\Messages\Error;
+use Neos\Error\Messages\Result as ErrorResult;
 
 /**
  * Reconstitute a Document from the ElasticSearch index.

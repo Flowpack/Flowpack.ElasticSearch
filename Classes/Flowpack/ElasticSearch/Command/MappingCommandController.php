@@ -66,8 +66,8 @@ class MappingCommandController extends \Neos\Flow\Cli\CommandController
                 $propertiesSet = $mappingSet['properties'];
                 $this->outputFormatted('type %s:', array($this->markupDiffValue(isset($entityMappingCollection[$indexName][$typeName]) ? $typeName : null, isset($backendMappingCollection[$indexName][$typeName]) ? $typeName : null)), 4);
                 foreach ($propertiesSet as $propertyName => $properties) {
-                    $entityProperties = \Neos\Flow\Utility\Arrays::getValueByPath($entityMappingCollection, array($indexName, $typeName, 'properties', $propertyName));
-                    $backendProperties = \Neos\Flow\Utility\Arrays::getValueByPath($backendMappingCollection, array($indexName, $typeName, 'properties', $propertyName));
+                    $entityProperties = \Neos\Utility\Arrays::getValueByPath($entityMappingCollection, array($indexName, $typeName, 'properties', $propertyName));
+                    $backendProperties = \Neos\Utility\Arrays::getValueByPath($backendMappingCollection, array($indexName, $typeName, 'properties', $propertyName));
 
                     $this->outputFormatted('property %s:', array($this->markupDiffValue($entityProperties ? $propertyName : null, $backendProperties ? $propertyName : null)), 8);
                     foreach ($properties as $key => $value) {

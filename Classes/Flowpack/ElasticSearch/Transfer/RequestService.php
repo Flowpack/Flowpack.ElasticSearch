@@ -12,9 +12,9 @@ namespace Flowpack\ElasticSearch\Transfer;
  */
 
 use Flowpack\ElasticSearch\Domain\Model\Client\ClientConfiguration;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Http\Client\CurlEngine;
-use TYPO3\Flow\Http\Request;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Http\Client\CurlEngine;
+use Neos\Flow\Http\Request;
 
 /**
  * Handles the requests
@@ -25,7 +25,7 @@ class RequestService
 {
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Http\Client\Browser
+     * @var \Neos\Flow\Http\Client\Browser
      */
     protected $browser;
 

@@ -16,9 +16,9 @@ use Flowpack\ElasticSearch\Annotations\Transform as TransformAnnotation;
 use Flowpack\ElasticSearch\Domain\Model\Client;
 use Flowpack\ElasticSearch\Domain\Model\Document;
 use Flowpack\ElasticSearch\Domain\Model\GenericType;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Reflection\ObjectAccess;
-use TYPO3\Flow\Utility\TypeHandling;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Reflection\ObjectAccess;
+use Neos\Flow\Utility\TypeHandling;
 
 /**
  * This serves functionality for indexing objects
@@ -37,13 +37,13 @@ class ObjectIndexer
 
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Persistence\PersistenceManagerInterface
+     * @var \Neos\Flow\Persistence\PersistenceManagerInterface
      */
     protected $persistenceManager;
 
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Reflection\ReflectionService
+     * @var \Neos\Flow\Reflection\ReflectionService
      */
     protected $reflectionService;
 

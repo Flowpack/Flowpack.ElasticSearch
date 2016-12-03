@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * An abstract document type. Implement your own or use the GenericType provided with this package.

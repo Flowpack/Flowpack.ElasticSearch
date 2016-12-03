@@ -13,7 +13,7 @@ namespace Flowpack\ElasticSearch\Mapping;
 
 use Flowpack\ElasticSearch\Domain\Model;
 use Flowpack\ElasticSearch\Indexer\Object\IndexInformer;
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * This collects mappings from a live instance

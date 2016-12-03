@@ -1,25 +1,26 @@
+
 Flowpack:
   ElasticSearch:
     clients:
-        # default bundle that will be used if no more specific bundle name was supplied.
       default:
-        - host: localhost
+        -
+          host: localhost
           port: 9200
           username: ''
           password: ''
-
     realtimeIndexing:
-      enabled: TRUE
+      enabled: true
       client: default
     transfer:
-      # The timeout in sections for connections between Flow and Elastic Search:
       connectionTimeout: 60
-
-TYPO3:
+Neos:
   Flow:
     persistence:
       doctrine:
         eventListeners:
-          'Flowpack\ElasticSearch\Indexer\Object\Signal\Doctrine\EmitterAdapter':
-            events: ['postUpdate', 'postPersist', 'postRemove']
-            listener: 'Flowpack\ElasticSearch\Indexer\Object\Signal\Doctrine\EmitterAdapter'
+          Flowpack\ElasticSearch\Indexer\Object\Signal\Doctrine\EmitterAdapter:
+            events:
+              - postUpdate
+              - postPersist
+              - postRemove
+            listener: Flowpack\ElasticSearch\Indexer\Object\Signal\Doctrine\EmitterAdapter

@@ -15,17 +15,17 @@ use Flowpack\ElasticSearch\Annotations\Indexable;
 use Flowpack\ElasticSearch\Domain\Model\Client;
 use Flowpack\ElasticSearch\Domain\Model\Index;
 use Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Error\Error;
-use TYPO3\Flow\Error\Result as ErrorResult;
-use TYPO3\Flow\Exception;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Error\Error;
+use Neos\Flow\Error\Result as ErrorResult;
+use Neos\Flow\Exception;
 
 /**
  * Provides CLI features for index handling
  *
  * @Flow\Scope("singleton")
  */
-class IndexCommandController extends \TYPO3\Flow\Cli\CommandController
+class IndexCommandController extends \Neos\Flow\Cli\CommandController
 {
     /**
      * @Flow\Inject
@@ -41,7 +41,7 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController
 
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Persistence\PersistenceManagerInterface
+     * @var \Neos\Flow\Persistence\PersistenceManagerInterface
      */
     protected $persistenceManager;
 
@@ -251,7 +251,7 @@ class IndexCommandController extends \TYPO3\Flow\Cli\CommandController
         if ($result->hasErrors()) {
             $this->outputLine();
             $this->outputLine('The following errors occurred:');
-            /** @var $error \TYPO3\Flow\Error\Error */
+            /** @var $error \Neos\Flow\Error\Error */
             foreach ($result->getFlattenedErrors() as $className => $errors) {
                 foreach ($errors as $error) {
                     $this->outputLine();

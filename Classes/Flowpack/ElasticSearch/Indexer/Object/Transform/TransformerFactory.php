@@ -12,7 +12,7 @@ namespace Flowpack\ElasticSearch\Indexer\Object\Transform;
  */
 
 use Doctrine\ORM\Mapping as ORM;
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * @Flow\Scope("singleton")
@@ -21,7 +21,7 @@ class TransformerFactory
 {
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\ObjectManagement\ObjectManagerInterface
+     * @var \Neos\Flow\ObjectManagement\ObjectManagerInterface
      */
     protected $objectManager;
 

@@ -17,12 +17,12 @@ namespace Flowpack\ElasticSearch\Transfer;
 class Exception extends \Flowpack\ElasticSearch\Exception
 {
     /**
-     * @var \TYPO3\Flow\Http\Response
+     * @var \Neos\Flow\Http\Response
      */
     protected $response;
 
     /**
-     * @var \TYPO3\Flow\Http\Request
+     * @var \Neos\Flow\Http\Request
      */
     protected $request;
 
@@ -31,11 +31,11 @@ class Exception extends \Flowpack\ElasticSearch\Exception
      *
      * @param string $message
      * @param integer $code
-     * @param \TYPO3\Flow\Http\Response $response
-     * @param \TYPO3\Flow\Http\Request $request
+     * @param \Neos\Flow\Http\Response $response
+     * @param \Neos\Flow\Http\Request $request
      * @param \Exception $previous
      */
-    public function __construct($message, $code, \TYPO3\Flow\Http\Response $response, \TYPO3\Flow\Http\Request $request = null, \Exception $previous = null)
+    public function __construct($message, $code, \Neos\Flow\Http\Response $response, \Neos\Flow\Http\Request $request = null, \Exception $previous = null)
     {
         $this->response = $response;
         $this->request = $request;
@@ -53,7 +53,7 @@ class Exception extends \Flowpack\ElasticSearch\Exception
     }
 
     /**
-     * @return \TYPO3\Flow\Http\Request
+     * @return \Neos\Flow\Http\Request
      */
     public function getRequest()
     {
@@ -61,7 +61,7 @@ class Exception extends \Flowpack\ElasticSearch\Exception
     }
 
     /**
-     * @return \TYPO3\Flow\Http\Response
+     * @return \Neos\Flow\Http\Response
      */
     public function getResponse()
     {

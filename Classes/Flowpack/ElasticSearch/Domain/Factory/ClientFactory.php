@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Factory;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Client factory
@@ -73,7 +73,7 @@ class ClientFactory
                 $setterMethodName = 'set' . ucfirst($settingKey);
                 try {
                     call_user_func(array($configuration, $setterMethodName), $settingValue);
-                } catch (\TYPO3\Flow\Error\Exception $exception) {
+                } catch (\Neos\Flow\Error\Exception $exception) {
                     $exceptionMessage = 'Setting key "' . $settingKey . '" as client configuration value is not allowed. Refer to the Settings.yaml.example for the supported keys.';
                     throw new \Flowpack\ElasticSearch\Exception($exceptionMessage, 1338886877, $exception);
                 }

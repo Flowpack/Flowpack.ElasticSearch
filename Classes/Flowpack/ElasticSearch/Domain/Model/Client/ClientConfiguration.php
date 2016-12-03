@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Model\Client;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Client configuration
@@ -137,11 +137,11 @@ class ClientConfiguration
     }
 
     /**
-     * @return \TYPO3\Flow\Http\Uri
+     * @return \Neos\Flow\Http\Uri
      */
     public function getUri()
     {
-        $uri = new \TYPO3\Flow\Http\Uri('');
+        $uri = new \Neos\Flow\Http\Uri('');
         $uri->setScheme($this->scheme);
         $uri->setHost($this->host);
         $uri->setPort($this->port);

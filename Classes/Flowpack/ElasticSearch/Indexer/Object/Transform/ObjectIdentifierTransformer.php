@@ -11,8 +11,8 @@ namespace Flowpack\ElasticSearch\Indexer\Object\Transform;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Persistence\PersistenceManagerInterface;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Persistence\PersistenceManagerInterface;
 
 /**
  * @Flow\Scope("singleton")

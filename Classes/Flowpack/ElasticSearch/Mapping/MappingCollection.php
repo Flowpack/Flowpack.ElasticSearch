@@ -13,7 +13,7 @@ namespace Flowpack\ElasticSearch\Mapping;
 
 use Doctrine\ORM\Mapping as ORM;
 use Flowpack\ElasticSearch\Domain\Model\Mapping;
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  */

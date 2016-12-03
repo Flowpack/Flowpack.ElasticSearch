@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
  * source code.
  */
 
-use \TYPO3\Flow\Annotations as Flow;
+use \Neos\Flow\Annotations as Flow;
 
 /**
  * A twitter sample type

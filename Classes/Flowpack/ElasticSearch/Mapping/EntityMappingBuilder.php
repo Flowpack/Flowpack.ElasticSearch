@@ -14,8 +14,8 @@ namespace Flowpack\ElasticSearch\Mapping;
 use Flowpack\ElasticSearch\Annotations\Indexable as IndexableAnnotation;
 use Flowpack\ElasticSearch\Annotations\Mapping as MappingAnnotation;
 use Flowpack\ElasticSearch\Domain\Model\Mapping;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Utility\Arrays;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Utility\Arrays;
 
 /**
  * Builds the mapping information across the objects
@@ -25,13 +25,13 @@ class EntityMappingBuilder
 {
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Reflection\ReflectionService
+     * @var \Neos\Flow\Reflection\ReflectionService
      */
     protected $reflectionService;
 
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\ObjectManagement\ObjectManagerInterface
+     * @var \Neos\Flow\ObjectManagement\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -91,7 +91,7 @@ class EntityMappingBuilder
         list($propertyType) = $this->reflectionService->getPropertyTagValues($className, $propertyName, 'var');
         if (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, 'Flowpack\ElasticSearch\Annotations\Transform')) !== null) {
             $mappingType = $this->transformerFactory->create($transformAnnotation->type)->getTargetMappingType();
-        } elseif (\TYPO3\Flow\Utility\TypeHandling::isSimpleType($propertyType)) {
+        } elseif (\Neos\Flow\Utility\TypeHandling::isSimpleType($propertyType)) {
             $mappingType = $propertyType;
         } elseif ($propertyType === '\DateTime') {
             $mappingType = 'date';

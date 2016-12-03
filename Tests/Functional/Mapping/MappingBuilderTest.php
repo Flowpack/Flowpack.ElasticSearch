@@ -16,7 +16,7 @@ use Flowpack\ElasticSearch\Mapping\EntityMappingBuilder;
 
 /**
  */
-class MappingBuilderTest extends \TYPO3\Flow\Tests\FunctionalTestCase
+class MappingBuilderTest extends \Neos\Flow\Tests\FunctionalTestCase
 {
     /**
      * @var EntityMappingBuilder

@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Indexer\Aspect;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Indexing aspect
@@ -27,11 +27,11 @@ class IndexerAspect
     protected $objectIndexer;
 
     /**
-     * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(add|update)())")
-     * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
+     * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(Neos\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(add|update)())")
+     * @param \Neos\Flow\Aop\JoinPointInterface $joinPoint
      * @return string
      */
-    public function updateObjectToIndex(\TYPO3\Flow\Aop\JoinPointInterface $joinPoint)
+    public function updateObjectToIndex(\Neos\Flow\Aop\JoinPointInterface $joinPoint)
     {
         $arguments = $joinPoint->getMethodArguments();
         $object = reset($arguments);
@@ -39,11 +39,11 @@ class IndexerAspect
     }
 
     /**
-     * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(TYPO3\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(remove)())")
-     * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
+     * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(Neos\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(remove)())")
+     * @param \Neos\Flow\Aop\JoinPointInterface $joinPoint
      * @return string
      */
-    public function removeObjectFromIndex(\TYPO3\Flow\Aop\JoinPointInterface $joinPoint)
+    public function removeObjectFromIndex(\Neos\Flow\Aop\JoinPointInterface $joinPoint)
     {
         $arguments = $joinPoint->getMethodArguments();
         $object = reset($arguments);

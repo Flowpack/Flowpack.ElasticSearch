@@ -12,9 +12,9 @@ namespace Flowpack\ElasticSearch\Indexer\Object;
  */
 
 use Flowpack\ElasticSearch\Annotations\Indexable;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\ObjectManagement\ObjectManagerInterface;
-use TYPO3\Flow\Reflection\ReflectionService;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
+use Neos\Flow\Reflection\ReflectionService;
 
 /**
  * Provides information about the index rules of Objects
@@ -120,7 +120,7 @@ class IndexInformer
     public static function buildIndexClassesAndProperties($objectManager)
     {
         /** @var ReflectionService $reflectionService */
-        $reflectionService = $objectManager->get(\TYPO3\Flow\Reflection\ReflectionService::class);
+        $reflectionService = $objectManager->get(\Neos\Flow\Reflection\ReflectionService::class);
 
         $indexAnnotations = array();
 

@@ -15,7 +15,7 @@ use Flowpack\ElasticSearch\Domain\Factory\ClientFactory;
 
 /**
  */
-abstract class AbstractTest extends \TYPO3\Flow\Tests\FunctionalTestCase
+abstract class AbstractTest extends \Neos\Flow\Tests\FunctionalTestCase
 {
     /**
      * @var ClientFactory

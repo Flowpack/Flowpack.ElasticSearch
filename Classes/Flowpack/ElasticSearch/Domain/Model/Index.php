@@ -12,8 +12,8 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  */
 
 use Flowpack\ElasticSearch\Exception;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Utility\Arrays;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Utility\Arrays;
 
 /**
  * Representation of an Index

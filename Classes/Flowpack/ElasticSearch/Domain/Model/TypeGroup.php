@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * A type group that is for requests against multiple types, like in localhost:9200/foo/onetype,anothertype/_search....

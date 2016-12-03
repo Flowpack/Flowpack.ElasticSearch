@@ -17,7 +17,7 @@ namespace Flowpack\ElasticSearch\Transfer;
 class Response
 {
     /**
-     * @var \TYPO3\Flow\Http\Response
+     * @var \Neos\Flow\Http\Response
      */
     protected $originalResponse;
 
@@ -29,12 +29,12 @@ class Response
     protected $treatedContent;
 
     /**
-     * @param \TYPO3\Flow\Http\Response $response
-     * @param \TYPO3\Flow\Http\Request $request
+     * @param \Neos\Flow\Http\Response $response
+     * @param \Neos\Flow\Http\Request $request
      * @throws \Flowpack\ElasticSearch\Transfer\Exception
      * @throws \Flowpack\ElasticSearch\Transfer\Exception\ApiException
      */
-    public function __construct(\TYPO3\Flow\Http\Response $response, \TYPO3\Flow\Http\Request $request = null)
+    public function __construct(\Neos\Flow\Http\Response $response, \Neos\Flow\Http\Request $request = null)
     {
         $this->originalResponse = $response;
 
@@ -73,7 +73,7 @@ class Response
     }
 
     /**
-     * @return \TYPO3\Flow\Http\Response
+     * @return \Neos\Flow\Http\Response
      */
     public function getOriginalResponse()
     {

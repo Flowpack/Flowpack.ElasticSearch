@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * source code.
  */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * A Document which itself holds the data

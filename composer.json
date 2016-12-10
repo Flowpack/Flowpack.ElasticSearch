@@ -8,8 +8,8 @@
         "typo3/flow": "~4.0 || dev-master"
     },
     "autoload": {
-        "psr-0": {
-            "Flowpack\\ElasticSearch": "Classes"
+        "psr-4": {
+            "Flowpack\\ElasticSearch\\": "Classes"
         }
     },
     "extra": {

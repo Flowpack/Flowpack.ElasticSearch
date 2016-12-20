@@ -18,7 +18,6 @@ use Flowpack\ElasticSearch\Domain\Model\Document;
 use Flowpack\ElasticSearch\Domain\Model\GenericType;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Reflection\ObjectAccess;
-use TYPO3\Flow\Utility\TypeHandling;
 
 /**
  * This serves functionality for indexing objects
@@ -95,7 +94,7 @@ class ObjectIndexer
      */
     protected function getIndexablePropertiesAndValuesFromObject($object)
     {
-        $className = TypeHandling::getTypeForValue($object);
+        $className = $this->reflectionService->getClassNameByObject($object);
         $data = [];
         foreach ($this->indexInformer->getClassProperties($className) as $propertyName) {
             if (ObjectAccess::isPropertyGettable($object, $propertyName) === false) {
@@ -171,7 +170,7 @@ class ObjectIndexer
         if ($client === null) {
             $client = $this->client;
         }
-        $className = TypeHandling::getTypeForValue($object);
+        $className = $this->reflectionService->getClassNameByObject($object);
         $indexAnnotation = $this->indexInformer->getClassAnnotation($className);
         if ($indexAnnotation === null) {
             return null;

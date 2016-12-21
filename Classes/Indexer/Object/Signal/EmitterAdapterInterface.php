@@ -1,5 +1,5 @@
 <?php
-namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
+namespace Flowpack\ElasticSearch\Indexer\Object\Signal;
 
 /*
  * This file is part of the Flowpack.ElasticSearch package.
@@ -15,8 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Neos\Flow\Annotations as Flow;
 
 /**
- * @Flow\Scope("singleton")
+ * Marker interface for the Persistence signal emitter
  */
-class TweetRepository extends \Neos\Flow\Persistence\Repository
+interface EmitterAdapterInterface
 {
 }

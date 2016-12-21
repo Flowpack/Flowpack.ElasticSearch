@@ -1,5 +1,5 @@
 <?php
-namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
+namespace Flowpack\ElasticSearch;
 
 /*
  * This file is part of the Flowpack.ElasticSearch package.
@@ -11,12 +11,9 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
  * source code.
  */
 
-use Doctrine\ORM\Mapping as ORM;
-use Neos\Flow\Annotations as Flow;
-
 /**
- * @Flow\Scope("singleton")
+ * This package's base exception
  */
-class TweetRepository extends \Neos\Flow\Persistence\Repository
+class Exception extends \Neos\Flow\Exception
 {
 }

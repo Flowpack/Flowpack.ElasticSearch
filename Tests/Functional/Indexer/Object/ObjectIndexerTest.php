@@ -15,11 +15,11 @@ use Flowpack\ElasticSearch\Domain\Model\Document;
 use Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer;
 use Flowpack\ElasticSearch\Tests\Functional\Fixtures\TweetRepository;
 use Flowpack\ElasticSearch\Tests\Functional\Fixtures\Tweet;
-use TYPO3\Flow\Utility\Algorithms;
+use Neos\Flow\Utility\Algorithms;
 
 /**
  */
-class ObjectIndexerTest extends \TYPO3\Flow\Tests\FunctionalTestCase
+class ObjectIndexerTest extends \Neos\Flow\Tests\FunctionalTestCase
 {
     /**
      * @var boolean

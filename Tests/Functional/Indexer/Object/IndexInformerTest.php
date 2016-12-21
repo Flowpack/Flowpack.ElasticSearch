@@ -17,7 +17,7 @@ use Flowpack\ElasticSearch\Tests\Functional\Fixtures;
 
 /**
  */
-class IndexInformerTest extends \TYPO3\Flow\Tests\FunctionalTestCase
+class IndexInformerTest extends \Neos\Flow\Tests\FunctionalTestCase
 {
     /**
      * @var IndexInformer

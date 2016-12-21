@@ -5,7 +5,7 @@
     "description": "This package provides wrapper functionality for the Elasticsearch engine.",
     "require": {
         "ext-curl": "*",
-        "typo3/flow": "~4.0 || dev-master"
+        "neos/flow": "~4.0 | dev-master"
     },
     "autoload": {
         "psr-4": {

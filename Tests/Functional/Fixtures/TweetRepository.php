@@ -13,10 +13,11 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Persistence\Repository;
 
 /**
  * @Flow\Scope("singleton")
  */
-class TweetRepository extends \Neos\Flow\Persistence\Repository
+class TweetRepository extends Repository
 {
 }

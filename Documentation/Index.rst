@@ -52,7 +52,7 @@ Running the Functional Tests
 
 For running the Functional Tests, the API will connect to the server and host you've set up in the ``Settings.yaml``
 directive ``Flowpack.ElasticSearch.clients.FunctionalTests`` (see above). The test scenario will try to create a temporary
-test *index* named ``typo3_elasticsearch_functionaltests`` where it will work the test data on. If this index already
+test *index* named ``flow_elasticsearch_functionaltests`` where it will work the test data on. If this index already
 exists, the test will stop with a notification in order not to destroy some real-life-data in the unlikely case it has
 that name.
 

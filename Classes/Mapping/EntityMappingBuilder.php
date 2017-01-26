@@ -13,9 +13,18 @@ namespace Flowpack\ElasticSearch\Mapping;
 
 use Flowpack\ElasticSearch\Annotations\Indexable as IndexableAnnotation;
 use Flowpack\ElasticSearch\Annotations\Mapping as MappingAnnotation;
+use Flowpack\ElasticSearch\Annotations\Transform;
+use Flowpack\ElasticSearch\Domain\Model\GenericType;
+use Flowpack\ElasticSearch\Domain\Model\Index as ElasticSearchIndex;
 use Flowpack\ElasticSearch\Domain\Model\Mapping;
+use Flowpack\ElasticSearch\Exception as ElasticSearchException;
+use Flowpack\ElasticSearch\Indexer\Object\IndexInformer;
+use Flowpack\ElasticSearch\Indexer\Object\Transform\TransformerFactory;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
+use Neos\Flow\Reflection\ReflectionService;
 use Neos\Utility\Arrays;
+use Neos\Utility\TypeHandling;
 
 /**
  * Builds the mapping information across the objects
@@ -25,32 +34,32 @@ class EntityMappingBuilder
 {
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\Reflection\ReflectionService
+     * @var ReflectionService
      */
     protected $reflectionService;
 
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\ObjectManagement\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
      * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\Indexer\Object\Transform\TransformerFactory
+     * @var TransformerFactory
      */
     protected $transformerFactory;
 
     /**
      * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\Indexer\Object\IndexInformer
+     * @var IndexInformer
      */
     protected $indexInformer;
 
     /**
      * Builds a Mapping collection from the annotation sources that are present
      *
-     * @return \Flowpack\ElasticSearch\Mapping\MappingCollection<\Flowpack\ElasticSearch\Domain\Mapping>
+     * @return MappingCollection<Mapping>
      */
     public function buildMappingInformation()
     {
@@ -65,12 +74,13 @@ class EntityMappingBuilder
     /**
      * @param string $className
      * @param IndexableAnnotation $annotation
+     *
      * @return Mapping
      */
     protected function buildMappingFromClassAndAnnotation($className, IndexableAnnotation $annotation)
     {
-        $index = new \Flowpack\ElasticSearch\Domain\Model\Index($annotation->indexName);
-        $type = new \Flowpack\ElasticSearch\Domain\Model\GenericType($index, $annotation->typeName);
+        $index = new ElasticSearchIndex($annotation->indexName);
+        $type = new GenericType($index, $annotation->typeName);
         $mapping = new Mapping($type);
         foreach ($this->indexInformer->getClassProperties($className) as $propertyName) {
             $this->augmentMappingByProperty($mapping, $className, $propertyName);
@@ -83,25 +93,26 @@ class EntityMappingBuilder
      * @param Mapping $mapping
      * @param string $className
      * @param string $propertyName
+     *
      * @return void
-     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws ElasticSearchException
      */
     protected function augmentMappingByProperty(Mapping $mapping, $className, $propertyName)
     {
         list($propertyType) = $this->reflectionService->getPropertyTagValues($className, $propertyName, 'var');
-        if (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, 'Flowpack\ElasticSearch\Annotations\Transform')) !== null) {
+        if (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, Transform::class)) !== null) {
             $mappingType = $this->transformerFactory->create($transformAnnotation->type)->getTargetMappingType();
-        } elseif (\Neos\Utility\TypeHandling::isSimpleType($propertyType)) {
+        } elseif (TypeHandling::isSimpleType($propertyType)) {
             $mappingType = $propertyType;
         } elseif ($propertyType === '\DateTime') {
             $mappingType = 'date';
         } else {
-            throw new \Flowpack\ElasticSearch\Exception('Mapping is only supported for simple types and DateTime objects; "' . $propertyType . '" given but without a Transform directive.');
+            throw new ElasticSearchException('Mapping is only supported for simple types and DateTime objects; "' . $propertyType . '" given but without a Transform directive.');
         }
 
-        $mapping->setPropertyByPath($propertyName, array('type' => $mappingType));
+        $mapping->setPropertyByPath($propertyName, ['type' => $mappingType]);
 
-        $annotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, 'Flowpack\ElasticSearch\Annotations\Mapping');
+        $annotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, MappingAnnotation::class);
 
         if ($annotation instanceof MappingAnnotation) {
             $mapping->setPropertyByPath($propertyName, $this->processMappingAnnotation($annotation, $mapping->getPropertyByPath($propertyName)));
@@ -110,15 +121,15 @@ class EntityMappingBuilder
                 foreach ($annotation->getFields() as $multiFieldAnnotation) {
                     $multiFieldIndexName = trim($multiFieldAnnotation->index_name);
                     if ($multiFieldIndexName === '') {
-                        throw new \Flowpack\ElasticSearch\Exception('Multi field require an unique index name "' . $className . '::' . $propertyName . '".');
+                        throw new ElasticSearchException('Multi field require an unique index name "' . $className . '::' . $propertyName . '".');
                     }
                     if (isset($multiFields[$multiFieldIndexName])) {
-                        throw new \Flowpack\ElasticSearch\Exception('Duplicate index name in the same multi field is not allowed "' . $className . '::' . $propertyName . '".');
+                        throw new ElasticSearchException('Duplicate index name in the same multi field is not allowed "' . $className . '::' . $propertyName . '".');
                     }
                     $multiFieldAnnotation->type = $mappingType;
                     $multiFields[$multiFieldIndexName] = $this->processMappingAnnotation($multiFieldAnnotation);
                 }
-                $mapping->setPropertyByPath(array($propertyName, 'fields'), $multiFields);
+                $mapping->setPropertyByPath([$propertyName, 'fields'], $multiFields);
             }
         }
     }
@@ -126,9 +137,10 @@ class EntityMappingBuilder
     /**
      * @param MappingAnnotation $annotation
      * @param array $propertyMapping
+     *
      * @return array
      */
-    protected function processMappingAnnotation(MappingAnnotation $annotation, array $propertyMapping = array())
+    protected function processMappingAnnotation(MappingAnnotation $annotation, array $propertyMapping = [])
     {
         foreach ($annotation->getPropertiesArray() as $mappingDirective => $directiveValue) {
             if ($directiveValue === null) {

@@ -11,7 +11,6 @@ namespace Flowpack\ElasticSearch\Indexer\Object\Signal;
  * source code.
  */
 
-use Doctrine\ORM\Mapping as ORM;
 use Neos\Flow\Annotations as Flow;
 
 /**
@@ -21,7 +20,9 @@ class SignalEmitter
 {
     /**
      * @Flow\Signal
+     *
      * @param object $object The object that has been updated
+     *
      * @return void
      */
     public function emitObjectUpdated($object)
@@ -30,7 +31,9 @@ class SignalEmitter
 
     /**
      * @Flow\Signal
+     *
      * @param object $object The object that has been updated
+     *
      * @return void
      */
     public function emitObjectPersisted($object)
@@ -39,7 +42,9 @@ class SignalEmitter
 
     /**
      * @Flow\Signal
+     *
      * @param object $object The object that has been updated
+     *
      * @return void
      */
     public function emitObjectRemoved($object)

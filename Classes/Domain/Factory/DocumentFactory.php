@@ -11,11 +11,12 @@ namespace Flowpack\ElasticSearch\Domain\Factory;
  * source code.
  */
 
-use Doctrine\ORM\Mapping as ORM;
+use Flowpack\ElasticSearch\Domain\Exception\DocumentPropertiesMismatchException;
 use Flowpack\ElasticSearch\Domain\Model;
-use Neos\Flow\Annotations as Flow;
+use Flowpack\ElasticSearch\Transfer\Response;
 use Neos\Error\Messages\Error;
 use Neos\Error\Messages\Result as ErrorResult;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Reconstitute a Document from the ElasticSearch index.
@@ -27,33 +28,34 @@ use Neos\Error\Messages\Result as ErrorResult;
 class DocumentFactory
 {
     /**
-     * @param \Flowpack\ElasticSearch\Domain\Model\AbstractType $type
+     * @param Model\AbstractType $type
      * @param string $id
-     * @param \Flowpack\ElasticSearch\Transfer\Response $response
-     * @throws \Flowpack\ElasticSearch\Domain\Exception\DocumentPropertiesMismatchException
-     * @return \Flowpack\ElasticSearch\Domain\Model\Document
+     * @param Response $response
+     *
+     * @return Model\Document
+     * @throws DocumentPropertiesMismatchException
      */
-    public function createFromResponse(Model\AbstractType $type, $id = null, \Flowpack\ElasticSearch\Transfer\Response $response)
+    public function createFromResponse(Model\AbstractType $type, $id = null, Response $response)
     {
         $content = $response->getTreatedContent();
 
         $verificationResults = new ErrorResult();
         if (isset($content['_index']) && $type->getIndex()->getName() !== $content['_index']) {
-            $error = new Error('The received index name "%s" does not match the expected one "%s".', 1340264838, array($content['_index'], $type->getIndex()->getName()));
+            $error = new Error('The received index name "%s" does not match the expected one "%s".', 1340264838, [$content['_index'], $type->getIndex()->getName()]);
             $verificationResults->addError($error);
         }
         if (isset($content['_type']) && $type->getName() !== $content['_type']) {
-            $error = new Error('The received type name "%s" does not match the expected one "%s".', 1340265103, array($content['_type'], $type->getName()));
+            $error = new Error('The received type name "%s" does not match the expected one "%s".', 1340265103, [$content['_type'], $type->getName()]);
             $verificationResults->addError($error);
         }
 
         if (isset($content['_id']) && $id !== null && $id !== $content['_id']) {
-            $error = new Error('The received id "%s" does not match the expected one "%s".', 1340269758, array($content['_id'], $id));
+            $error = new Error('The received id "%s" does not match the expected one "%s".', 1340269758, [$content['_id'], $id]);
             $verificationResults->addError($error);
         }
 
         if ($verificationResults->hasErrors()) {
-            $exception = new \Flowpack\ElasticSearch\Domain\Exception\DocumentPropertiesMismatchException('The document\'s properties do not match the expected ones.', 1340265248);
+            $exception = new DocumentPropertiesMismatchException('The document\'s properties do not match the expected ones.', 1340265248);
             $exception->setErrorResult($verificationResults);
             throw $exception;
         }

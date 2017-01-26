@@ -11,6 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Transfer\Response;
 use Neos\Flow\Annotations as Flow;
 use Neos\Utility\Arrays;
 
@@ -27,13 +28,13 @@ class Mapping
     /**
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-root-object-type.html#_dynamic_templates
      * @var array
      */
-    protected $dynamicTemplates = array();
+    protected $dynamicTemplates = [];
 
     /**
      * This is the full / raw ElasticSearch mapping which is merged with the properties and dynamicTemplates.
@@ -42,7 +43,7 @@ class Mapping
      *
      * @var array
      */
-    protected $fullMapping = array();
+    protected $fullMapping = [];
 
     /**
      * @param AbstractType $type
@@ -56,6 +57,7 @@ class Mapping
      * Gets a property setting by its path
      *
      * @param array|string $path
+     *
      * @return mixed
      */
     public function getPropertyByPath($path)
@@ -68,19 +70,12 @@ class Mapping
      *
      * @param array|string $path
      * @param string $value
+     *
      * @return void
      */
     public function setPropertyByPath($path, $value)
     {
         $this->properties = Arrays::setValueByPath($this->properties, $path, $value);
-    }
-
-    /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return $this->properties;
     }
 
     /**
@@ -92,29 +87,30 @@ class Mapping
     }
 
     /**
+     * Sets this mapping to the server
+     *
+     * @return Response
+     */
+    public function apply()
+    {
+        $content = json_encode($this->asArray());
+
+        return $this->type->request('PUT', '/_mapping', [], $content);
+    }
+
+    /**
      * Return the mapping which would be sent to the server as array
      *
      * @return array
      */
     public function asArray()
     {
-        return array($this->type->getName() => Arrays::arrayMergeRecursiveOverrule(array(
-            'dynamic_templates' => $this->getDynamicTemplates(),
-            'properties' => $this->getProperties()
-        ), $this->fullMapping));
-    }
-
-    /**
-     * Sets this mapping to the server
-     *
-     * @return \Flowpack\ElasticSearch\Transfer\Response
-     */
-    public function apply()
-    {
-        $content = json_encode($this->asArray());
-        $response = $this->type->request('PUT', '/_mapping', array(), $content);
-
-        return $response;
+        return [
+            $this->type->getName() => Arrays::arrayMergeRecursiveOverrule([
+                'dynamic_templates' => $this->getDynamicTemplates(),
+                'properties' => $this->getProperties(),
+            ], $this->fullMapping),
+        ];
     }
 
     /**
@@ -126,30 +122,26 @@ class Mapping
     }
 
     /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
+    /**
      * Dynamic templates allow to define mapping templates
      *
      * @param string $dynamicTemplateName
      * @param array $mappingConfiguration
+     *
      * @return void
      */
     public function addDynamicTemplate($dynamicTemplateName, array $mappingConfiguration)
     {
-        $this->dynamicTemplates[] = array(
-            $dynamicTemplateName => $mappingConfiguration
-        );
-    }
-
-    /**
-     * This is the full / raw ElasticSearch mapping which is merged with the properties and dynamicTemplates.
-     *
-     * It can be used to specify arbitrary ElasticSearch mapping options, like f.e. configuring the _all field.
-     *
-     * @param array $fullMapping
-     * @return void
-     */
-    public function setFullMapping(array $fullMapping)
-    {
-        $this->fullMapping = $fullMapping;
+        $this->dynamicTemplates[] = [
+            $dynamicTemplateName => $mappingConfiguration,
+        ];
     }
 
     /**
@@ -160,5 +152,19 @@ class Mapping
     public function getFullMapping()
     {
         return $this->fullMapping;
+    }
+
+    /**
+     * This is the full / raw ElasticSearch mapping which is merged with the properties and dynamicTemplates.
+     *
+     * It can be used to specify arbitrary ElasticSearch mapping options, like f.e. configuring the _all field.
+     *
+     * @param array $fullMapping
+     *
+     * @return void
+     */
+    public function setFullMapping(array $fullMapping)
+    {
+        $this->fullMapping = $fullMapping;
     }
 }

@@ -12,11 +12,11 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Domain;
  */
 
 use Flowpack\ElasticSearch\Domain\Model\Document;
-use \Flowpack\ElasticSearch\Tests\Functional\Fixtures\TwitterType;
+use Flowpack\ElasticSearch\Tests\Functional\Fixtures\TwitterType;
 
 /**
  */
-class DocumentTest extends \Flowpack\ElasticSearch\Tests\Functional\Domain\AbstractTest
+class DocumentTest extends AbstractTest
 {
     /**
      * Array that returns sample data. Intentionally returns only one record.
@@ -24,15 +24,15 @@ class DocumentTest extends \Flowpack\ElasticSearch\Tests\Functional\Domain\Abstr
      */
     public function simpleDocumentDataProvider()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'user' => 'kimchy',
                     'post_date' => '2009-11-15T14:12:12',
                     'message' => 'trying out Elastic Search'
-                )
-            )
-        );
+                ]
+            ]
+        ];
     }
 
     /**

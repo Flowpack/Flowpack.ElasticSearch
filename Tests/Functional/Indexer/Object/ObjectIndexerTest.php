@@ -11,15 +11,17 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Indexer\Object;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Domain\Model\Client;
 use Flowpack\ElasticSearch\Domain\Model\Document;
 use Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer;
 use Flowpack\ElasticSearch\Tests\Functional\Fixtures\TweetRepository;
 use Flowpack\ElasticSearch\Tests\Functional\Fixtures\Tweet;
+use Neos\Flow\Tests\FunctionalTestCase;
 use Neos\Flow\Utility\Algorithms;
 
 /**
  */
-class ObjectIndexerTest extends \Neos\Flow\Tests\FunctionalTestCase
+class ObjectIndexerTest extends FunctionalTestCase
 {
     /**
      * @var boolean
@@ -32,7 +34,7 @@ class ObjectIndexerTest extends \Neos\Flow\Tests\FunctionalTestCase
     protected $testEntityRepository;
 
     /**
-     * @var \Flowpack\ElasticSearch\Domain\Model\Client
+     * @var Client
      */
     protected $testClient;
 

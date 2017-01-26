@@ -11,13 +11,11 @@ namespace Flowpack\ElasticSearch\Mapping;
  * source code.
  */
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Flowpack\ElasticSearch\Domain\Model\Client as ElasticSearchClient;
 use Flowpack\ElasticSearch\Domain\Model\Mapping;
-use Neos\Flow\Annotations as Flow;
 
-/**
- */
-class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection
+class MappingCollection extends ArrayCollection
 {
     const TYPE_BACKEND = 'backend';
     const TYPE_ENTITY = 'entity';
@@ -30,7 +28,7 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection
     protected $type;
 
     /**
-     * @var \Flowpack\ElasticSearch\Domain\Model\Client
+     * @var ElasticSearchClient
      */
     protected $client;
 
@@ -39,7 +37,7 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection
      */
     public function __construct($type = null)
     {
-        parent::__construct(array());
+        parent::__construct([]);
         $this->type = $type;
     }
 
@@ -47,11 +45,12 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection
      * Returns a new collection of mappings of this collection that are not member of the $complementCollection.
      *
      * @param MappingCollection $complementCollection
-     * @return \Flowpack\ElasticSearch\Mapping\MappingCollection
+     *
+     * @return MappingCollection
      */
     public function diffAgainstCollection(MappingCollection $complementCollection)
     {
-        $returnMappings = new \Flowpack\ElasticSearch\Mapping\MappingCollection();
+        $returnMappings = new MappingCollection();
         foreach ($this as $entityMapping) {
             /** @var $entityMapping Mapping */
             $mapping = new Mapping(clone $entityMapping->getType());
@@ -60,7 +59,7 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection
                 foreach ($propertySettings as $entitySettingKey => $entitySettingValue) {
                     $backendSettingValue = $complementCollection->getMappingSetting($entityMapping, $propertyName, $entitySettingKey);
                     if ($entitySettingValue !== $backendSettingValue) {
-                        $mapping->setPropertyByPath(array($propertyName, $entitySettingKey), $entitySettingValue);
+                        $mapping->setPropertyByPath([$propertyName, $entitySettingKey], $entitySettingValue);
                         $saveMapping = true;
                     }
                 }
@@ -79,6 +78,7 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection
      * @param Mapping $inquirerMapping
      * @param string $propertyName
      * @param string $settingKey
+     *
      * @return mixed
      */
     public function getMappingSetting(Mapping $inquirerMapping, $propertyName, $settingKey)
@@ -86,8 +86,9 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection
         foreach ($this as $memberMapping) {
             /** @var $memberMapping Mapping */
             if ($inquirerMapping->getType()->getName() === $memberMapping->getType()->getName()
-                && $inquirerMapping->getType()->getIndex()->getName() === $memberMapping->getType()->getIndex()->getName()) {
-                return $memberMapping->getPropertyByPath(array($propertyName, $settingKey));
+                && $inquirerMapping->getType()->getIndex()->getName() === $memberMapping->getType()->getIndex()->getName()
+            ) {
+                return $memberMapping->getPropertyByPath([$propertyName, $settingKey]);
             }
         }
 
@@ -95,20 +96,21 @@ class MappingCollection extends \Doctrine\Common\Collections\ArrayCollection
     }
 
     /**
-     * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
-     * @return void
-     */
-    public function setClient(\Flowpack\ElasticSearch\Domain\Model\Client $client)
-    {
-        $this->client = $client;
-    }
-
-    /**
-     * @return \Flowpack\ElasticSearch\Domain\Model\Client
+     * @return ElasticSearchClient
      */
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * @param ElasticSearchClient $client
+     *
+     * @return void
+     */
+    public function setClient(ElasticSearchClient $client)
+    {
+        $this->client = $client;
     }
 
     /**

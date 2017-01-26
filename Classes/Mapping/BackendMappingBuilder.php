@@ -12,6 +12,7 @@ namespace Flowpack\ElasticSearch\Mapping;
  */
 
 use Flowpack\ElasticSearch\Domain\Model;
+use Flowpack\ElasticSearch\Exception as ElasticSearchException;
 use Flowpack\ElasticSearch\Indexer\Object\IndexInformer;
 use Neos\Flow\Annotations as Flow;
 
@@ -44,16 +45,16 @@ class BackendMappingBuilder
     /**
      * Builds a Mapping collection from the annotation sources that are present
      *
-     * @return \Flowpack\ElasticSearch\Mapping\MappingCollection<\Flowpack\ElasticSearch\Domain\Model\Mapping>
-     * @throws \Flowpack\ElasticSearch\Exception
+     * @return MappingCollection<Model\Mapping>
+     * @throws ElasticSearchException
      */
     public function buildMappingInformation()
     {
         if (!$this->client instanceof Model\Client) {
-            throw new \Flowpack\ElasticSearch\Exception('No client was given for mapping retrieval. Set a client BackendMappingBuilder->setClient().', 1339678111);
+            throw new ElasticSearchException('No client was given for mapping retrieval. Set a client BackendMappingBuilder->setClient().', 1339678111);
         }
 
-        $this->indicesWithoutTypeInformation = array();
+        $this->indicesWithoutTypeInformation = [];
 
         $response = $this->client->request('GET', '/_mapping');
         $mappingInformation = new MappingCollection(MappingCollection::TYPE_BACKEND);
@@ -74,7 +75,7 @@ class BackendMappingBuilder
                 if (isset($typeSettings['properties'])) {
                     foreach ($typeSettings['properties'] as $propertyName => $propertySettings) {
                         foreach ($propertySettings as $key => $value) {
-                            $mapping->setPropertyByPath(array($propertyName, $key), $value);
+                            $mapping->setPropertyByPath([$propertyName, $key], $value);
                         }
                     }
                 }
@@ -87,6 +88,7 @@ class BackendMappingBuilder
 
     /**
      * @param Model\Client $client
+     *
      * @return void
      */
     public function setClient(Model\Client $client)
@@ -96,12 +98,12 @@ class BackendMappingBuilder
 
     /**
      * @return array
-     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws ElasticSearchException
      */
     public function getIndicesWithoutTypeInformation()
     {
         if ($this->indicesWithoutTypeInformation === null) {
-            throw new \Flowpack\ElasticSearch\Exception('For getting the indices having no mapping information attached, BackendMappingBuilder->buildMappingInformation() has to be run first.', 1339751812);
+            throw new ElasticSearchException('For getting the indices having no mapping information attached, BackendMappingBuilder->buildMappingInformation() has to be run first.', 1339751812);
         }
 
         return $this->indicesWithoutTypeInformation;

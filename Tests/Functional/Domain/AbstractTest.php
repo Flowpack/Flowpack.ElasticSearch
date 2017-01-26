@@ -12,10 +12,12 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Domain;
  */
 
 use Flowpack\ElasticSearch\Domain\Factory\ClientFactory;
+use Flowpack\ElasticSearch\Domain\Model\Index;
+use Neos\Flow\Tests\FunctionalTestCase;
 
 /**
  */
-abstract class AbstractTest extends \Neos\Flow\Tests\FunctionalTestCase
+abstract class AbstractTest extends FunctionalTestCase
 {
     /**
      * @var ClientFactory
@@ -23,7 +25,7 @@ abstract class AbstractTest extends \Neos\Flow\Tests\FunctionalTestCase
     protected $clientFactory;
 
     /**
-     * @var \Flowpack\ElasticSearch\Domain\Model\Index
+     * @var Index
      */
     protected $testingIndex;
 
@@ -33,7 +35,7 @@ abstract class AbstractTest extends \Neos\Flow\Tests\FunctionalTestCase
     protected $removeIndexOnTearDown = false;
 
     /**
-     * final because else it could seriously damage the Index in the unlikely case there's already an index named typo3_ElasticSearch_FunctionalTests
+     * final because else it could seriously damage the Index in the unlikely case there's already an index named flow_ElasticSearch_FunctionalTests
      */
     final public function setUp()
     {
@@ -41,10 +43,10 @@ abstract class AbstractTest extends \Neos\Flow\Tests\FunctionalTestCase
 
         $this->clientFactory = $this->objectManager->get(ClientFactory::class);
         $client = $this->clientFactory->create();
-        $this->testingIndex = $client->findIndex('typo3_elasticsearch_functionaltests');
+        $this->testingIndex = $client->findIndex('flow_elasticsearch_functionaltests');
 
         if ($this->testingIndex->exists()) {
-            throw new \Exception('The index "typo3_elasticsearch_functionaltests" already existed, aborting.', 1338967487);
+            throw new \Exception('The index "flow_elasticsearch_functionaltests" already existed, aborting.', 1338967487);
         } else {
             $this->testingIndex->create();
             $this->removeIndexOnTearDown = true;

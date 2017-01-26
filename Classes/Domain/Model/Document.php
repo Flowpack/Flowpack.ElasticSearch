@@ -11,6 +11,8 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Exception as ElasticSearchException;
+use Flowpack\ElasticSearch\Transfer\Response;
 use Neos\Flow\Annotations as Flow;
 
 /**
@@ -79,21 +81,9 @@ class Document
     }
 
     /**
-     * @param string $method
-     * @param string $path
-     * @param array $arguments
-     * @param string $content
-     * @return \Flowpack\ElasticSearch\Transfer\Response
-     */
-    protected function request($method, $path = null, array $arguments = array(), $content = null)
-    {
-        return $this->type->request($method, $path, $arguments, $content);
-    }
-
-    /**
      * Stores this document. If ID is given, PUT will be used; else POST
      *
-     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws ElasticSearchException
      * @return void
      */
     public function store()
@@ -105,7 +95,7 @@ class Document
             $method = 'POST';
             $path = '';
         }
-        $response = $this->request($method, $path, array(), json_encode($this->data));
+        $response = $this->request($method, $path, [], json_encode($this->data));
         $treatedContent = $response->getTreatedContent();
 
         $this->id = $treatedContent['_id'];
@@ -114,12 +104,16 @@ class Document
     }
 
     /**
-     * @param boolean $dirty
-     * @return void
+     * @param string $method
+     * @param string $path
+     * @param array $arguments
+     * @param string $content
+     *
+     * @return Response
      */
-    protected function setDirty($dirty = true)
+    protected function request($method, $path = null, array $arguments = [], $content = null)
     {
-        $this->dirty = $dirty;
+        return $this->type->request($method, $path, $arguments, $content);
     }
 
     /**
@@ -128,6 +122,16 @@ class Document
     public function isDirty()
     {
         return $this->dirty;
+    }
+
+    /**
+     * @param boolean $dirty
+     *
+     * @return void
+     */
+    protected function setDirty($dirty = true)
+    {
+        $this->dirty = $dirty;
     }
 
     /**
@@ -150,6 +154,7 @@ class Document
 
     /**
      * @param array $data
+     *
      * @return void
      */
     public function setData(array $data)
@@ -171,13 +176,14 @@ class Document
      *
      * @param string $fieldName
      * @param boolean $silent
-     * @throws \Flowpack\ElasticSearch\Exception
+     *
      * @return mixed
+     * @throws ElasticSearchException
      */
     public function getField($fieldName, $silent = false)
     {
         if (!array_key_exists($fieldName, $this->data) && $silent === false) {
-            throw new \Flowpack\ElasticSearch\Exception(sprintf('The field %s was not present in data of document in %s/%s.', $fieldName, $this->type->getIndex()->getName(), $this->type->getName()), 1340274696);
+            throw new ElasticSearchException(sprintf('The field %s was not present in data of document in %s/%s.', $fieldName, $this->type->getIndex()->getName(), $this->type->getName()), 1340274696);
         }
 
         return $this->data[$fieldName];

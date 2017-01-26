@@ -105,6 +105,7 @@ final class Mapping
     {
         $properties = get_object_vars($this);
         unset($properties['fields']);
+
         return $properties;
     }
 

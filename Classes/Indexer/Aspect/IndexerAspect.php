@@ -11,7 +11,9 @@ namespace Flowpack\ElasticSearch\Indexer\Aspect;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Aop\JoinPointInterface;
 
 /**
  * Indexing aspect
@@ -22,16 +24,17 @@ class IndexerAspect
 {
     /**
      * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer
+     * @var ObjectIndexer
      */
     protected $objectIndexer;
 
     /**
      * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(Neos\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(add|update)())")
-     * @param \Neos\Flow\Aop\JoinPointInterface $joinPoint
+     * @param JoinPointInterface $joinPoint
+     *
      * @return string
      */
-    public function updateObjectToIndex(\Neos\Flow\Aop\JoinPointInterface $joinPoint)
+    public function updateObjectToIndex(JoinPointInterface $joinPoint)
     {
         $arguments = $joinPoint->getMethodArguments();
         $object = reset($arguments);
@@ -40,10 +43,11 @@ class IndexerAspect
 
     /**
      * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(Neos\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(remove)())")
-     * @param \Neos\Flow\Aop\JoinPointInterface $joinPoint
+     * @param JoinPointInterface $joinPoint
+     *
      * @return string
      */
-    public function removeObjectFromIndex(\Neos\Flow\Aop\JoinPointInterface $joinPoint)
+    public function removeObjectFromIndex(JoinPointInterface $joinPoint)
     {
         $arguments = $joinPoint->getMethodArguments();
         $object = reset($arguments);

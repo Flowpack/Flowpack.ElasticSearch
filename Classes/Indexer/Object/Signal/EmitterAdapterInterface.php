@@ -11,9 +11,6 @@ namespace Flowpack\ElasticSearch\Indexer\Object\Signal;
  * source code.
  */
 
-use Doctrine\ORM\Mapping as ORM;
-use Neos\Flow\Annotations as Flow;
-
 /**
  * Marker interface for the Persistence signal emitter
  */

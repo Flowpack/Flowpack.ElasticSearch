@@ -12,6 +12,7 @@ namespace Flowpack\ElasticSearch\Domain\Model\Client;
  */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Http\Uri;
 
 /**
  * Client configuration
@@ -44,15 +45,6 @@ class ClientConfiguration
     protected $password = '';
 
     /**
-     * @param string $host
-     * @return void
-     */
-    public function setHost($host)
-    {
-        $this->host = $host;
-    }
-
-    /**
      * @return string
      */
     public function getHost()
@@ -61,12 +53,13 @@ class ClientConfiguration
     }
 
     /**
-     * @param int $port
+     * @param string $host
+     *
      * @return void
      */
-    public function setPort($port)
+    public function setHost($host)
     {
-        $this->port = $port;
+        $this->host = $host;
     }
 
     /**
@@ -78,12 +71,13 @@ class ClientConfiguration
     }
 
     /**
-     * @param string $scheme
+     * @param int $port
+     *
      * @return void
      */
-    public function setScheme($scheme)
+    public function setPort($port)
     {
-        $this->scheme = $scheme;
+        $this->port = $port;
     }
 
     /**
@@ -92,6 +86,16 @@ class ClientConfiguration
     public function getScheme()
     {
         return $this->scheme;
+    }
+
+    /**
+     * @param string $scheme
+     *
+     * @return void
+     */
+    public function setScheme($scheme)
+    {
+        $this->scheme = $scheme;
     }
 
     /**
@@ -108,6 +112,7 @@ class ClientConfiguration
      * Sets username
      *
      * @param string $username
+     *
      * @return void
      */
     public function setUsername($username)
@@ -129,6 +134,7 @@ class ClientConfiguration
      * Sets password
      *
      * @param string $password
+     *
      * @return void
      */
     public function setPassword($password)
@@ -137,11 +143,11 @@ class ClientConfiguration
     }
 
     /**
-     * @return \Neos\Flow\Http\Uri
+     * @return Uri
      */
     public function getUri()
     {
-        $uri = new \Neos\Flow\Http\Uri('');
+        $uri = new Uri('');
         $uri->setScheme($this->scheme);
         $uri->setHost($this->host);
         $uri->setPort($this->port);

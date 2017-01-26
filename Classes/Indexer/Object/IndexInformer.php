@@ -12,6 +12,7 @@ namespace Flowpack\ElasticSearch\Indexer\Object;
  */
 
 use Flowpack\ElasticSearch\Annotations\Indexable;
+use Flowpack\ElasticSearch\Exception as ElasticSearchException;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 use Neos\Flow\Reflection\ReflectionService;
@@ -37,7 +38,7 @@ class IndexInformer
     /**
      * @var array
      */
-    protected $indexAnnotations = array();
+    protected $indexAnnotations = [];
 
     /**
      * @return void
@@ -48,86 +49,27 @@ class IndexInformer
     }
 
     /**
-     * Returns the to-index classes and their annotation
-     *
-     * @return array
-     */
-    public function getClassesAndAnnotations()
-    {
-        static $classesAndAnnotations;
-        if ($classesAndAnnotations === null) {
-            $classesAndAnnotations = array();
-            foreach (array_keys($this->indexAnnotations) as $className) {
-                $classesAndAnnotations[$className] = $this->indexAnnotations[$className]['annotation'];
-            }
-        }
-
-        return $classesAndAnnotations;
-    }
-
-    /**
-     * Returns all indexes name deplared in class annotations
-     *
-     * @return array
-     */
-    public function getAllIndexNames()
-    {
-        $indexes = array();
-        foreach ($this->getClassesAndAnnotations() as $configuration) {
-            /** @var Indexable $configuration */
-            $indexes[$configuration->indexName] = $configuration->indexName;
-        }
-
-        return array_keys($indexes);
-    }
-
-    /**
-     * @param string $className
-     * @return Indexable The annotation for this class
-     */
-    public function getClassAnnotation($className)
-    {
-        if (!isset($this->indexAnnotations[$className])) {
-            return null;
-        }
-
-        return $this->indexAnnotations[$className]['annotation'];
-    }
-
-    /**
-     * @param string $className
-     * @return array
-     */
-    public function getClassProperties($className)
-    {
-        if (!isset($this->indexAnnotations[$className])) {
-            return null;
-        }
-
-        return $this->indexAnnotations[$className]['properties'];
-    }
-
-    /**
      * Creates the source array of what classes and properties have to be annotated.
      * The returned array consists of class names, with a sub-key having both 'annotation' and 'properties' set.
      * The annotation contains the class's annotation, while properties contains each property that has to be indexed.
      * Each property might either have TRUE as value, or also an annotation instance, if given.
      *
      * @param ObjectManagerInterface $objectManager
+     *
      * @return array
-     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws ElasticSearchException
      */
     public static function buildIndexClassesAndProperties($objectManager)
     {
         /** @var ReflectionService $reflectionService */
-        $reflectionService = $objectManager->get(\Neos\Flow\Reflection\ReflectionService::class);
+        $reflectionService = $objectManager->get(ReflectionService::class);
 
-        $indexAnnotations = array();
+        $indexAnnotations = [];
 
-        $annotationClassName = \Flowpack\ElasticSearch\Annotations\Indexable::class;
+        $annotationClassName = Indexable::class;
         foreach ($reflectionService->getClassNamesByAnnotation($annotationClassName) as $className) {
             if ($reflectionService->isClassAbstract($className)) {
-                throw new \Flowpack\ElasticSearch\Exception(sprintf('The class with name "%s" is annotated with %s, but is abstract. Indexable classes must not be abstract.', $className, $annotationClassName), 1339595182);
+                throw new ElasticSearchException(sprintf('The class with name "%s" is annotated with %s, but is abstract. Indexable classes must not be abstract.', $className, $annotationClassName), 1339595182);
             }
             $indexAnnotations[$className]['annotation'] = $reflectionService->getClassAnnotation($className, $annotationClassName);
 
@@ -143,5 +85,67 @@ class IndexInformer
         }
 
         return $indexAnnotations;
+    }
+
+    /**
+     * Returns all indexes name deplared in class annotations
+     *
+     * @return array
+     */
+    public function getAllIndexNames()
+    {
+        $indexes = [];
+        foreach ($this->getClassesAndAnnotations() as $configuration) {
+            /** @var Indexable $configuration */
+            $indexes[$configuration->indexName] = $configuration->indexName;
+        }
+
+        return array_keys($indexes);
+    }
+
+    /**
+     * Returns the to-index classes and their annotation
+     *
+     * @return array
+     */
+    public function getClassesAndAnnotations()
+    {
+        static $classesAndAnnotations;
+        if ($classesAndAnnotations === null) {
+            $classesAndAnnotations = [];
+            foreach (array_keys($this->indexAnnotations) as $className) {
+                $classesAndAnnotations[$className] = $this->indexAnnotations[$className]['annotation'];
+            }
+        }
+
+        return $classesAndAnnotations;
+    }
+
+    /**
+     * @param string $className
+     *
+     * @return Indexable The annotation for this class
+     */
+    public function getClassAnnotation($className)
+    {
+        if (!isset($this->indexAnnotations[$className])) {
+            return null;
+        }
+
+        return $this->indexAnnotations[$className]['annotation'];
+    }
+
+    /**
+     * @param string $className
+     *
+     * @return array
+     */
+    public function getClassProperties($className)
+    {
+        if (!isset($this->indexAnnotations[$className])) {
+            return null;
+        }
+
+        return $this->indexAnnotations[$className]['properties'];
     }
 }

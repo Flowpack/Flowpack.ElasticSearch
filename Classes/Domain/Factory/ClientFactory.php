@@ -11,7 +11,11 @@ namespace Flowpack\ElasticSearch\Domain\Factory;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Domain\Model\Client\ClientConfiguration;
+use Flowpack\ElasticSearch\Exception as ElasticSearchException;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Error\Exception as FlowErrorException;
+use Flowpack\ElasticSearch\Domain\Model\Client;
 
 /**
  * Client factory
@@ -35,18 +39,18 @@ class ClientFactory
     /**
      * @param string $bundle
      * @param string $clientClassName
-     * @throws \Flowpack\ElasticSearch\Exception
-     * @return \Flowpack\ElasticSearch\Domain\Model\Client
-     * @return void
+     *
+     * @return Client
+     * @throws ElasticSearchException
      */
-    public function create($bundle = null, $clientClassName = 'Flowpack\ElasticSearch\Domain\Model\Client')
+    public function create($bundle = null, $clientClassName = Client::class)
     {
         if ($bundle === null) {
             $bundle = 'default';
         }
 
         if (!isset($this->settings['clients'][$bundle]) || !is_array($this->settings['clients'][$bundle])) {
-            throw new \Flowpack\ElasticSearch\Exception('The inquired client settings bundle "' . $bundle . '" is not present in setting "Flowpack.ElasticSearch.clients".', 1338890487);
+            throw new ElasticSearchException('The inquired client settings bundle "' . $bundle . '" is not present in setting "Flowpack.ElasticSearch.clients".', 1338890487);
         }
         $clientsSettings = $this->settings['clients'][$bundle];
 
@@ -61,21 +65,23 @@ class ClientFactory
 
     /**
      * @param array $clientsSettings
+     *
      * @return array
-     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws ElasticSearchException
      */
     protected function buildClientConfigurations(array $clientsSettings)
     {
-        $clientConfigurations = array();
+        $clientConfigurations = [];
+        $clientConfiguration = new ClientConfiguration();
         foreach ($clientsSettings as $clientSettings) {
-            $configuration = new \Flowpack\ElasticSearch\Domain\Model\Client\ClientConfiguration();
+            $configuration = clone $clientConfiguration;
             foreach ($clientSettings as $settingKey => $settingValue) {
                 $setterMethodName = 'set' . ucfirst($settingKey);
                 try {
-                    call_user_func(array($configuration, $setterMethodName), $settingValue);
-                } catch (\Neos\Flow\Error\Exception $exception) {
+                    $configuration->$setterMethodName($settingValue);
+                } catch (FlowErrorException $exception) {
                     $exceptionMessage = 'Setting key "' . $settingKey . '" as client configuration value is not allowed. Refer to the Settings.yaml.example for the supported keys.';
-                    throw new \Flowpack\ElasticSearch\Exception($exceptionMessage, 1338886877, $exception);
+                    throw new ElasticSearchException($exceptionMessage, 1338886877, $exception);
                 }
             }
             $clientConfigurations[] = $configuration;

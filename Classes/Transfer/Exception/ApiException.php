@@ -11,11 +11,13 @@ namespace Flowpack\ElasticSearch\Transfer\Exception;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Transfer\Exception as ElasticSearchException;
+
 /**
  * This exception type is intended to map any error output that was returned by ElasticSearch itself
  * If, for example, ElasticSearch returns {"error":"IndexMissingException[[foo_bar] missing]","status":404}
  * this exception is raised.
  */
-class ApiException extends \Flowpack\ElasticSearch\Transfer\Exception
+class ApiException extends ElasticSearchException
 {
 }

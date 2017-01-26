@@ -13,10 +13,11 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Mapping;
 
 use Flowpack\ElasticSearch\Domain\Model\Mapping;
 use Flowpack\ElasticSearch\Mapping\EntityMappingBuilder;
+use Neos\Flow\Tests\FunctionalTestCase;
 
 /**
  */
-class MappingBuilderTest extends \Neos\Flow\Tests\FunctionalTestCase
+class MappingBuilderTest extends FunctionalTestCase
 {
     /**
      * @var EntityMappingBuilder

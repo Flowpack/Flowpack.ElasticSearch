@@ -11,8 +11,9 @@ namespace Flowpack\ElasticSearch\Indexer\Object\Transform;
  * source code.
  */
 
-use Doctrine\ORM\Mapping as ORM;
+use Flowpack\ElasticSearch\Exception as ElasticSearchException;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
 
 /**
  * @Flow\Scope("singleton")
@@ -21,14 +22,15 @@ class TransformerFactory
 {
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\ObjectManagement\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
      * @param string $annotatedTransformer Either a full qualified class name or a shortened one which is seeked in the current package.
-     * @return \Flowpack\ElasticSearch\Indexer\Object\Transform\TransformerInterface
-     * @throws \Flowpack\ElasticSearch\Exception
+     *
+     * @return TransformerInterface
+     * @throws ElasticSearchException
      */
     public function create($annotatedTransformer)
     {
@@ -36,8 +38,8 @@ class TransformerFactory
             $annotatedTransformer = 'Flowpack\ElasticSearch\Indexer\Object\Transform\\' . $annotatedTransformer . 'Transformer';
         }
         $transformer = $this->objectManager->get($annotatedTransformer);
-        if (!$transformer instanceof \Flowpack\ElasticSearch\Indexer\Object\Transform\TransformerInterface) {
-            throw new \Flowpack\ElasticSearch\Exception(sprintf('The transformer instance "%s" does not implement the TransformerInterface.', $annotatedTransformer), 1339598316);
+        if (!$transformer instanceof TransformerInterface) {
+            throw new ElasticSearchException(sprintf('The transformer instance "%s" does not implement the TransformerInterface.', $annotatedTransformer), 1339598316);
         }
 
         return $transformer;

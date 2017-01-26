@@ -11,6 +11,8 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Domain\Factory\DocumentFactory;
+use Flowpack\ElasticSearch\Transfer\Response;
 use Neos\Flow\Annotations as Flow;
 
 /**
@@ -20,12 +22,12 @@ abstract class AbstractType
 {
     /**
      * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\Domain\Factory\DocumentFactory
+     * @var DocumentFactory
      */
     protected $documentFactory;
 
     /**
-     * @var \Flowpack\ElasticSearch\Domain\Model\Index
+     * @var Index
      */
     protected $index;
 
@@ -60,7 +62,7 @@ abstract class AbstractType
     }
 
     /**
-     * @return \Flowpack\ElasticSearch\Domain\Model\Index
+     * @return Index
      */
     public function getIndex()
     {
@@ -71,7 +73,8 @@ abstract class AbstractType
      * Returns a document
      *
      * @param string $id
-     * @return \Flowpack\ElasticSearch\Domain\Model\Document
+     *
+     * @return Document
      */
     public function findDocumentById($id)
     {
@@ -79,13 +82,28 @@ abstract class AbstractType
         if ($response->getStatusCode() !== 200) {
             return null;
         }
-        $document = $this->documentFactory->createFromResponse($this, $id, $response);
 
-        return $document;
+        return $this->documentFactory->createFromResponse($this, $id, $response);
+    }
+
+    /**
+     * @param string $method
+     * @param string $path
+     * @param array $arguments
+     * @param string $content
+     *
+     * @return Response
+     */
+    public function request($method, $path = null, array $arguments = [], $content = null)
+    {
+        $path = '/' . $this->name . ($path ?: '');
+
+        return $this->index->request($method, $path, $arguments, $content);
     }
 
     /**
      * @param string $id
+     *
      * @return boolean ...whether the deletion is considered successful
      */
     public function deleteDocumentById($id)
@@ -112,24 +130,11 @@ abstract class AbstractType
 
     /**
      * @param array $searchQuery The search query TODO: make it an object
-     * @return \Flowpack\ElasticSearch\Transfer\Response
+     *
+     * @return Response
      */
     public function search(array $searchQuery)
     {
-        return $this->request('GET', '/_search', array(), json_encode($searchQuery));
-    }
-
-    /**
-     * @param string $method
-     * @param string $path
-     * @param array $arguments
-     * @param string $content
-     * @return \Flowpack\ElasticSearch\Transfer\Response
-     */
-    public function request($method, $path = null, array $arguments = array(), $content = null)
-    {
-        $path = '/' . $this->name . ($path ?: '');
-
-        return $this->index->request($method, $path, $arguments, $content);
+        return $this->request('GET', '/_search', [], json_encode($searchQuery));
     }
 }

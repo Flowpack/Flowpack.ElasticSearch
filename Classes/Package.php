@@ -14,6 +14,9 @@ namespace Flowpack\ElasticSearch;
 use Flowpack\ElasticSearch\Indexer\Object\ObjectIndexer;
 use Flowpack\ElasticSearch\Indexer\Object\Signal\SignalEmitter;
 use Neos\Flow\Configuration\ConfigurationManager;
+use Neos\Flow\Core\Booting\Sequence;
+use Neos\Flow\Core\Booting\Step;
+use Neos\Flow\Core\Bootstrap;
 use Neos\Flow\Package\Package as BasePackage;
 
 /**
@@ -29,25 +32,27 @@ class Package extends BasePackage
     /**
      * Invokes custom PHP code directly after the package manager has been initialized.
      *
-     * @param \Neos\Flow\Core\Bootstrap $bootstrap The current bootstrap
+     * @param Bootstrap $bootstrap The current bootstrap
+     *
      * @return void
      */
-    public function boot(\Neos\Flow\Core\Bootstrap $bootstrap)
+    public function boot(Bootstrap $bootstrap)
     {
         $dispatcher = $bootstrap->getSignalSlotDispatcher();
         $package = $this;
-        $dispatcher->connect(\Neos\Flow\Core\Booting\Sequence::class, 'afterInvokeStep', function (\Neos\Flow\Core\Booting\Step $step) use ($package, $bootstrap) {
-            if ($step->getIdentifier() === 'typo3.flow:objectmanagement:runtime') {
+        $dispatcher->connect(Sequence::class, 'afterInvokeStep', function (Step $step) use ($package, $bootstrap) {
+            if ($step->getIdentifier() === 'neos.flow:objectmanagement:runtime') {
                 $package->prepareRealtimeIndexing($bootstrap);
             }
         });
     }
 
     /**
-     * @param \Neos\Flow\Core\Bootstrap $bootstrap
+     * @param Bootstrap $bootstrap
+     *
      * @return void
      */
-    public function prepareRealtimeIndexing(\Neos\Flow\Core\Bootstrap $bootstrap)
+    public function prepareRealtimeIndexing(Bootstrap $bootstrap)
     {
         $this->configurationManager = $bootstrap->getObjectManager()->get(ConfigurationManager::class);
         $settings = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, $this->getPackageKey());

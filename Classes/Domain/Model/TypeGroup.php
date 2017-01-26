@@ -21,7 +21,7 @@ class TypeGroup extends AbstractType
     /**
      * @var array<AbstractType>
      */
-    protected $types = array();
+    protected $types = [];
 
     /**
      * @param Index $index
@@ -32,7 +32,7 @@ class TypeGroup extends AbstractType
         parent::__construct($index);
         $this->types = $types;
 
-        $names = array();
+        $names = [];
         foreach ($this->types as $type) {
             $names[] = $type->getName();
         }

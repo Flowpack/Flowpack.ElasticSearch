@@ -10,19 +10,22 @@ namespace Flowpack\ElasticSearch\Transfer;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
+use Flowpack\ElasticSearch\Exception as ElasticSearchException;
+use Neos\Flow\Http\Request;
+use Neos\Flow\Http\Response;
 
 /**
  * Exception that occurs related to ElasticSearch transfers
  */
-class Exception extends \Flowpack\ElasticSearch\Exception
+class Exception extends ElasticSearchException
 {
     /**
-     * @var \Neos\Flow\Http\Response
+     * @var Response
      */
     protected $response;
 
     /**
-     * @var \Neos\Flow\Http\Request
+     * @var Request
      */
     protected $request;
 
@@ -31,20 +34,20 @@ class Exception extends \Flowpack\ElasticSearch\Exception
      *
      * @param string $message
      * @param integer $code
-     * @param \Neos\Flow\Http\Response $response
-     * @param \Neos\Flow\Http\Request $request
+     * @param Response $response
+     * @param Request $request
      * @param \Exception $previous
      */
-    public function __construct($message, $code, \Neos\Flow\Http\Response $response, \Neos\Flow\Http\Request $request = null, \Exception $previous = null)
+    public function __construct($message, $code, Response $response, Request $request = null, \Exception $previous = null)
     {
         $this->response = $response;
         $this->request = $request;
         if ($request !== null) {
-            $message = sprintf("Elasticsearch request failed.\n[%s %s]: %s\n\nRequest data: %s",
+            $message = sprintf(
+                "Elasticsearch request failed.\n[%s %s]: %s\n\nRequest data: %s",
                 $request->getMethod(),
                 $request->getUri(),
                 $message . '; Response body: ' . $response->getContent(),
-
                 $request->getContent()
             );
         }
@@ -53,7 +56,7 @@ class Exception extends \Flowpack\ElasticSearch\Exception
     }
 
     /**
-     * @return \Neos\Flow\Http\Request
+     * @return Request
      */
     public function getRequest()
     {
@@ -61,7 +64,7 @@ class Exception extends \Flowpack\ElasticSearch\Exception
     }
 
     /**
-     * @return \Neos\Flow\Http\Response
+     * @return Response
      */
     public function getResponse()
     {

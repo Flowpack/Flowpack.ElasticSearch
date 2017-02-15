@@ -70,7 +70,7 @@ class Client
      * @param array $clientConfigurations
      * @return void
      */
-    public function setClientConfigurations($clientConfigurations)
+    public function setClientConfigurations(array $clientConfigurations)
     {
         $this->clientConfigurations = $clientConfigurations;
     }

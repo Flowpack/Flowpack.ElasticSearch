@@ -29,7 +29,6 @@ class EmitterAdapter implements EmitterAdapterInterface
 
     /**
      * @param LifecycleEventArgs $eventArguments
-     *
      * @return void
      */
     public function postUpdate(LifecycleEventArgs $eventArguments)
@@ -39,7 +38,6 @@ class EmitterAdapter implements EmitterAdapterInterface
 
     /**
      * @param LifecycleEventArgs $eventArguments
-     *
      * @return void
      */
     public function postPersist(LifecycleEventArgs $eventArguments)
@@ -49,7 +47,6 @@ class EmitterAdapter implements EmitterAdapterInterface
 
     /**
      * @param LifecycleEventArgs $eventArguments
-     *
      * @return void
      */
     public function postRemove(LifecycleEventArgs $eventArguments)

@@ -32,7 +32,6 @@ class DateTransformer implements TransformerInterface
     /**
      * @param \DateTime $source
      * @param TransformAnnotation $annotation
-     *
      * @return string
      */
     public function transformByAnnotation($source, TransformAnnotation $annotation)

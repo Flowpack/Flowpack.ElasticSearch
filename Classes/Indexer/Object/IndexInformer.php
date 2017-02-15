@@ -55,7 +55,6 @@ class IndexInformer
      * Each property might either have TRUE as value, or also an annotation instance, if given.
      *
      * @param ObjectManagerInterface $objectManager
-     *
      * @return array
      * @throws ElasticSearchException
      */
@@ -123,7 +122,6 @@ class IndexInformer
 
     /**
      * @param string $className
-     *
      * @return Indexable The annotation for this class
      */
     public function getClassAnnotation($className)
@@ -137,7 +135,6 @@ class IndexInformer
 
     /**
      * @param string $className
-     *
      * @return array
      */
     public function getClassProperties($className)

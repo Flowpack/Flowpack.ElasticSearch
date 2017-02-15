@@ -31,7 +31,6 @@ class IndexerAspect
     /**
      * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(Neos\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(add|update)())")
      * @param JoinPointInterface $joinPoint
-     *
      * @return string
      */
     public function updateObjectToIndex(JoinPointInterface $joinPoint)
@@ -44,7 +43,6 @@ class IndexerAspect
     /**
      * @Flow\AfterReturning("setting(Flowpack.ElasticSearch.realtimeIndexing.enabled) && within(Neos\Flow\Persistence\PersistenceManagerInterface) && method(public .+->(remove)())")
      * @param JoinPointInterface $joinPoint
-     *
      * @return string
      */
     public function removeObjectFromIndex(JoinPointInterface $joinPoint)

@@ -73,7 +73,6 @@ abstract class AbstractType
      * Returns a document
      *
      * @param string $id
-     *
      * @return Document
      */
     public function findDocumentById($id)
@@ -91,7 +90,6 @@ abstract class AbstractType
      * @param string $path
      * @param array $arguments
      * @param string $content
-     *
      * @return Response
      */
     public function request($method, $path = null, array $arguments = [], $content = null)
@@ -103,7 +101,6 @@ abstract class AbstractType
 
     /**
      * @param string $id
-     *
      * @return boolean ...whether the deletion is considered successful
      */
     public function deleteDocumentById($id)
@@ -130,7 +127,6 @@ abstract class AbstractType
 
     /**
      * @param array $searchQuery The search query TODO: make it an object
-     *
      * @return Response
      */
     public function search(array $searchQuery)

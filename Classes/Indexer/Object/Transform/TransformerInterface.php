@@ -12,7 +12,6 @@ namespace Flowpack\ElasticSearch\Indexer\Object\Transform;
  */
 
 use Flowpack\ElasticSearch\Annotations\Transform as TransformAnnotation;
-use Neos\Flow\Annotations as Flow;
 
 /**
  */
@@ -29,7 +28,6 @@ interface TransformerInterface
     /**
      * @param mixed $source
      * @param TransformAnnotation $annotation
-     *
      * @return mixed
      */
     public function transformByAnnotation($source, TransformAnnotation $annotation);

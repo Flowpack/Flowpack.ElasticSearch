@@ -13,7 +13,6 @@ namespace Flowpack\ElasticSearch\Domain\Model;
 
 use Flowpack\ElasticSearch\Exception as ElasticSearchException;
 use Flowpack\ElasticSearch\Transfer\Response;
-use Neos\Flow\Annotations as Flow;
 
 /**
  * A Document which itself holds the data
@@ -108,7 +107,6 @@ class Document
      * @param string $path
      * @param array $arguments
      * @param string $content
-     *
      * @return Response
      */
     protected function request($method, $path = null, array $arguments = [], $content = null)
@@ -126,7 +124,6 @@ class Document
 
     /**
      * @param boolean $dirty
-     *
      * @return void
      */
     protected function setDirty($dirty = true)
@@ -154,7 +151,6 @@ class Document
 
     /**
      * @param array $data
-     *
      * @return void
      */
     public function setData(array $data)
@@ -176,7 +172,6 @@ class Document
      *
      * @param string $fieldName
      * @param boolean $silent
-     *
      * @return mixed
      * @throws ElasticSearchException
      */

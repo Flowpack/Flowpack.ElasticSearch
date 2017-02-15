@@ -74,7 +74,6 @@ class EntityMappingBuilder
     /**
      * @param string $className
      * @param IndexableAnnotation $annotation
-     *
      * @return Mapping
      */
     protected function buildMappingFromClassAndAnnotation($className, IndexableAnnotation $annotation)
@@ -93,7 +92,6 @@ class EntityMappingBuilder
      * @param Mapping $mapping
      * @param string $className
      * @param string $propertyName
-     *
      * @return void
      * @throws ElasticSearchException
      */
@@ -137,7 +135,6 @@ class EntityMappingBuilder
     /**
      * @param MappingAnnotation $annotation
      * @param array $propertyMapping
-     *
      * @return array
      */
     protected function processMappingAnnotation(MappingAnnotation $annotation, array $propertyMapping = [])

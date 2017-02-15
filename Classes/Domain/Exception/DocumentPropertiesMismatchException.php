@@ -26,7 +26,6 @@ class DocumentPropertiesMismatchException extends ElasticSearchException
 
     /**
      * @param Result $result
-     *
      * @return void
      */
     public function setErrorResult(Result $result)

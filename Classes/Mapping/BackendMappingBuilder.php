@@ -88,7 +88,6 @@ class BackendMappingBuilder
 
     /**
      * @param Model\Client $client
-     *
      * @return void
      */
     public function setClient(Model\Client $client)

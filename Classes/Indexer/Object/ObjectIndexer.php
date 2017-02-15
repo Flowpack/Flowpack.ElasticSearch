@@ -73,7 +73,6 @@ class ObjectIndexer
      * @param object $object
      * @param string $signalInformation Signal information, if called from a signal
      * @param Client $client
-     *
      * @return void
      */
     public function indexObject($object, $signalInformation = null, Client $client = null)
@@ -94,7 +93,6 @@ class ObjectIndexer
      *
      * @param object $object
      * @param Client $client
-     *
      * @return GenericType
      */
     protected function getIndexTypeForObject($object, Client $client = null)
@@ -116,7 +114,6 @@ class ObjectIndexer
      * Returns a multidimensional array with the indexable, probably transformed values of an object
      *
      * @param object $object
-     *
      * @return array
      */
     protected function getIndexablePropertiesAndValuesFromObject($object)
@@ -143,7 +140,6 @@ class ObjectIndexer
      * @param object $object
      * @param string $signalInformation Signal information, if called from a signal
      * @param Client $client
-     *
      * @return void
      */
     public function removeObject($object, $signalInformation = null, Client $client = null)
@@ -162,7 +158,6 @@ class ObjectIndexer
      *
      * @param object $object
      * @param Client $client
-     *
      * @return string one of this' ACTION_TYPE_* constants or NULL if no action is required
      */
     public function objectIndexActionRequired($object, Client $client = null)

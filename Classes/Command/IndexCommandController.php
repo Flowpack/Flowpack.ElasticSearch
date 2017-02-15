@@ -60,7 +60,6 @@ class IndexCommandController extends CommandController
      *
      * @param string $indexName The name of the new index
      * @param string $clientName The client name to use
-     *
      * @return void
      */
     public function createCommand($indexName, $clientName = null)
@@ -90,7 +89,6 @@ class IndexCommandController extends CommandController
      *
      * @param string $indexName The name of the new index
      * @param string $clientName The client name to use
-     *
      * @return void
      */
     public function updateSettingsCommand($indexName, $clientName = null)
@@ -120,7 +118,6 @@ class IndexCommandController extends CommandController
      *
      * @param string $indexName The name of the index to be removed
      * @param string $clientName The client name to use
-     *
      * @return void
      */
     public function deleteCommand($indexName, $clientName = null)
@@ -150,7 +147,6 @@ class IndexCommandController extends CommandController
      *
      * @param string $indexName The name of the index to be removed
      * @param string $clientName The client name to use
-     *
      * @return void
      */
     public function refreshCommand($indexName, $clientName = null)
@@ -195,7 +191,6 @@ class IndexCommandController extends CommandController
      * @param string $object Class name of a domain object. If given, will only work on this single object
      * @param boolean $conductUpdate Set to TRUE to conduct the required corrections
      * @param string $clientName The client name to use
-     *
      * @return void
      */
     public function statusCommand($object = null, $conductUpdate = false, $clientName = null)
@@ -286,7 +281,6 @@ class IndexCommandController extends CommandController
     /**
      * @param Client $client
      * @param string $className
-     *
      * @return array
      */
     protected function getModificationsNeededStatesAndIdentifiers(Client $client, $className)

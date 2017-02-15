@@ -50,7 +50,6 @@ class MappingCommandController extends CommandController
      * Shows the status of the current mapping...
      *
      * @param string $clientName The client name for the configuration. Defaults to the default client configured.
-     *
      * @return void
      */
     public function showStatusCommand($clientName = null)
@@ -111,7 +110,6 @@ class MappingCommandController extends CommandController
      * Traverses through mappingInformation array and aggregates by index and type names
      *
      * @param MappingCollection $mappingCollection
-     *
      * @throws ElasticSearchException
      * @return array with index names as keys, second level type names as keys
      */
@@ -152,7 +150,6 @@ class MappingCommandController extends CommandController
     /**
      * @param mixed $entityValue
      * @param mixed $backendValue
-     *
      * @return string
      */
     protected function markupDiffValue($entityValue, $backendValue)
@@ -186,7 +183,6 @@ class MappingCommandController extends CommandController
      * This command will adjust the backend's mapping to the mapping the entity status prescribes.
      *
      * @param string $clientName The client name for the configuration. Defaults to the default client configured.
-     *
      * @return void
      */
     public function convergeCommand($clientName = null)

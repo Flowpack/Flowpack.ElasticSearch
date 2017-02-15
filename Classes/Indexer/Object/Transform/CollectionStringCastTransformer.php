@@ -32,7 +32,6 @@ class CollectionStringCastTransformer implements TransformerInterface
     /**
      * @param mixed $source
      * @param TransformAnnotation $annotation
-     *
      * @return array
      */
     public function transformByAnnotation($source, TransformAnnotation $annotation)

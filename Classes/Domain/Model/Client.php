@@ -75,7 +75,6 @@ class Client
 
     /**
      * @param string $indexName
-     *
      * @return Index
      */
     public function findIndex($indexName)
@@ -94,7 +93,6 @@ class Client
      * @param string $path
      * @param array $arguments
      * @param string|array $content
-     *
      * @return Response
      */
     public function request($method, $path = null, array $arguments = [], $content = null)

@@ -28,7 +28,6 @@ class TransformerFactory
 
     /**
      * @param string $annotatedTransformer Either a full qualified class name or a shortened one which is seeked in the current package.
-     *
      * @return TransformerInterface
      * @throws ElasticSearchException
      */

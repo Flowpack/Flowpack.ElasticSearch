@@ -13,7 +13,6 @@ namespace Flowpack\ElasticSearch\Domain\Model;
 
 use Flowpack\ElasticSearch\Exception as ElasticSearchException;
 use Flowpack\ElasticSearch\Transfer\Response;
-use Neos\Flow\Annotations as Flow;
 use Neos\Utility\Arrays;
 
 /**
@@ -86,7 +85,6 @@ class Index
     /**
      * @param string $name
      * @param Client $client $client
-     *
      * @throws ElasticSearchException
      */
     public function __construct($name, Client $client = null)
@@ -106,7 +104,6 @@ class Index
      * Inject the settings
      *
      * @param array $settings
-     *
      * @return void
      */
     public function injectSettings(array $settings)
@@ -116,7 +113,6 @@ class Index
 
     /**
      * @param string $typeName
-     *
      * @return AbstractType
      */
     public function findType($typeName)
@@ -125,8 +121,7 @@ class Index
     }
 
     /**
-     * @param array<AbstractType> $types
-     *
+     * @param array <AbstractType> $types
      * @return TypeGroup
      */
     public function findTypeGroup(array $types)
@@ -150,7 +145,6 @@ class Index
      * @param array $arguments
      * @param string $content
      * @param boolean $prefixIndex
-     *
      * @return Response
      * @throws ElasticSearchException
      */
@@ -235,7 +229,6 @@ class Index
 
     /**
      * @param Client $client
-     *
      * @return void
      */
     public function setClient($client)
@@ -245,7 +238,6 @@ class Index
 
     /**
      * @param string $settingsKey
-     *
      * @return void
      */
     public function setSettingsKey($settingsKey)

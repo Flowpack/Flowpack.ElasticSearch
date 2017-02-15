@@ -31,7 +31,6 @@ class DocumentFactory
      * @param Model\AbstractType $type
      * @param string $id
      * @param Response $response
-     *
      * @return Model\Document
      * @throws DocumentPropertiesMismatchException
      */

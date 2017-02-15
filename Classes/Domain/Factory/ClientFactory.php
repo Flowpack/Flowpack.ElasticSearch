@@ -11,11 +11,11 @@ namespace Flowpack\ElasticSearch\Domain\Factory;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Domain\Model\Client;
 use Flowpack\ElasticSearch\Domain\Model\Client\ClientConfiguration;
 use Flowpack\ElasticSearch\Exception as ElasticSearchException;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Error\Exception as FlowErrorException;
-use Flowpack\ElasticSearch\Domain\Model\Client;
 
 /**
  * Client factory
@@ -39,7 +39,6 @@ class ClientFactory
     /**
      * @param string $bundle
      * @param string $clientClassName
-     *
      * @return Client
      * @throws ElasticSearchException
      */
@@ -65,7 +64,6 @@ class ClientFactory
 
     /**
      * @param array $clientsSettings
-     *
      * @return array
      * @throws ElasticSearchException
      */

@@ -12,7 +12,6 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  */
 
 use Flowpack\ElasticSearch\Transfer\Response;
-use Neos\Flow\Annotations as Flow;
 use Neos\Utility\Arrays;
 
 /**
@@ -57,7 +56,6 @@ class Mapping
      * Gets a property setting by its path
      *
      * @param array|string $path
-     *
      * @return mixed
      */
     public function getPropertyByPath($path)
@@ -70,7 +68,6 @@ class Mapping
      *
      * @param array|string $path
      * @param string $value
-     *
      * @return void
      */
     public function setPropertyByPath($path, $value)
@@ -134,7 +131,6 @@ class Mapping
      *
      * @param string $dynamicTemplateName
      * @param array $mappingConfiguration
-     *
      * @return void
      */
     public function addDynamicTemplate($dynamicTemplateName, array $mappingConfiguration)
@@ -160,7 +156,6 @@ class Mapping
      * It can be used to specify arbitrary ElasticSearch mapping options, like f.e. configuring the _all field.
      *
      * @param array $fullMapping
-     *
      * @return void
      */
     public function setFullMapping(array $fullMapping)

@@ -39,7 +39,6 @@ class ObjectIdentifierTransformer implements TransformerInterface
     /**
      * @param mixed $source
      * @param TransformAnnotation $annotation
-     *
      * @return string
      */
     public function transformByAnnotation($source, TransformAnnotation $annotation)

@@ -31,7 +31,6 @@ class Response
     /**
      * @param HttpResponse $response
      * @param Request $request
-     *
      * @throws Exception
      * @throws Exception\ApiException
      */

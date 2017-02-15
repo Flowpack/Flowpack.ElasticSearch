@@ -38,7 +38,6 @@ class RequestService
 
     /**
      * @param array $settings
-     *
      * @return void
      */
     public function injectSettings(array $settings)
@@ -62,7 +61,6 @@ class RequestService
      * @param string $path
      * @param array $arguments
      * @param string|array $content
-     *
      * @return Response
      */
     public function request($method, ElasticSearchClient $client, $path = null, $arguments = [], $content = null)

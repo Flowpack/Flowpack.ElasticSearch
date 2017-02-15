@@ -45,7 +45,6 @@ class MappingCollection extends ArrayCollection
      * Returns a new collection of mappings of this collection that are not member of the $complementCollection.
      *
      * @param MappingCollection $complementCollection
-     *
      * @return MappingCollection
      */
     public function diffAgainstCollection(MappingCollection $complementCollection)
@@ -78,7 +77,6 @@ class MappingCollection extends ArrayCollection
      * @param Mapping $inquirerMapping
      * @param string $propertyName
      * @param string $settingKey
-     *
      * @return mixed
      */
     public function getMappingSetting(Mapping $inquirerMapping, $propertyName, $settingKey)
@@ -105,7 +103,6 @@ class MappingCollection extends ArrayCollection
 
     /**
      * @param ElasticSearchClient $client
-     *
      * @return void
      */
     public function setClient(ElasticSearchClient $client)

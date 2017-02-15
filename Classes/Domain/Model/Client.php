@@ -51,6 +51,7 @@ class Client
 
     /**
      * @param string $bundle
+     * @return void
      */
     public function setBundle($bundle)
     {
@@ -67,6 +68,7 @@ class Client
 
     /**
      * @param array $clientConfigurations
+     * @return void
      */
     public function setClientConfigurations($clientConfigurations)
     {

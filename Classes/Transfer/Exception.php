@@ -33,7 +33,7 @@ class Exception extends ElasticSearchException
      * Exception constructor.
      *
      * @param string $message
-     * @param integer $code
+     * @param int $code
      * @param Response $response
      * @param Request $request
      * @param \Exception $previous

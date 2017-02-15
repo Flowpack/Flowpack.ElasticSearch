@@ -24,7 +24,7 @@ class ClientConfiguration
     protected $host;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $port;
 

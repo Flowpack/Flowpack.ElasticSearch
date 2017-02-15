@@ -34,7 +34,7 @@ class Document
     /**
      * The version that has been assigned to this document.
      *
-     * @var integer
+     * @var int
      */
     protected $version;
 
@@ -56,7 +56,7 @@ class Document
      * @param AbstractType $type
      * @param array $data
      * @param string $id
-     * @param integer $version
+     * @param int $version
      */
     public function __construct(AbstractType $type, array $data = null, $id = null, $version = null)
     {
@@ -132,7 +132,7 @@ class Document
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getVersion()
     {

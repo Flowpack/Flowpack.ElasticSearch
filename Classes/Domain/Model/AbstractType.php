@@ -112,7 +112,7 @@ abstract class AbstractType
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function count()
     {

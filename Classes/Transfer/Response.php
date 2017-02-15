@@ -57,7 +57,7 @@ class Response
     /**
      * Shortcut to response's getStatusCode
      *
-     * @return integer
+     * @return int
      */
     public function getStatusCode()
     {

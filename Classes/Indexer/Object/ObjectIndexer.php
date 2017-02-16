@@ -11,13 +11,15 @@ namespace Flowpack\ElasticSearch\Indexer\Object;
  * source code.
  */
 
-use Doctrine\ORM\Mapping as ORM;
 use Flowpack\ElasticSearch\Annotations\Transform as TransformAnnotation;
 use Flowpack\ElasticSearch\Domain\Model\Client;
 use Flowpack\ElasticSearch\Domain\Model\Document;
 use Flowpack\ElasticSearch\Domain\Model\GenericType;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Persistence\PersistenceManagerInterface;
+use Neos\Flow\Reflection\ReflectionService;
 use Neos\Utility\ObjectAccess;
+use Neos\Utility\TypeHandling;
 
 /**
  * This serves functionality for indexing objects
@@ -36,13 +38,13 @@ class ObjectIndexer
 
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\Persistence\PersistenceManagerInterface
+     * @var PersistenceManagerInterface
      */
     protected $persistenceManager;
 
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\Reflection\ReflectionService
+     * @var ReflectionService
      */
     protected $reflectionService;
 
@@ -54,7 +56,7 @@ class ObjectIndexer
 
     /**
      * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\Indexer\Object\Transform\TransformerFactory
+     * @var Transform\TransformerFactory
      */
     protected $transformerFactory;
 
@@ -87,6 +89,28 @@ class ObjectIndexer
     }
 
     /**
+     * Returns the ElasticSearch type for a specific object, by its annotation
+     *
+     * @param object $object
+     * @param Client $client
+     * @return GenericType
+     */
+    protected function getIndexTypeForObject($object, Client $client = null)
+    {
+        if ($client === null) {
+            $client = $this->client;
+        }
+        $className = TypeHandling::getTypeForValue($object);
+        $indexAnnotation = $this->indexInformer->getClassAnnotation($className);
+        if ($indexAnnotation === null) {
+            return null;
+        }
+        $index = $client->findIndex($indexAnnotation->indexName);
+
+        return new GenericType($index, $indexAnnotation->typeName);
+    }
+
+    /**
      * Returns a multidimensional array with the indexable, probably transformed values of an object
      *
      * @param object $object
@@ -94,7 +118,7 @@ class ObjectIndexer
      */
     protected function getIndexablePropertiesAndValuesFromObject($object)
     {
-        $className = $this->reflectionService->getClassNameByObject($object);
+        $className = TypeHandling::getTypeForValue($object);
         $data = [];
         foreach ($this->indexInformer->getClassProperties($className) as $propertyName) {
             if (ObjectAccess::isPropertyGettable($object, $propertyName) === false) {
@@ -156,29 +180,6 @@ class ObjectIndexer
         }
 
         return $actionType;
-    }
-
-    /**
-     * Returns the ElasticSearch type for a specific object, by its annotation
-     *
-     * @param object $object
-     * @param Client $client
-     * @return \Flowpack\ElasticSearch\Domain\Model\GenericType
-     */
-    protected function getIndexTypeForObject($object, Client $client = null)
-    {
-        if ($client === null) {
-            $client = $this->client;
-        }
-        $className = $this->reflectionService->getClassNameByObject($object);
-        $indexAnnotation = $this->indexInformer->getClassAnnotation($className);
-        if ($indexAnnotation === null) {
-            return null;
-        }
-        $index = $client->findIndex($indexAnnotation->indexName);
-        $type = new GenericType($index, $indexAnnotation->typeName);
-
-        return $type;
     }
 
     /**

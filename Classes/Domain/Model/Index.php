@@ -11,8 +11,8 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * source code.
  */
 
-use Flowpack\ElasticSearch\Exception;
-use Neos\Flow\Annotations as Flow;
+use Flowpack\ElasticSearch\Exception as ElasticSearchException;
+use Flowpack\ElasticSearch\Transfer\Response;
 use Neos\Utility\Arrays;
 
 /**
@@ -24,7 +24,7 @@ class Index
      * @var array
      * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-update-settings.html
      */
-    protected $updatableSettings = array(
+    static protected $updatableSettings = [
         'index.number_of_replicas',
         'index.auto_expand_replicas',
         'index.blocks.read_only',
@@ -57,8 +57,8 @@ class Index
         'index.translog.fs.type',
         'index.compound_format',
         'index.compound_on_flush',
-        'index.warmer.enabled'
-    );
+        'index.warmer.enabled',
+    ];
 
     /**
      * @var string
@@ -83,6 +83,24 @@ class Index
     protected $settings;
 
     /**
+     * @param string $name
+     * @param Client $client $client
+     * @throws ElasticSearchException
+     */
+    public function __construct($name, Client $client = null)
+    {
+        $name = trim($name);
+        if (empty($name) || substr($name, 0, 1) === '_') {
+            throw new ElasticSearchException('The provided index name "' . $name . '" must not be empty and not start with an underscore.', 1340187948);
+        } elseif ($name !== strtolower($name)) {
+            throw new ElasticSearchException('The provided index name "' . $name . '" must be all lowercase.', 1340187956);
+        }
+        $this->name = $name;
+        $this->settingsKey = $name;
+        $this->client = $client;
+    }
+
+    /**
      * Inject the settings
      *
      * @param array $settings
@@ -94,26 +112,8 @@ class Index
     }
 
     /**
-     * @param $name
-     * @param Client $client $client
-     * @throws \Flowpack\ElasticSearch\Exception
-     */
-    public function __construct($name, Client $client = null)
-    {
-        $name = trim($name);
-        if (strlen($name) < 1 || substr($name, 0, 1) === '_') {
-            throw new \Flowpack\ElasticSearch\Exception('The provided index name "' . $name . '" must not be empty and not start with an underscore.', 1340187948);
-        } elseif ($name !== strtolower($name)) {
-            throw new \Flowpack\ElasticSearch\Exception('The provided index name "' . $name . '" must be all lowercase.', 1340187956);
-        }
-        $this->name = $name;
-        $this->settingsKey = $name;
-        $this->client = $client;
-    }
-
-    /**
      * @param string $typeName
-     * @return \Flowpack\ElasticSearch\Domain\Model\AbstractType
+     * @return AbstractType
      */
     public function findType($typeName)
     {
@@ -121,7 +121,7 @@ class Index
     }
 
     /**
-     * @param array<AbstractType> $types
+     * @param array <AbstractType> $types
      * @return TypeGroup
      */
     public function findTypeGroup(array $types)
@@ -140,11 +140,49 @@ class Index
     }
 
     /**
+     * @param string $method
+     * @param string $path
+     * @param array $arguments
+     * @param string $content
+     * @param boolean $prefixIndex
+     * @return Response
+     * @throws ElasticSearchException
+     */
+    public function request($method, $path = null, array $arguments = [], $content = null, $prefixIndex = true)
+    {
+        if ($this->client === null) {
+            throw new Exception('The client of the index "' . $this->name . '" is not set, hence no requests can be done.');
+        }
+        $path = ($path ? trim($path) : '');
+        if ($prefixIndex === true) {
+            $path = '/' . $this->name . $path;
+        } else {
+            $path = '/' . $path;
+        }
+
+        return $this->client->request($method, $path, $arguments, $content);
+    }
+
+    /**
      * @return void
      */
     public function create()
     {
-        $this->request('PUT', null, array(), json_encode($this->getSettings()));
+        $this->request('PUT', null, [], json_encode($this->getSettings()));
+    }
+
+    /**
+     * @return array|null
+     */
+    protected function getSettings()
+    {
+        if ($this->client instanceof Client) {
+            $settings = Arrays::getValueByPath($this->settings, 'indexes.' . $this->client->getBundle() . '.' . $this->settingsKey) ?: Arrays::getValueByPath($this->settings, 'indexes.default' . '.' . $this->settingsKey);
+        } else {
+            $settings = Arrays::getValueByPath($this->settings, 'indexes.default' . '.' . $this->settingsKey);
+        }
+
+        return $settings;
     }
 
     /**
@@ -153,14 +191,14 @@ class Index
     public function updateSettings()
     {
         $settings = $this->getSettings();
-        $updatableSettings = array();
-        foreach ($this->updatableSettings as $settingPath) {
+        $updatableSettings = [];
+        foreach (static::$updatableSettings as $settingPath) {
             $setting = Arrays::getValueByPath($settings, $settingPath);
             if ($setting !== null) {
                 $updatableSettings = Arrays::setValueByPath($updatableSettings, $settingPath, $setting);
             }
         }
-        $this->request('PUT', '/_settings', array(), json_encode($updatableSettings));
+        $this->request('PUT', '/_settings', [], json_encode($updatableSettings));
     }
 
     /**
@@ -179,30 +217,6 @@ class Index
     public function refresh()
     {
         $this->request('POST', '/_refresh');
-    }
-
-    /**
-     * @param string $method
-     * @param string $path
-     * @param array $arguments
-     * @param string $content
-     * @param boolean $prefixIndex
-     * @return \Flowpack\ElasticSearch\Transfer\Response
-     * @throws \Flowpack\ElasticSearch\Exception
-     */
-    public function request($method, $path = null, array $arguments = array(), $content = null, $prefixIndex = true)
-    {
-        if ($this->client === null) {
-            throw new Exception('The client of the index "' . $this->name . '" is not set, hence no requests can be done.');
-        }
-        $path = ($path ? trim($path) : '');
-        if ($prefixIndex === true) {
-            $path = '/' . $this->name . $path;
-        } else {
-            $path = '/' . $path;
-        }
-
-        return $this->client->request($method, $path, $arguments, $content);
     }
 
     /**
@@ -229,18 +243,5 @@ class Index
     public function setSettingsKey($settingsKey)
     {
         $this->settingsKey = $settingsKey;
-    }
-
-    /**
-     * @return array|null
-     */
-    protected function getSettings()
-    {
-        if ($this->client instanceof Client) {
-            $settings = Arrays::getValueByPath($this->settings, 'indexes.' . $this->client->getBundle() . '.' . $this->settingsKey) ?: Arrays::getValueByPath($this->settings, 'indexes.default' . '.' . $this->settingsKey);
-        } else {
-            $settings = Arrays::getValueByPath($this->settings, 'indexes.default' . '.' . $this->settingsKey);
-        }
-        return $settings;
     }
 }

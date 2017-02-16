@@ -14,10 +14,11 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Indexer\Object;
 use Flowpack\ElasticSearch\Annotations\Indexable as IndexableAnnotation;
 use Flowpack\ElasticSearch\Indexer\Object\IndexInformer;
 use Flowpack\ElasticSearch\Tests\Functional\Fixtures;
+use Neos\Flow\Tests\FunctionalTestCase;
 
 /**
  */
-class IndexInformerTest extends \Neos\Flow\Tests\FunctionalTestCase
+class IndexInformerTest extends FunctionalTestCase
 {
     /**
      * @var IndexInformer

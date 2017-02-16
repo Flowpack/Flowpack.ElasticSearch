@@ -11,8 +11,8 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
  * source code.
  */
 
-use \Neos\Flow\Annotations as Flow;
-use \Flowpack\ElasticSearch\Annotations as ElasticSearch;
+use Neos\Flow\Annotations as Flow;
+use Flowpack\ElasticSearch\Annotations as ElasticSearch;
 
 /**
  * An object for the "twitter" index, representing a "tweet" document.

@@ -11,7 +11,8 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Flowpack\ElasticSearch\Exception as ElasticSearchException;
+use Flowpack\ElasticSearch\Transfer\Response;
 
 /**
  * A Document which itself holds the data
@@ -33,7 +34,7 @@ class Document
     /**
      * The version that has been assigned to this document.
      *
-     * @var integer
+     * @var int
      */
     protected $version;
 
@@ -55,7 +56,7 @@ class Document
      * @param AbstractType $type
      * @param array $data
      * @param string $id
-     * @param integer $version
+     * @param int $version
      */
     public function __construct(AbstractType $type, array $data = null, $id = null, $version = null)
     {
@@ -79,21 +80,9 @@ class Document
     }
 
     /**
-     * @param string $method
-     * @param string $path
-     * @param array $arguments
-     * @param string $content
-     * @return \Flowpack\ElasticSearch\Transfer\Response
-     */
-    protected function request($method, $path = null, array $arguments = array(), $content = null)
-    {
-        return $this->type->request($method, $path, $arguments, $content);
-    }
-
-    /**
      * Stores this document. If ID is given, PUT will be used; else POST
      *
-     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws ElasticSearchException
      * @return void
      */
     public function store()
@@ -105,12 +94,32 @@ class Document
             $method = 'POST';
             $path = '';
         }
-        $response = $this->request($method, $path, array(), json_encode($this->data));
+        $response = $this->request($method, $path, [], json_encode($this->data));
         $treatedContent = $response->getTreatedContent();
 
         $this->id = $treatedContent['_id'];
         $this->version = $treatedContent['_version'];
         $this->dirty = false;
+    }
+
+    /**
+     * @param string $method
+     * @param string $path
+     * @param array $arguments
+     * @param string $content
+     * @return Response
+     */
+    protected function request($method, $path = null, array $arguments = [], $content = null)
+    {
+        return $this->type->request($method, $path, $arguments, $content);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDirty()
+    {
+        return $this->dirty;
     }
 
     /**
@@ -123,15 +132,7 @@ class Document
     }
 
     /**
-     * @return boolean
-     */
-    public function isDirty()
-    {
-        return $this->dirty;
-    }
-
-    /**
-     * @return integer
+     * @return int
      */
     public function getVersion()
     {
@@ -171,13 +172,13 @@ class Document
      *
      * @param string $fieldName
      * @param boolean $silent
-     * @throws \Flowpack\ElasticSearch\Exception
      * @return mixed
+     * @throws ElasticSearchException
      */
     public function getField($fieldName, $silent = false)
     {
         if (!array_key_exists($fieldName, $this->data) && $silent === false) {
-            throw new \Flowpack\ElasticSearch\Exception(sprintf('The field %s was not present in data of document in %s/%s.', $fieldName, $this->type->getIndex()->getName(), $this->type->getName()), 1340274696);
+            throw new ElasticSearchException(sprintf('The field %s was not present in data of document in %s/%s.', $fieldName, $this->type->getIndex()->getName(), $this->type->getName()), 1340274696);
         }
 
         return $this->data[$fieldName];

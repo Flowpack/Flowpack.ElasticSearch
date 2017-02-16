@@ -11,11 +11,12 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Fixtures;
  * source code.
  */
 
-use \Neos\Flow\Annotations as Flow;
+use Flowpack\ElasticSearch\Domain\Model\AbstractType;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * A twitter sample type
  */
-class TwitterType extends \Flowpack\ElasticSearch\Domain\Model\AbstractType
+class TwitterType extends AbstractType
 {
 }

@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Flowpack\ElasticSearch\Transfer\Response;
 use Neos\Utility\Arrays;
 
 /**
@@ -27,13 +27,13 @@ class Mapping
     /**
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-root-object-type.html#_dynamic_templates
      * @var array
      */
-    protected $dynamicTemplates = array();
+    protected $dynamicTemplates = [];
 
     /**
      * This is the full / raw ElasticSearch mapping which is merged with the properties and dynamicTemplates.
@@ -42,7 +42,7 @@ class Mapping
      *
      * @var array
      */
-    protected $fullMapping = array();
+    protected $fullMapping = [];
 
     /**
      * @param AbstractType $type
@@ -76,19 +76,23 @@ class Mapping
     }
 
     /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return $this->properties;
-    }
-
-    /**
      * @return AbstractType
      */
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Sets this mapping to the server
+     *
+     * @return Response
+     */
+    public function apply()
+    {
+        $content = json_encode($this->asArray());
+
+        return $this->type->request('PUT', '/_mapping', [], $content);
     }
 
     /**
@@ -98,23 +102,12 @@ class Mapping
      */
     public function asArray()
     {
-        return array($this->type->getName() => Arrays::arrayMergeRecursiveOverrule(array(
-            'dynamic_templates' => $this->getDynamicTemplates(),
-            'properties' => $this->getProperties()
-        ), $this->fullMapping));
-    }
-
-    /**
-     * Sets this mapping to the server
-     *
-     * @return \Flowpack\ElasticSearch\Transfer\Response
-     */
-    public function apply()
-    {
-        $content = json_encode($this->asArray());
-        $response = $this->type->request('PUT', '/_mapping', array(), $content);
-
-        return $response;
+        return [
+            $this->type->getName() => Arrays::arrayMergeRecursiveOverrule([
+                'dynamic_templates' => $this->getDynamicTemplates(),
+                'properties' => $this->getProperties(),
+            ], $this->fullMapping),
+        ];
     }
 
     /**
@@ -126,6 +119,14 @@ class Mapping
     }
 
     /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
+    /**
      * Dynamic templates allow to define mapping templates
      *
      * @param string $dynamicTemplateName
@@ -134,9 +135,19 @@ class Mapping
      */
     public function addDynamicTemplate($dynamicTemplateName, array $mappingConfiguration)
     {
-        $this->dynamicTemplates[] = array(
-            $dynamicTemplateName => $mappingConfiguration
-        );
+        $this->dynamicTemplates[] = [
+            $dynamicTemplateName => $mappingConfiguration,
+        ];
+    }
+
+    /**
+     * See {@link setFullMapping} for documentation
+     *
+     * @return array
+     */
+    public function getFullMapping()
+    {
+        return $this->fullMapping;
     }
 
     /**
@@ -150,15 +161,5 @@ class Mapping
     public function setFullMapping(array $fullMapping)
     {
         $this->fullMapping = $fullMapping;
-    }
-
-    /**
-     * See {@link setFullMapping} for documentation
-     *
-     * @return array
-     */
-    public function getFullMapping()
-    {
-        return $this->fullMapping;
     }
 }

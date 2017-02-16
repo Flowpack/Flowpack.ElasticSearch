@@ -11,12 +11,13 @@ namespace Flowpack\ElasticSearch\Domain\Exception;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Exception as ElasticSearchException;
 use Neos\Error\Messages\Result;
 
 /**
- * Signals a mismatch between the
+ * Signals a mismatch between the document properties
  */
-class DocumentPropertiesMismatchException extends \Flowpack\ElasticSearch\Exception
+class DocumentPropertiesMismatchException extends ElasticSearchException
 {
     /**
      * @var Result

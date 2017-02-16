@@ -11,7 +11,7 @@ namespace Flowpack\ElasticSearch\Domain\Model\Client;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Http\Uri;
 
 /**
  * Client configuration
@@ -24,7 +24,7 @@ class ClientConfiguration
     protected $host;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $port;
 
@@ -44,6 +44,14 @@ class ClientConfiguration
     protected $password = '';
 
     /**
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
      * @param string $host
      * @return void
      */
@@ -53,11 +61,11 @@ class ClientConfiguration
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getHost()
+    public function getPort()
     {
-        return $this->host;
+        return $this->port;
     }
 
     /**
@@ -70,11 +78,11 @@ class ClientConfiguration
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPort()
+    public function getScheme()
     {
-        return $this->port;
+        return $this->scheme;
     }
 
     /**
@@ -84,14 +92,6 @@ class ClientConfiguration
     public function setScheme($scheme)
     {
         $this->scheme = $scheme;
-    }
-
-    /**
-     * @return string
-     */
-    public function getScheme()
-    {
-        return $this->scheme;
     }
 
     /**
@@ -137,11 +137,11 @@ class ClientConfiguration
     }
 
     /**
-     * @return \Neos\Flow\Http\Uri
+     * @return Uri
      */
     public function getUri()
     {
-        $uri = new \Neos\Flow\Http\Uri('');
+        $uri = new Uri('');
         $uri->setScheme($this->scheme);
         $uri->setHost($this->host);
         $uri->setPort($this->port);

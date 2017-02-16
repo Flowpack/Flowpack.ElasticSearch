@@ -11,9 +11,11 @@ namespace Flowpack\ElasticSearch;
  * source code.
  */
 
+use Neos\Flow\Exception as FlowException;
+
 /**
  * This package's base exception
  */
-class Exception extends \Neos\Flow\Exception
+class Exception extends FlowException
 {
 }

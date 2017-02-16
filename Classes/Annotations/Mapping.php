@@ -100,11 +100,14 @@ final class Mapping
 
     /**
      * Returns this class's properties as type/value array in order to directly use it for mapping information
+     *
+     * @return array
      */
     public function getPropertiesArray()
     {
         $properties = get_object_vars($this);
         unset($properties['fields']);
+
         return $properties;
     }
 

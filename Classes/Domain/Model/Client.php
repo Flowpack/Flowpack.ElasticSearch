@@ -11,6 +11,8 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Transfer\RequestService;
+use Flowpack\ElasticSearch\Transfer\Response;
 use Neos\Flow\Annotations as Flow;
 
 /**
@@ -25,7 +27,7 @@ class Client
 
     /**
      * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\Transfer\RequestService
+     * @var RequestService
      */
     protected $requestService;
 
@@ -37,15 +39,7 @@ class Client
     /**
      * @var array
      */
-    protected $indexCollection = array();
-
-    /**
-     * @param string $bundle
-     */
-    public function setBundle($bundle)
-    {
-        $this->bundle = $bundle;
-    }
+    protected $indexCollection = [];
 
     /**
      * @return string
@@ -56,11 +50,12 @@ class Client
     }
 
     /**
-     * @param array $clientConfigurations
+     * @param string $bundle
+     * @return void
      */
-    public function setClientConfigurations($clientConfigurations)
+    public function setBundle($bundle)
     {
-        $this->clientConfigurations = $clientConfigurations;
+        $this->bundle = $bundle;
     }
 
     /**
@@ -72,8 +67,17 @@ class Client
     }
 
     /**
+     * @param array $clientConfigurations
+     * @return void
+     */
+    public function setClientConfigurations(array $clientConfigurations)
+    {
+        $this->clientConfigurations = $clientConfigurations;
+    }
+
+    /**
      * @param string $indexName
-     * @return \Flowpack\ElasticSearch\Domain\Model\Index
+     * @return Index
      */
     public function findIndex($indexName)
     {
@@ -91,9 +95,9 @@ class Client
      * @param string $path
      * @param array $arguments
      * @param string|array $content
-     * @return \Flowpack\ElasticSearch\Transfer\Response
+     * @return Response
      */
-    public function request($method, $path = null, array $arguments = array(), $content = null)
+    public function request($method, $path = null, array $arguments = [], $content = null)
     {
         return $this->requestService->request($method, $this, $path, $arguments, $content);
     }

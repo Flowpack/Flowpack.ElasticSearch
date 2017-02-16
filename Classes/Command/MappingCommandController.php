@@ -11,31 +11,38 @@ namespace Flowpack\ElasticSearch\Command;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Domain\Factory\ClientFactory;
+use Flowpack\ElasticSearch\Domain\Model\Mapping;
+use Flowpack\ElasticSearch\Exception as ElasticSearchException;
+use Flowpack\ElasticSearch\Mapping\BackendMappingBuilder;
+use Flowpack\ElasticSearch\Mapping\EntityMappingBuilder;
 use Flowpack\ElasticSearch\Mapping\MappingCollection;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Cli\CommandController;
+use Neos\Utility\Arrays;
 
 /**
  * Provides CLI features for mapping handling
  *
  * @Flow\Scope("singleton")
  */
-class MappingCommandController extends \Neos\Flow\Cli\CommandController
+class MappingCommandController extends CommandController
 {
     /**
      * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\Mapping\EntityMappingBuilder
+     * @var EntityMappingBuilder
      */
     protected $entityMappingBuilder;
 
     /**
      * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\Mapping\BackendMappingBuilder
+     * @var BackendMappingBuilder
      */
     protected $backendMappingBuilder;
 
     /**
      * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\Domain\Factory\ClientFactory
+     * @var ClientFactory
      */
     protected $clientFactory;
 
@@ -61,19 +68,29 @@ class MappingCommandController extends \Neos\Flow\Cli\CommandController
 
         $mergedMappingCollection = array_merge_recursive($entityMappingCollection, $backendMappingCollection);
         foreach ($mergedMappingCollection as $indexName => $typeSet) {
-            $this->outputFormatted('index %s:', array($this->markupDiffValue(isset($entityMappingCollection[$indexName]) ? $indexName : null, isset($backendMappingCollection[$indexName]) ? $indexName : null)));
+            $this->outputFormatted('index %s:', [$this->markupDiffValue(isset($entityMappingCollection[$indexName]) ? $indexName : null, isset($backendMappingCollection[$indexName]) ? $indexName : null)]);
             foreach ($typeSet as $typeName => $mappingSet) {
                 $propertiesSet = $mappingSet['properties'];
-                $this->outputFormatted('type %s:', array($this->markupDiffValue(isset($entityMappingCollection[$indexName][$typeName]) ? $typeName : null, isset($backendMappingCollection[$indexName][$typeName]) ? $typeName : null)), 4);
+                $this->outputFormatted('type %s:', [$this->markupDiffValue(isset($entityMappingCollection[$indexName][$typeName]) ? $typeName : null, isset($backendMappingCollection[$indexName][$typeName]) ? $typeName : null)], 4);
                 foreach ($propertiesSet as $propertyName => $properties) {
-                    $entityProperties = \Neos\Utility\Arrays::getValueByPath($entityMappingCollection, array($indexName, $typeName, 'properties', $propertyName));
-                    $backendProperties = \Neos\Utility\Arrays::getValueByPath($backendMappingCollection, array($indexName, $typeName, 'properties', $propertyName));
+                    $entityProperties = Arrays::getValueByPath($entityMappingCollection, [
+                        $indexName,
+                        $typeName,
+                        'properties',
+                        $propertyName,
+                    ]);
+                    $backendProperties = Arrays::getValueByPath($backendMappingCollection, [
+                        $indexName,
+                        $typeName,
+                        'properties',
+                        $propertyName,
+                    ]);
 
-                    $this->outputFormatted('property %s:', array($this->markupDiffValue($entityProperties ? $propertyName : null, $backendProperties ? $propertyName : null)), 8);
+                    $this->outputFormatted('property %s:', [$this->markupDiffValue($entityProperties ? $propertyName : null, $backendProperties ? $propertyName : null)], 8);
                     foreach ($properties as $key => $value) {
                         $keyMarkup = $this->markupDiffValue(isset($entityProperties[$key]) ? $key : null, isset($backendProperties[$key]) ? $key : null);
                         $valueMarkup = $this->markupDiffValue(isset($entityProperties[$key]) ? $entityProperties[$key] : null, isset($backendProperties[$key]) ? $backendProperties[$key] : null);
-                        $this->outputFormatted("%s : %s", array($keyMarkup, $valueMarkup), 12);
+                        $this->outputFormatted("%s : %s", [$keyMarkup, $valueMarkup], 12);
                     }
                 }
                 $this->outputLine();
@@ -84,49 +101,35 @@ class MappingCommandController extends \Neos\Flow\Cli\CommandController
         if (count($indicesWithoutTypeInformation = $this->backendMappingBuilder->getIndicesWithoutTypeInformation())) {
             $this->outputFormatted("\x1b[43mNotice:\x1b[0m The following indices are present in the backend's mapping but having no type configuration, can hence be regarded as garbage:");
             foreach ($indicesWithoutTypeInformation as $indexName) {
-                $this->outputFormatted('* %s', array($indexName), 4);
+                $this->outputFormatted('* %s', [$indexName], 4);
             }
         }
     }
 
     /**
-     * This command will adjust the backend's mapping to the mapping the entity status prescribes.
+     * Traverses through mappingInformation array and aggregates by index and type names
      *
-     * @param string $clientName The client name for the configuration. Defaults to the default client configured.
-     * @return void
+     * @param MappingCollection $mappingCollection
+     * @throws ElasticSearchException
+     * @return array with index names as keys, second level type names as keys
      */
-    public function convergeCommand($clientName = null)
+    protected function buildArrayFromMappingCollection(MappingCollection $mappingCollection)
     {
-        $client = $this->clientFactory->create($clientName);
+        $return = [];
 
-        $entityMappingCollection = $this->entityMappingBuilder->buildMappingInformation();
-        $this->backendMappingBuilder->setClient($client);
-        $backendMappingCollection = $this->backendMappingBuilder->buildMappingInformation();
+        /** @var $mappingInformation Mapping */
+        foreach ($mappingCollection as $mappingInformation) {
+            $indexName = $mappingInformation->getType()->getIndex()->getName();
+            $typeName = $mappingInformation->getType()->getName();
+            if (isset($return[$indexName][$typeName])) {
+                throw new ElasticSearchException('There was more than one mapping present in index %s with type %s, which must not happen.', 1339758480);
+            }
 
-        $additiveMappings = $entityMappingCollection->diffAgainstCollection($backendMappingCollection);
-        /** @var $mapping \Flowpack\ElasticSearch\Domain\Model\Mapping */
-        foreach ($additiveMappings as $mapping) {
-            $index = $mapping->getType()->getIndex();
-            $index->setClient($client);
-            if (!$index->exists()) {
-                $this->outputFormatted('Index <b>%s</b> does not exist', array($index->getName()));
-                continue;
-            }
-            $this->outputLine('Attempt to apply properties to %s/%s: %s... ', array(
-                $index->getName(),
-                $mapping->getType()->getName(),
-                print_r($mapping->getProperties(), true)
-            ));
-            $response = $mapping->apply();
-            if ($response->getStatusCode() === 200) {
-                $this->outputFormatted('<b>OK</b>');
-            } else {
-                $this->outputFormatted('<b>NOT OK</b>, response code was %d, response body was: %s', array($response->getStatusCode(), $response->getOriginalResponse()->getContent()), 4);
-            }
+            $return[$indexName][$typeName]['mappingInstance'] = $mappingInformation;
+            $return[$indexName][$typeName]['properties'] = $mappingInformation->getProperties();
         }
-        if (0 === $additiveMappings->count()) {
-            $this->outputLine('No mappings were to be applied.');
-        }
+
+        return $return;
     }
 
     /**
@@ -141,7 +144,7 @@ class MappingCommandController extends \Neos\Flow\Cli\CommandController
 " . $this->markupDiffValue('something', 'different') . " different in entities and backend
 ";
         $this->outputFormatted('<b>Legend:</b>');
-        $this->outputFormatted($legendText, array(), 4);
+        $this->outputFormatted($legendText, [], 4);
     }
 
     /**
@@ -160,7 +163,7 @@ class MappingCommandController extends \Neos\Flow\Cli\CommandController
             if (is_array($backendValue)) {
                 $backendValue = var_export($backendValue, true);
             }
-            $markup .= $entityValue ? : $backendValue;
+            $markup .= $entityValue ?: $backendValue;
             $markup .= "\x1b[0m";
         } else {
             if (is_array($entityValue)) {
@@ -177,28 +180,45 @@ class MappingCommandController extends \Neos\Flow\Cli\CommandController
     }
 
     /**
-     * Traverses through mappingInformation array and aggregates by index and type names
+     * This command will adjust the backend's mapping to the mapping the entity status prescribes.
      *
-     * @param MappingCollection $mappingCollection
-     * @throws \Flowpack\ElasticSearch\Exception
-     * @return array with index names as keys, second level type names as keys
+     * @param string $clientName The client name for the configuration. Defaults to the default client configured.
+     * @return void
      */
-    protected function buildArrayFromMappingCollection(MappingCollection $mappingCollection)
+    public function convergeCommand($clientName = null)
     {
-        $return = array();
+        $client = $this->clientFactory->create($clientName);
 
-        /** @var $mappingInformation \Flowpack\ElasticSearch\Domain\Model\Mapping */
-        foreach ($mappingCollection as $mappingInformation) {
-            $indexName = $mappingInformation->getType()->getIndex()->getName();
-            $typeName = $mappingInformation->getType()->getName();
-            if (isset($return[$indexName][$typeName])) {
-                throw new \Flowpack\ElasticSearch\Exception('There was more than one mapping present in index %s with type %s, which must not happen.', 1339758480);
+        $entityMappingCollection = $this->entityMappingBuilder->buildMappingInformation();
+        $this->backendMappingBuilder->setClient($client);
+        $backendMappingCollection = $this->backendMappingBuilder->buildMappingInformation();
+
+        $additiveMappings = $entityMappingCollection->diffAgainstCollection($backendMappingCollection);
+        /** @var $mapping Mapping */
+        foreach ($additiveMappings as $mapping) {
+            $index = $mapping->getType()->getIndex();
+            $index->setClient($client);
+            if (!$index->exists()) {
+                $this->outputFormatted('Index <b>%s</b> does not exist', [$index->getName()]);
+                continue;
             }
-
-            $return[$indexName][$typeName]['mappingInstance'] = $mappingInformation;
-            $return[$indexName][$typeName]['properties'] = $mappingInformation->getProperties();
+            $this->outputLine('Attempt to apply properties to %s/%s: %s... ', [
+                $index->getName(),
+                $mapping->getType()->getName(),
+                print_r($mapping->getProperties(), true),
+            ]);
+            $response = $mapping->apply();
+            if ($response->getStatusCode() === 200) {
+                $this->outputFormatted('<b>OK</b>');
+            } else {
+                $this->outputFormatted('<b>NOT OK</b>, response code was %d, response body was: %s', [
+                    $response->getStatusCode(),
+                    $response->getOriginalResponse()->getContent(),
+                ], 4);
+            }
         }
-
-        return $return;
+        if ($additiveMappings->count() === 0) {
+            $this->outputLine('No mappings were to be applied.');
+        }
     }
 }

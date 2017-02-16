@@ -11,8 +11,6 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * source code.
  */
 
-use Neos\Flow\Annotations as Flow;
-
 /**
  * A type group that is for requests against multiple types, like in localhost:9200/foo/onetype,anothertype/_search....
  */
@@ -21,7 +19,7 @@ class TypeGroup extends AbstractType
     /**
      * @var array<AbstractType>
      */
-    protected $types = array();
+    protected $types = [];
 
     /**
      * @param Index $index
@@ -32,7 +30,7 @@ class TypeGroup extends AbstractType
         parent::__construct($index);
         $this->types = $types;
 
-        $names = array();
+        $names = [];
         foreach ($this->types as $type) {
             $names[] = $type->getName();
         }

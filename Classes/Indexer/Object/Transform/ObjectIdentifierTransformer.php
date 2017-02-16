@@ -11,6 +11,7 @@ namespace Flowpack\ElasticSearch\Indexer\Object\Transform;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Annotations\Transform as TransformAnnotation;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Persistence\PersistenceManagerInterface;
 
@@ -37,14 +38,15 @@ class ObjectIdentifierTransformer implements TransformerInterface
 
     /**
      * @param mixed $source
-     * @param \Flowpack\ElasticSearch\Annotations\Transform $annotation
+     * @param TransformAnnotation $annotation
      * @return string
      */
-    public function transformByAnnotation($source, \Flowpack\ElasticSearch\Annotations\Transform $annotation)
+    public function transformByAnnotation($source, TransformAnnotation $annotation)
     {
         if ($source != null) {
             return $this->persistenceManager->getIdentifierByObject($source);
         }
+
         return '';
     }
 }

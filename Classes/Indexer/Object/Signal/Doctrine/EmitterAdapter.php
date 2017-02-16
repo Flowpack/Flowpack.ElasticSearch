@@ -12,22 +12,23 @@ namespace Flowpack\ElasticSearch\Indexer\Object\Signal\Doctrine;
  */
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Mapping as ORM;
+use Flowpack\ElasticSearch\Indexer\Object\Signal\EmitterAdapterInterface;
+use Flowpack\ElasticSearch\Indexer\Object\Signal\SignalEmitter;
 use Neos\Flow\Annotations as Flow;
 
 /**
  * @Flow\Scope("singleton")
  */
-class EmitterAdapter implements \Flowpack\ElasticSearch\Indexer\Object\Signal\EmitterAdapterInterface
+class EmitterAdapter implements EmitterAdapterInterface
 {
     /**
      * @Flow\Inject
-     * @var \Flowpack\ElasticSearch\Indexer\Object\Signal\SignalEmitter
+     * @var SignalEmitter
      */
     protected $signalEmitter;
 
     /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArguments
+     * @param LifecycleEventArgs $eventArguments
      * @return void
      */
     public function postUpdate(LifecycleEventArgs $eventArguments)
@@ -36,7 +37,7 @@ class EmitterAdapter implements \Flowpack\ElasticSearch\Indexer\Object\Signal\Em
     }
 
     /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArguments
+     * @param LifecycleEventArgs $eventArguments
      * @return void
      */
     public function postPersist(LifecycleEventArgs $eventArguments)
@@ -45,7 +46,7 @@ class EmitterAdapter implements \Flowpack\ElasticSearch\Indexer\Object\Signal\Em
     }
 
     /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArguments
+     * @param LifecycleEventArgs $eventArguments
      * @return void
      */
     public function postRemove(LifecycleEventArgs $eventArguments)

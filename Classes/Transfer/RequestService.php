@@ -11,8 +11,10 @@ namespace Flowpack\ElasticSearch\Transfer;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Domain\Model\Client as ElasticSearchClient;
 use Flowpack\ElasticSearch\Domain\Model\Client\ClientConfiguration;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Http\Client\Browser;
 use Neos\Flow\Http\Client\CurlEngine;
 use Neos\Flow\Http\Request;
 
@@ -25,7 +27,7 @@ class RequestService
 {
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\Http\Client\Browser
+     * @var Browser
      */
     protected $browser;
 
@@ -55,13 +57,13 @@ class RequestService
 
     /**
      * @param string $method
-     * @param \Flowpack\ElasticSearch\Domain\Model\Client $client
+     * @param ElasticSearchClient $client
      * @param string $path
      * @param array $arguments
      * @param string|array $content
      * @return Response
      */
-    public function request($method, \Flowpack\ElasticSearch\Domain\Model\Client $client, $path = null, $arguments = array(), $content = null)
+    public function request($method, ElasticSearchClient $client, $path = null, $arguments = [], $content = null)
     {
         $clientConfigurations = $client->getClientConfigurations();
         $clientConfiguration = $clientConfigurations[0];
@@ -76,7 +78,7 @@ class RequestService
             $uri->setPath($uri->getPath() . $path);
         }
 
-        $request = Request::create($uri, $method, $arguments, array(), array());
+        $request = Request::create($uri, $method, $arguments, [], []);
         // In some cases, $content will contain "null" as a string. Better be safe and handle this weird case:
         if ($content === 'null') {
             $request->setContent(null);
@@ -90,6 +92,7 @@ class RequestService
         }
 
         $response = $this->browser->sendRequest($request);
+
         return new Response($response, $this->browser->getLastRequest());
     }
 }

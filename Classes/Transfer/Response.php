@@ -11,13 +11,13 @@ namespace Flowpack\ElasticSearch\Transfer;
  * source code.
  */
 
-/**
- *
- */
+use Neos\Flow\Http\Request;
+use Neos\Flow\Http\Response as HttpResponse;
+
 class Response
 {
     /**
-     * @var \Neos\Flow\Http\Response
+     * @var HttpResponse
      */
     protected $originalResponse;
 
@@ -29,12 +29,12 @@ class Response
     protected $treatedContent;
 
     /**
-     * @param \Neos\Flow\Http\Response $response
-     * @param \Neos\Flow\Http\Request $request
-     * @throws \Flowpack\ElasticSearch\Transfer\Exception
-     * @throws \Flowpack\ElasticSearch\Transfer\Exception\ApiException
+     * @param HttpResponse $response
+     * @param Request $request
+     * @throws Exception
+     * @throws Exception\ApiException
      */
-    public function __construct(\Neos\Flow\Http\Response $response, \Neos\Flow\Http\Request $request = null)
+    public function __construct(HttpResponse $response, Request $request = null)
     {
         $this->originalResponse = $response;
 
@@ -57,7 +57,7 @@ class Response
     /**
      * Shortcut to response's getStatusCode
      *
-     * @return integer
+     * @return int
      */
     public function getStatusCode()
     {
@@ -73,7 +73,7 @@ class Response
     }
 
     /**
-     * @return \Neos\Flow\Http\Response
+     * @return HttpResponse
      */
     public function getOriginalResponse()
     {

@@ -12,7 +12,7 @@ namespace Flowpack\ElasticSearch\Transfer;
  */
 use Flowpack\ElasticSearch\Exception as ElasticSearchException;
 use Neos\Flow\Http\Request;
-use Neos\Flow\Http\Response;
+use Neos\Flow\Http\Response as FlowResponse;
 
 /**
  * Exception that occurs related to ElasticSearch transfers
@@ -20,7 +20,7 @@ use Neos\Flow\Http\Response;
 class Exception extends ElasticSearchException
 {
     /**
-     * @var Response
+     * @var FlowResponse
      */
     protected $response;
 
@@ -34,11 +34,11 @@ class Exception extends ElasticSearchException
      *
      * @param string $message
      * @param int $code
-     * @param Response $response
+     * @param FlowResponse $response
      * @param Request $request
      * @param \Exception $previous
      */
-    public function __construct($message, $code, Response $response, Request $request = null, \Exception $previous = null)
+    public function __construct($message, $code, FlowResponse $response, Request $request = null, \Exception $previous = null)
     {
         $this->response = $response;
         $this->request = $request;
@@ -64,7 +64,7 @@ class Exception extends ElasticSearchException
     }
 
     /**
-     * @return Response
+     * @return FlowResponse
      */
     public function getResponse()
     {

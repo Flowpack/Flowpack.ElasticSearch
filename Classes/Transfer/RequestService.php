@@ -91,6 +91,17 @@ class RequestService
             $requestUri->setPassword($uri->getPassword());
         }
 
+        /**
+         * If request method is 'HEAD', do not request for body.
+         *
+         * In some cases, like with a Elastic Cloud service (cloud.elastic.co),
+         * body isn't sent when doing a HEAD query so we need to say to cURL to
+         * not wait for it (else cURL will timeout).
+         */
+        if ($method === 'HEAD') {
+            $this->browser->getRequestEngine()->setOption(CURLOPT_NOBODY, true);
+        }
+
         $response = $this->browser->sendRequest($request);
 
         return new Response($response, $this->browser->getLastRequest());

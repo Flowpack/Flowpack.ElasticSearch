@@ -1,5 +1,6 @@
 Flowpack:
   ElasticSearch:
+    version: 2.x
     clients:
       default:
         -

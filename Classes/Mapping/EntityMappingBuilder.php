@@ -57,6 +57,12 @@ class EntityMappingBuilder
     protected $indexInformer;
 
     /**
+     * @var int
+     * @Flow\InjectConfiguration(path="driver.version")
+     */
+    protected $driverVersion;
+
+    /**
      * Builds a Mapping collection from the annotation sources that are present
      *
      * @return MappingCollection<Mapping>
@@ -125,6 +131,11 @@ class EntityMappingBuilder
                         throw new ElasticSearchException('Duplicate index name in the same multi field is not allowed "' . $className . '::' . $propertyName . '".');
                     }
                     $multiFieldAnnotation->type = $mappingType;
+
+                    if ($this->driverVersion === '2.x') {
+                        $multiFieldAnnotation->index_name = null;
+                    }
+
                     $multiFields[$multiFieldIndexName] = $this->processMappingAnnotation($multiFieldAnnotation);
                 }
                 $mapping->setPropertyByPath([$propertyName, 'fields'], $multiFields);

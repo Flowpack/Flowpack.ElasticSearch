@@ -58,7 +58,7 @@ class EntityMappingBuilder
 
     /**
      * @var int
-     * @Flow\InjectConfiguration(path="driver.version")
+     * @Flow\InjectConfiguration(path="version")
      */
     protected $driverVersion;
 

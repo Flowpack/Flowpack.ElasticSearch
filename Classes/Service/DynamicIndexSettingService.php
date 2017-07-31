@@ -49,7 +49,7 @@ final class DynamicIndexSettingService
     }
 
     /**
-     * Returns all class names implementing the ThumbnailGeneratorInterface.
+     * Returns all class names implementing the IndexSettingProcessorInterface.
      *
      * @Flow\CompileStatic
      * @param ObjectManagerInterface $objectManager

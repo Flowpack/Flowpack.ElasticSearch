@@ -191,7 +191,7 @@ class Index
         }
         $settings = Arrays::getValueByPath($this->settings, $path);
 
-        return $this->dynamicIndexSettingService->process($settings, $path, $this->getName());
+        return $settings !== null ? $this->dynamicIndexSettingService->process($settings, $path, $this->getName()) : $settings;
     }
 
     /**

@@ -12,8 +12,10 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  */
 
 use Flowpack\ElasticSearch\Exception as ElasticSearchException;
+use Flowpack\ElasticSearch\Service\DynamicIndexSettingService;
 use Flowpack\ElasticSearch\Transfer\Response;
 use Neos\Utility\Arrays;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Representation of an Index
@@ -59,6 +61,12 @@ class Index
         'index.compound_on_flush',
         'index.warmer.enabled',
     ];
+
+    /**
+     * @var DynamicIndexSettingService
+     * @Flow\Inject
+     */
+    protected $dynamicIndexSettingService;
 
     /**
      * @var string
@@ -177,12 +185,13 @@ class Index
     protected function getSettings()
     {
         if ($this->client instanceof Client) {
-            $settings = Arrays::getValueByPath($this->settings, 'indexes.' . $this->client->getBundle() . '.' . $this->settingsKey) ?: Arrays::getValueByPath($this->settings, 'indexes.default' . '.' . $this->settingsKey);
+            $path = 'indexes.' . $this->client->getBundle() . '.' . $this->settingsKey;
         } else {
-            $settings = Arrays::getValueByPath($this->settings, 'indexes.default' . '.' . $this->settingsKey);
+            $path = 'indexes.default' . '.' . $this->settingsKey;
         }
+        $settings = Arrays::getValueByPath($this->settings, $path);
 
-        return $settings;
+        return $settings !== null ? $this->dynamicIndexSettingService->process($settings, $path, $this->getName()) : $settings;
     }
 
     /**

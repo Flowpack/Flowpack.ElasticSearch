@@ -89,6 +89,7 @@ class RequestService
             $requestUri->setPassword($uri->getPassword());
         }
 
+        $request->setHeader('Content-Type', 'application/json');
         $response = $this->browser->sendRequest($request);
         return new Response($response, $this->browser->getLastRequest());
     }

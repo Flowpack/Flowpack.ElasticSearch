@@ -172,11 +172,12 @@ class Index
     }
 
     /**
+     * @param array $arguments
      * @return void
      */
-    public function create()
+    public function create(array $arguments = [])
     {
-        $this->request('PUT', null, [], json_encode($this->getSettings()));
+        $this->request('PUT', null, $arguments, json_encode($this->getSettings()));
     }
 
     /**

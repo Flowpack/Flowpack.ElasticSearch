@@ -9,7 +9,7 @@ This project connects the Flow Framework to Elasticsearch; enabling two main fun
 
 Related package:
 
-* [Flowpack.ElasticSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.ElasticSearch.ContentRepositoryAdaptor): An adapter to support the Neos Content Repository 
+* [Flowpack.ElasticSearch.ContentRepositoryAdaptor](https://github.com/Flowpack/Flowpack.ElasticSearch.ContentRepositoryAdaptor): An adapter to support the Neos Content Repository
 indexing and searching
 
 More documentation:

@@ -9,10 +9,10 @@
         "doctrine/annotations": "^1.0",
         "doctrine/collections": "^1.0",
         "doctrine/orm": "^2.0",
-        "neos/error-messages": "^4.0 || dev-master",
-        "neos/flow": "^4.0 || dev-master",
-        "neos/utility-arrays": "^4.0 || dev-master",
-        "neos/utility-objecthandling": "^4.0 || dev-master"
+        "neos/error-messages": "^4.0 || ^5.0 || dev-master",
+        "neos/flow": "^4.0 || ^5.0 || dev-master",
+        "neos/utility-arrays": "^4.0 || ^5.0 || dev-master",
+        "neos/utility-objecthandling": "^4.0 || ^5.0 || dev-master"
     },
     "autoload": {
         "psr-4": {

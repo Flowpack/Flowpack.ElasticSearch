@@ -100,6 +100,9 @@ class EntityMappingBuilder
         list($propertyType) = $this->reflectionService->getPropertyTagValues($className, $propertyName, 'var');
         if (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, Transform::class)) !== null) {
             $mappingType = $this->transformerFactory->create($transformAnnotation->type)->getTargetMappingType();
+        } elseif ($propertyType === 'string') {
+            // string must be mapped to text as elasticsearch does not support the 'string' type for version >=5.0
+            $mappingType = 'text';
         } elseif (TypeHandling::isSimpleType($propertyType)) {
             $mappingType = $propertyType;
         } elseif ($propertyType === '\DateTime') {

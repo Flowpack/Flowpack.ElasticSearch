@@ -15,10 +15,9 @@ use Flowpack\ElasticSearch\Annotations\Transform as TransformAnnotation;
 use Neos\Flow\Annotations as Flow;
 
 /**
- * @deprecated Since ElasticSearch deprecated the type "string" with version 5.0
  * @Flow\Scope("singleton")
  */
-class StringCastTransformer implements TransformerInterface
+class TextCastTransformer implements TransformerInterface
 {
     /**
      * Returns the Elasticsearch type this transform() method returns
@@ -27,7 +26,7 @@ class StringCastTransformer implements TransformerInterface
      */
     public function getTargetMappingType()
     {
-        return 'string';
+        return 'text';
     }
 
     /**

@@ -75,6 +75,14 @@ final class Mapping
     public $analyzer;
 
     /**
+     * The analyzer used to analyze the text contents only when searching using a query string.
+     *
+     * @var string
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/5.6/search-analyzer.html
+     */
+	public $search_analyzer;
+    
+    /**
      * The type to use for this
      * Defaults to the property/field type.
      *

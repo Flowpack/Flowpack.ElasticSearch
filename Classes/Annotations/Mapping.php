@@ -99,11 +99,17 @@ final class Mapping
     public $fields;
 
     /**
-	 * @var array
+	   * @var array
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/5.6/properties.html
-	 */
-	public $properties;
-    
+	   */
+    public $properties;
+
+    /**
+     * @var bool
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/5.4/fielddata.html
+     */
+    public $fielddata;
+
     /**
      * Returns this class's properties as type/value array in order to directly use it for mapping information
      *

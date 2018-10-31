@@ -99,9 +99,9 @@ final class Mapping
     public $fields;
 
     /**
-	   * @var array
+     * @var array
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/5.6/properties.html
-	   */
+     */
     public $properties;
 
     /**

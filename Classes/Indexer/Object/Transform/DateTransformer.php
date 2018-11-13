@@ -36,6 +36,10 @@ class DateTransformer implements TransformerInterface
      */
     public function transformByAnnotation($source, TransformAnnotation $annotation)
     {
+        if ($source === null) {
+            return null;
+        }
+   
         return $source->format($annotation->options['format'] ?: 'Y-m-d');
     }
 }

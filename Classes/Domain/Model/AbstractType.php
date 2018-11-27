@@ -108,7 +108,7 @@ abstract class AbstractType
         $response = $this->request('DELETE', '/' . $id);
         $treatedContent = $response->getTreatedContent();
 
-        return $response->getStatusCode() === 200 && $treatedContent['found'] === true;
+        return $response->getStatusCode() === 200 && $treatedContent['result'] === 'deleted';
     }
 
     /**

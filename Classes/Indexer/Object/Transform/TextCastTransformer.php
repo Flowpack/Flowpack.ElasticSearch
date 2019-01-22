@@ -34,7 +34,7 @@ class TextCastTransformer implements TransformerInterface
      * @param TransformAnnotation $annotation
      * @return string
      */
-    public function transformByAnnotation($source, TransformAnnotation $annotation)
+    public function transformByAnnotation($source, TransformAnnotation $annotation): string
     {
         return (string)$source;
     }

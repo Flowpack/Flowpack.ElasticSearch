@@ -1,6 +1,6 @@
 # Flow Framework ElasticSearch Integration
 
-*supporting Elasticsearch versions 1.2.x to 2.4.x**
+*Supporting Elasticsearch versions 5.x and 6.x*
 
 This project connects the Flow Framework to Elasticsearch; enabling two main functionalities:
 

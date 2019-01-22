@@ -24,7 +24,7 @@ class TextCastTransformer implements TransformerInterface
      *
      * @return string
      */
-    public function getTargetMappingType()
+    public function getTargetMappingType(): string
     {
         return 'text';
     }

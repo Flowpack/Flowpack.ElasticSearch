@@ -95,10 +95,11 @@ class Client
      * @param string $path
      * @param array $arguments
      * @param string|array $content
+     * @param string $header
      * @return Response
      */
-    public function request($method, $path = null, array $arguments = [], $content = null)
+    public function request($method, $path = null, array $arguments = [], $content = null, $header = null)
     {
-        return $this->requestService->request($method, $this, $path, $arguments, $content);
+        return $this->requestService->request($method, $this, $path, $arguments, $content, $header);
     }
 }

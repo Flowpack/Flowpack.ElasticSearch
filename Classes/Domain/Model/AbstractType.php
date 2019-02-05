@@ -92,7 +92,7 @@ abstract class AbstractType
      * @param string $content
      * @return Response
      */
-    public function request($method, $path = null, array $arguments = [], $content = null)
+    public function request($method, $path = null, array $arguments = [], $content = null, $header = null)
     {
         $path = '/' . $this->name . ($path ?: '');
 
@@ -132,5 +132,31 @@ abstract class AbstractType
     public function search(array $searchQuery)
     {
         return $this->request('GET', '/_search', [], json_encode($searchQuery));
+    }
+
+    /**
+     * A bulk request always needs the following strukture:
+     * action_and_meta_data
+     * optional_source
+     * action_and_meta_data
+     * optional_source
+     * As the index and type are already in the url the meta_data part could be empty
+     *
+     * @param array $arguments
+     * @param string|array $content
+     * @return Response
+     */
+    public function bulkRequest(array $arguments = [], $content = null)
+    {
+        $path = '/' . $this->name . '/_bulk';
+        if (is_array($content)) {
+            $ndjsonContent = '';
+            foreach ($content as $contentItem) {
+                // JSON_FORCE_OBJECT is important here as a empty meta_data needs to be a empty json object
+                $ndjsonContent = $ndjsonContent . json_encode($contentItem, JSON_FORCE_OBJECT) . "\n";
+            }
+            $content = $ndjsonContent;
+        }
+        return $this->index->request('POST', $path, $arguments, $content, true, 'application/x-ndjson');
     }
 }

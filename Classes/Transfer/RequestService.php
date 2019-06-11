@@ -61,9 +61,10 @@ class RequestService
      * @param string $path
      * @param array $arguments
      * @param string|array $content
+     * @param string $header
      * @return Response
      */
-    public function request($method, ElasticSearchClient $client, $path = null, $arguments = [], $content = null)
+    public function request($method, ElasticSearchClient $client, $path = null, $arguments = [], $content = null, $header = null)
     {
         $clientConfigurations = $client->getClientConfigurations();
         $clientConfiguration = $clientConfigurations[0];
@@ -90,8 +91,9 @@ class RequestService
             $requestUri->setUsername($uri->getUsername());
             $requestUri->setPassword($uri->getPassword());
         }
-        
-        $request->setHeader('Content-Type', 'application/json');
+
+        $header = $header ?: 'application/json';
+        $request->setHeader('Content-Type', $header);
         $response = $this->browser->sendRequest($request);
 
         return new Response($response, $this->browser->getLastRequest());

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Flowpack\ElasticSearch\Domain\Model;
 
 /*
@@ -78,8 +80,9 @@ class Client
     /**
      * @param string $indexName
      * @return Index
+     * @throws \Flowpack\ElasticSearch\Exception
      */
-    public function findIndex($indexName)
+    public function findIndex(string $indexName): Index
     {
         if (!array_key_exists($indexName, $this->indexCollection)) {
             $this->indexCollection[$indexName] = new Index($indexName, $this);
@@ -96,8 +99,11 @@ class Client
      * @param array $arguments
      * @param string|array $content
      * @return Response
+     * @throws \Flowpack\ElasticSearch\Transfer\Exception
+     * @throws \Flowpack\ElasticSearch\Transfer\Exception\ApiException
+     * @throws \Neos\Flow\Http\Exception
      */
-    public function request($method, $path = null, array $arguments = [], $content = null)
+    public function request(string $method, ?string $path = null, array $arguments = [], $content = null): Response
     {
         return $this->requestService->request($method, $this, $path, $arguments, $content);
     }

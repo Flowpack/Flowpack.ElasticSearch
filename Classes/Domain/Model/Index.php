@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Flowpack\ElasticSearch\Domain\Model;
 
 /*
@@ -114,7 +116,7 @@ class Index
      * @param array $settings
      * @return void
      */
-    public function injectSettings(array $settings)
+    public function injectSettings(array $settings): void
     {
         $this->settings = $settings;
     }
@@ -123,7 +125,7 @@ class Index
      * @param string $typeName
      * @return AbstractType
      */
-    public function findType($typeName)
+    public function findType($typeName): AbstractType
     {
         return new GenericType($this, $typeName);
     }
@@ -132,15 +134,16 @@ class Index
      * @param array <AbstractType> $types
      * @return TypeGroup
      */
-    public function findTypeGroup(array $types)
+    public function findTypeGroup(array $types): TypeGroup
     {
         return new TypeGroup($this, $types);
     }
 
     /**
-     * @return boolean
+     * @return bool
+     * @throws \Exception
      */
-    public function exists()
+    public function exists(): bool
     {
         $response = $this->request('HEAD');
 
@@ -152,14 +155,14 @@ class Index
      * @param string $path
      * @param array $arguments
      * @param string $content
-     * @param boolean $prefixIndex
+     * @param bool $prefixIndex
      * @return Response
-     * @throws ElasticSearchException
+     * @throws \Exception
      */
-    public function request($method, $path = null, array $arguments = [], $content = null, $prefixIndex = true)
+    public function request(string $method, ?string $path = null, array $arguments = [], ?string $content = null, bool $prefixIndex = true): Response
     {
         if ($this->client === null) {
-            throw new Exception('The client of the index "' . $this->name . '" is not set, hence no requests can be done.');
+            throw new \Exception('The client of the index "' . $this->name . '" is not set, hence no requests can be done.', 1566313883);
         }
         $path = ($path ? trim($path) : '');
         if ($prefixIndex === true) {
@@ -173,8 +176,9 @@ class Index
 
     /**
      * @return void
+     * @throws \Exception
      */
-    public function create()
+    public function create(): void
     {
         $this->request('PUT', null, [], json_encode($this->getSettings()));
     }
@@ -196,6 +200,7 @@ class Index
 
     /**
      * @return void
+     * @throws \Exception
      */
     public function updateSettings()
     {

@@ -91,19 +91,19 @@ class RequestService
         if ($path !== null) {
             if (strpos($path, '?') !== false) {
                 list($path, $query) = explode('?', $path);
-                $uri->withQuery($query);
+                $uri = $uri->withQuery($query);
             }
-            $uri->withPath($uri->getPath() . $path);
+            $uri = $uri->withPath($uri->getPath() . $path);
         }
 
         $request = $this->requestFactory->createServerRequest($method, $uri);
 
         // In some cases, $content will contain "null" as a string. Better be safe and handle this weird case:
         if ($content !== 'null') {
-            $request->withBody($this->contentStreamFactory->createStream((is_array($content) ? json_encode($content) : $content)));
+            $request = $request->withBody($this->contentStreamFactory->createStream((is_array($content) ? json_encode($content) : $content)));
         }
 
-        $request->withHeader('Content-Type', 'application/json');
+        $request = $request->withHeader('Content-Type', 'application/json');
         $response = $this->browser->sendRequest($request);
 
         return new Response($response, $this->browser->getLastRequest());

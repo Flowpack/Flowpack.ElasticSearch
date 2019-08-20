@@ -13,9 +13,8 @@ namespace Flowpack\ElasticSearch\Domain\Model\Client;
  * source code.
  */
 
-use GuzzleHttp\Psr7\Uri;
 use Neos\Flow\Annotations as Flow;
-use Neos\Http\Factories\UriFactory;
+use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -50,7 +49,7 @@ class ClientConfiguration
 
     /**
      * @Flow\Inject
-     * @var UriFactory
+     * @var UriFactoryInterface
      */
     protected $uriFactory;
 

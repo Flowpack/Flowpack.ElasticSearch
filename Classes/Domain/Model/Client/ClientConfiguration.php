@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Flowpack\ElasticSearch\Domain\Model\Client;
 
 /*
@@ -11,7 +13,10 @@ namespace Flowpack\ElasticSearch\Domain\Model\Client;
  * source code.
  */
 
-use Neos\Flow\Http\Uri;
+use GuzzleHttp\Psr7\Uri;
+use Neos\Flow\Annotations as Flow;
+use Neos\Http\Factories\UriFactory;
+use Psr\Http\Message\UriInterface;
 
 /**
  * Client configuration
@@ -44,9 +49,15 @@ class ClientConfiguration
     protected $password = '';
 
     /**
+     * @Flow\Inject
+     * @var UriFactory
+     */
+    protected $uriFactory;
+
+    /**
      * @return string
      */
-    public function getHost()
+    public function getHost(): string
     {
         return $this->host;
     }
@@ -55,7 +66,7 @@ class ClientConfiguration
      * @param string $host
      * @return void
      */
-    public function setHost($host)
+    public function setHost(string $host): void
     {
         $this->host = $host;
     }
@@ -63,7 +74,7 @@ class ClientConfiguration
     /**
      * @return int
      */
-    public function getPort()
+    public function getPort(): int
     {
         return $this->port;
     }
@@ -72,7 +83,7 @@ class ClientConfiguration
      * @param int $port
      * @return void
      */
-    public function setPort($port)
+    public function setPort(int $port): void
     {
         $this->port = $port;
     }
@@ -80,7 +91,7 @@ class ClientConfiguration
     /**
      * @return string
      */
-    public function getScheme()
+    public function getScheme(): string
     {
         return $this->scheme;
     }
@@ -89,7 +100,7 @@ class ClientConfiguration
      * @param string $scheme
      * @return void
      */
-    public function setScheme($scheme)
+    public function setScheme(string $scheme): void
     {
         $this->scheme = $scheme;
     }
@@ -99,7 +110,7 @@ class ClientConfiguration
      *
      * @return string
      */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -110,7 +121,7 @@ class ClientConfiguration
      * @param string $username
      * @return void
      */
-    public function setUsername($username)
+    public function setUsername(string $username): void
     {
         $this->username = $username;
     }
@@ -120,7 +131,7 @@ class ClientConfiguration
      *
      * @return string
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -131,23 +142,20 @@ class ClientConfiguration
      * @param string $password
      * @return void
      */
-    public function setPassword($password)
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }
 
     /**
-     * @return Uri
+     * @return UriInterface
      */
-    public function getUri()
+    public function getUri(): UriInterface
     {
-        $uri = new Uri('');
-        $uri->setScheme($this->scheme);
-        $uri->setHost($this->host);
-        $uri->setPort($this->port);
-        $uri->setUsername($this->username);
-        $uri->setPassword($this->password);
-
-        return $uri;
+        return $this->uriFactory->createUri()
+            ->withScheme($this->scheme)
+            ->withHost($this->host)
+            ->withPort($this->port)
+            ->withUserInfo($this->username, $this->password);
     }
 }

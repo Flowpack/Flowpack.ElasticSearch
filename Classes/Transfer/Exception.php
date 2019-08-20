@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Flowpack\ElasticSearch\Transfer;
 
 /*
@@ -10,9 +12,10 @@ namespace Flowpack\ElasticSearch\Transfer;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
+
 use Flowpack\ElasticSearch\Exception as ElasticSearchException;
-use Neos\Flow\Http\Request;
-use Neos\Flow\Http\Response as FlowResponse;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Exception that occurs related to ElasticSearch transfers
@@ -20,25 +23,16 @@ use Neos\Flow\Http\Response as FlowResponse;
 class Exception extends ElasticSearchException
 {
     /**
-     * @var FlowResponse
+     * @var ResponseInterface
      */
     protected $response;
 
     /**
-     * @var Request
+     * @var RequestInterface
      */
     protected $request;
 
-    /**
-     * Exception constructor.
-     *
-     * @param string $message
-     * @param int $code
-     * @param FlowResponse $response
-     * @param Request $request
-     * @param \Exception $previous
-     */
-    public function __construct($message, $code, FlowResponse $response, Request $request = null, \Exception $previous = null)
+    public function __construct($message, $code, ResponseInterface $response, RequestInterface $request = null, \Exception $previous = null)
     {
         $this->response = $response;
         $this->request = $request;
@@ -47,8 +41,8 @@ class Exception extends ElasticSearchException
                 "Elasticsearch request failed.\n[%s %s]: %s\n\nRequest data: %s",
                 $request->getMethod(),
                 $request->getUri(),
-                $message . '; Response body: ' . $response->getContent(),
-                $request->getContent()
+                $message . '; Response body: ' . $response->getBody()->getContents(),
+                $request->getBody()->getContents()
             );
         }
 
@@ -56,17 +50,17 @@ class Exception extends ElasticSearchException
     }
 
     /**
-     * @return Request
+     * @return RequestInterface
      */
-    public function getRequest()
+    public function getRequest(): RequestInterface
     {
         return $this->request;
     }
 
     /**
-     * @return FlowResponse
+     * @return ResponseInterface
      */
-    public function getResponse()
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }

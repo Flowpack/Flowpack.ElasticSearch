@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Flowpack\ElasticSearch\Transfer;
 
 /*
@@ -11,13 +13,13 @@ namespace Flowpack\ElasticSearch\Transfer;
  * source code.
  */
 
-use Neos\Flow\Http\Request;
-use Neos\Flow\Http\Response as HttpResponse;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class Response
 {
     /**
-     * @var HttpResponse
+     * @var ResponseInterface
      */
     protected $originalResponse;
 
@@ -29,20 +31,22 @@ class Response
     protected $treatedContent;
 
     /**
-     * @param HttpResponse $response
-     * @param Request $request
+     * Response constructor.
+     * @param ResponseInterface $response
+     * @param RequestInterface|null $request
      * @throws Exception
      * @throws Exception\ApiException
      */
-    public function __construct(HttpResponse $response, Request $request = null)
+    public function __construct(ResponseInterface $response, RequestInterface $request = null)
     {
         $this->originalResponse = $response;
 
-        $treatedContent = json_decode($response->getContent(), true);
+        $content = $response->getBody()->getContents();
+        $treatedContent = json_decode($content, true);
 
-        if (strlen($response->getContent()) > 0) {
+        if (strlen($content) > 0) {
             if ($treatedContent === null) {
-                throw new Exception('The request returned an invalid JSON string which was "' . $response->getContent() . '".', 1338976439, $response, $request);
+                throw new Exception('The request returned an invalid JSON string which was "' . $content . '".', 1338976439, $response, $request);
             }
 
             if (array_key_exists('error', $treatedContent)) {
@@ -59,7 +63,7 @@ class Response
      *
      * @return int
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->originalResponse->getStatusCode();
     }
@@ -73,9 +77,9 @@ class Response
     }
 
     /**
-     * @return HttpResponse
+     * @return ResponseInterface
      */
-    public function getOriginalResponse()
+    public function getOriginalResponse(): ResponseInterface
     {
         return $this->originalResponse;
     }

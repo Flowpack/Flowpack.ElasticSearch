@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Flowpack\ElasticSearch\Transfer;
 
 /*
@@ -16,7 +17,8 @@ use Flowpack\ElasticSearch\Domain\Model\Client\ClientConfiguration;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Http\Client\Browser;
 use Neos\Flow\Http\Client\CurlEngine;
-use Neos\Flow\Http\Request;
+use Psr\Http\Message\ServerRequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * Handles the requests
@@ -30,6 +32,18 @@ class RequestService
      * @var Browser
      */
     protected $browser;
+
+    /**
+     * @Flow\Inject
+     * @var ServerRequestFactoryInterface
+     */
+    protected $requestFactory;
+
+    /**
+     * @Flow\Inject
+     * @var StreamFactoryInterface
+     */
+    protected $contentStreamFactory;
 
     /**
      * @var array
@@ -62,36 +76,34 @@ class RequestService
      * @param array $arguments
      * @param string|array $content
      * @return Response
+     * @throws Exception
+     * @throws Exception\ApiException
+     * @throws \Neos\Flow\Http\Exception
      */
-    public function request($method, ElasticSearchClient $client, $path = null, $arguments = [], $content = null)
+    public function request($method, ElasticSearchClient $client, ?string $path = null, array $arguments = [], $content = null): Response
     {
         $clientConfigurations = $client->getClientConfigurations();
         $clientConfiguration = $clientConfigurations[0];
         /** @var ClientConfiguration $clientConfiguration */
 
         $uri = clone $clientConfiguration->getUri();
+
         if ($path !== null) {
             if (strpos($path, '?') !== false) {
                 list($path, $query) = explode('?', $path);
-                $uri->setQuery($query);
+                $uri->withQuery($query);
             }
-            $uri->setPath($uri->getPath() . $path);
+            $uri->withPath($uri->getPath() . $path);
         }
 
-        $request = Request::create($uri, $method, $arguments, [], []);
+        $request = $this->requestFactory->createServerRequest($method, $uri);
+
         // In some cases, $content will contain "null" as a string. Better be safe and handle this weird case:
-        if ($content === 'null') {
-            $request->setContent(null);
-        } else {
-            $request->setContent((is_array($content) ? json_encode($content) : $content));
+        if ($content !== 'null') {
+            $request->withBody($this->contentStreamFactory->createStream((is_array($content) ? json_encode($content) : $content)));
         }
-        if ($uri->getUsername()) {
-            $requestUri = $request->getUri();
-            $requestUri->setUsername($uri->getUsername());
-            $requestUri->setPassword($uri->getPassword());
-        }
-        
-        $request->setHeader('Content-Type', 'application/json');
+
+        $request->withHeader('Content-Type', 'application/json');
         $response = $this->browser->sendRequest($request);
 
         return new Response($response, $this->browser->getLastRequest());

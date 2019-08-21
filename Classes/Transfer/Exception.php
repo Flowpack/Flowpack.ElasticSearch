@@ -32,6 +32,13 @@ class Exception extends ElasticSearchException
      */
     protected $request;
 
+    /**
+     * @param string $message
+     * @param int $code
+     * @param ResponseInterface $response
+     * @param RequestInterface|null $request
+     * @param \Exception|null $previous
+     */
     public function __construct($message, $code, ResponseInterface $response, RequestInterface $request = null, \Exception $previous = null)
     {
         $this->response = $response;

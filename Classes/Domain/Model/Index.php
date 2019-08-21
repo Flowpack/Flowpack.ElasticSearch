@@ -157,12 +157,13 @@ class Index
      * @param string $content
      * @param bool $prefixIndex
      * @return Response
-     * @throws \Exception
+     * @throws ElasticSearchException
+     * @throws \Neos\Flow\Http\Exception
      */
-    public function request(string $method, ?string $path = null, array $arguments = [], ?string $content = null, bool $prefixIndex = true): Response
+    public function request(string $method, string $path = null, array $arguments = [], string $content = null, bool $prefixIndex = true): Response
     {
         if ($this->client === null) {
-            throw new \Exception('The client of the index "' . $this->name . '" is not set, hence no requests can be done.', 1566313883);
+            throw new ElasticSearchException('The client of the index "' . $this->name . '" is not set, hence no requests can be done.', 1566313883);
         }
         $path = ($path ? trim($path) : '');
         if ($prefixIndex === true) {
@@ -175,8 +176,8 @@ class Index
     }
 
     /**
-     * @return void
-     * @throws \Exception
+     * @throws ElasticSearchException
+     * @throws \Neos\Flow\Http\Exception
      */
     public function create(): void
     {
@@ -199,8 +200,8 @@ class Index
     }
 
     /**
-     * @return void
-     * @throws \Exception
+     * @throws ElasticSearchException
+     * @throws \Neos\Flow\Http\Exception
      */
     public function updateSettings()
     {
@@ -217,6 +218,8 @@ class Index
 
     /**
      * @return void
+     * @throws ElasticSearchException
+     * @throws \Neos\Flow\Http\Exception
      */
     public function delete()
     {
@@ -227,6 +230,8 @@ class Index
      * Refresh the index
      *
      * @return void
+     * @throws ElasticSearchException
+     * @throws \Neos\Flow\Http\Exception
      */
     public function refresh()
     {

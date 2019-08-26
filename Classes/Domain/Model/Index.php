@@ -154,13 +154,13 @@ class Index
      * @param string $method
      * @param string $path
      * @param array $arguments
-     * @param string $content
+     * @param string|array $content
      * @param bool $prefixIndex
      * @return Response
      * @throws ElasticSearchException
      * @throws \Neos\Flow\Http\Exception
      */
-    public function request(string $method, string $path = null, array $arguments = [], string $content = null, bool $prefixIndex = true): Response
+    public function request(string $method, string $path = null, array $arguments = [], $content = null, bool $prefixIndex = true): Response
     {
         if ($this->client === null) {
             throw new ElasticSearchException('The client of the index "' . $this->name . '" is not set, hence no requests can be done.', 1566313883);

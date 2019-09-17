@@ -19,8 +19,6 @@ use Flowpack\ElasticSearch\Tests\Functional\Fixtures\Tweet;
 use Neos\Flow\Tests\FunctionalTestCase;
 use Neos\Flow\Utility\Algorithms;
 
-/**
- */
 class ObjectIndexerTest extends FunctionalTestCase
 {
     /**
@@ -40,7 +38,7 @@ class ObjectIndexerTest extends FunctionalTestCase
 
     /**
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->testEntityRepository = new TweetRepository();
@@ -61,8 +59,8 @@ class ObjectIndexerTest extends FunctionalTestCase
             ->findDocumentById($documentId);
         $resultData = $resultDocument->getData();
 
-        $this->assertEquals($testEntity->getMessage(), $resultData['message']);
-        $this->assertEquals($testEntity->getUsername(), $resultData['username']);
+        static::assertEquals($testEntity->getMessage(), $resultData['message']);
+        static::assertEquals($testEntity->getUsername(), $resultData['username']);
     }
 
     /**
@@ -78,7 +76,7 @@ class ObjectIndexerTest extends FunctionalTestCase
             ->findType('tweet')
             ->findDocumentById($identifier)
             ->getVersion();
-        $this->assertInternalType('integer', $initialVersion);
+        static::assertIsInt($initialVersion);
 
         $persistedTestEntity = $this->testEntityRepository->findByIdentifier($identifier);
         $persistedTestEntity->setMessage('changed message.');
@@ -93,8 +91,8 @@ class ObjectIndexerTest extends FunctionalTestCase
 
         // the version increments by two, since we index via AOP and via Doctrine lifecycle events
         // see https://github.com/Flowpack/Flowpack.ElasticSearch/pull/36
-        $this->assertSame($initialVersion + 2, $changedDocument->getVersion());
-        $this->assertSame($changedDocument->getField('message'), 'changed message.');
+        static::assertSame($initialVersion + 2, $changedDocument->getVersion());
+        static::assertSame($changedDocument->getField('message'), 'changed message.');
     }
 
     /**
@@ -109,7 +107,7 @@ class ObjectIndexerTest extends FunctionalTestCase
             ->findIndex('flow_elasticsearch_functionaltests_twitter')
             ->findType('tweet')
             ->findDocumentById($identifier);
-        $this->assertInstanceOf(Document::class, $initialDocument);
+        static::assertInstanceOf(Document::class, $initialDocument);
 
         $persistedTestEntity = $this->testEntityRepository->findByIdentifier($identifier);
         $this->testEntityRepository->remove($persistedTestEntity);
@@ -120,11 +118,9 @@ class ObjectIndexerTest extends FunctionalTestCase
             ->findIndex('flow_elasticsearch_functionaltests_twitter')
             ->findType('tweet')
             ->findDocumentById($identifier);
-        $this->assertNull($foundDocument);
+        static::assertNull($foundDocument);
     }
 
-    /**
-     */
     protected function createAndPersistTestEntity()
     {
         $testEntity = new Tweet();

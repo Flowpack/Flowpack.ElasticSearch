@@ -14,8 +14,6 @@ namespace Flowpack\ElasticSearch\Tests\Functional\Domain;
 use Flowpack\ElasticSearch\Domain\Model\Document;
 use Flowpack\ElasticSearch\Tests\Functional\Fixtures\TwitterType;
 
-/**
- */
 class DocumentTest extends AbstractTest
 {
     /**
@@ -42,9 +40,9 @@ class DocumentTest extends AbstractTest
     public function idOfFreshNewDocumentIsPopulatedAfterStoring(array $data = null)
     {
         $document = new Document(new TwitterType($this->testingIndex), $data);
-        $this->assertNull($document->getId());
+        static::assertNull($document->getId());
         $document->store();
-        $this->assertRegExp('/\w+/', $document->getId());
+        static::assertRegExp('/\w+/', $document->getId());
     }
 
     /**
@@ -54,13 +52,13 @@ class DocumentTest extends AbstractTest
     public function versionOfFreshNewDocumentIsCreatedAfterStoringAndIncreasedAfterSubsequentStoring(array $data = null)
     {
         $document = new Document(new TwitterType($this->testingIndex), $data);
-        $this->assertNull($document->getVersion());
+        static::assertNull($document->getVersion());
         $document->store();
         $idAfterFirstStoring = $document->getId();
-        $this->assertSame(1, $document->getVersion());
+        static::assertSame(1, $document->getVersion());
         $document->store();
-        $this->assertSame(2, $document->getVersion());
-        $this->assertSame($idAfterFirstStoring, $document->getId());
+        static::assertSame(2, $document->getVersion());
+        static::assertSame($idAfterFirstStoring, $document->getId());
     }
 
     /**
@@ -72,6 +70,6 @@ class DocumentTest extends AbstractTest
         $id = '42-1010-42';
         $document = new Document(new TwitterType($this->testingIndex), $data, $id);
         $document->store();
-        $this->assertSame($id, $document->getId());
+        static::assertSame($id, $document->getId());
     }
 }

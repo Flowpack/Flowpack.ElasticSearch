@@ -15,8 +15,6 @@ use Flowpack\ElasticSearch\Domain\Factory\ClientFactory;
 use Flowpack\ElasticSearch\Domain\Model\Index;
 use Neos\Flow\Tests\FunctionalTestCase;
 
-/**
- */
 abstract class AbstractTest extends FunctionalTestCase
 {
     /**
@@ -37,7 +35,7 @@ abstract class AbstractTest extends FunctionalTestCase
     /**
      * final because else it could seriously damage the Index in the unlikely case there's already an index named flow_ElasticSearch_FunctionalTests
      */
-    final public function setUp()
+    final public function setUp(): void
     {
         parent::setUp();
 
@@ -65,7 +63,7 @@ abstract class AbstractTest extends FunctionalTestCase
     /**
      * set to final because this is an important step which may not be overridden.
      */
-    final public function tearDown()
+    final public function tearDown(): void
     {
         parent::tearDown();
 

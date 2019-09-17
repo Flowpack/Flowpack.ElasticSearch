@@ -16,8 +16,6 @@ use Flowpack\ElasticSearch\Indexer\Object\IndexInformer;
 use Flowpack\ElasticSearch\Tests\Functional\Fixtures;
 use Neos\Flow\Tests\FunctionalTestCase;
 
-/**
- */
 class IndexInformerTest extends FunctionalTestCase
 {
     /**
@@ -27,7 +25,7 @@ class IndexInformerTest extends FunctionalTestCase
 
     /**
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->informer = $this->objectManager->get(IndexInformer::class);
@@ -39,9 +37,9 @@ class IndexInformerTest extends FunctionalTestCase
     public function classAnnotationTest()
     {
         $actual = $this->informer->getClassAnnotation(Fixtures\JustFewPropertiesToIndex::class);
-        $this->assertInstanceOf(IndexableAnnotation::class, $actual);
-        $this->assertSame('dummyindex', $actual->indexName);
-        $this->assertSame('sampletype', $actual->typeName);
+        static::assertInstanceOf(IndexableAnnotation::class, $actual);
+        static::assertSame('dummyindex', $actual->indexName);
+        static::assertSame('sampletype', $actual->typeName);
     }
 
     /**
@@ -50,7 +48,7 @@ class IndexInformerTest extends FunctionalTestCase
     public function classWithOnlyOnePropertyAnnotatedHasOnlyThisPropertyToBeIndexed()
     {
         $actual = $this->informer->getClassProperties(Fixtures\JustFewPropertiesToIndex::class);
-        $this->assertCount(1, $actual);
+        static::assertCount(1, $actual);
     }
 
     /**
@@ -59,6 +57,6 @@ class IndexInformerTest extends FunctionalTestCase
     public function classWithNoPropertyAnnotatedHasAllPropertiesToBeIndexed()
     {
         $actual = $this->informer->getClassProperties(Fixtures\Tweet::class);
-        $this->assertGreaterThan(1, $actual);
+        static::assertGreaterThan(1, $actual);
     }
 }

@@ -15,8 +15,6 @@ use Flowpack\ElasticSearch\Domain\Model\Mapping;
 use Flowpack\ElasticSearch\Mapping\EntityMappingBuilder;
 use Neos\Flow\Tests\FunctionalTestCase;
 
-/**
- */
 class MappingBuilderTest extends FunctionalTestCase
 {
     /**
@@ -26,7 +24,7 @@ class MappingBuilderTest extends FunctionalTestCase
 
     /**
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->mappingBuilder = $this->objectManager->get(EntityMappingBuilder::class);
@@ -38,7 +36,7 @@ class MappingBuilderTest extends FunctionalTestCase
     public function basicTest()
     {
         $information = $this->mappingBuilder->buildMappingInformation();
-        $this->assertGreaterThanOrEqual(2, count($information));
-        $this->assertInstanceOf(Mapping::class, $information[0]);
+        static::assertGreaterThanOrEqual(2, count($information));
+        static::assertInstanceOf(Mapping::class, $information[0]);
     }
 }

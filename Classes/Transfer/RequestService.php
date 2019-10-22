@@ -100,8 +100,8 @@ class RequestService
         $request = $this->requestFactory->createServerRequest($method, $uri);
 
         // In some cases, $content will contain "null" as a string. Better be safe and handle this weird case:
-        if ($content !== 'null') {
-            $request = $request->withBody($this->contentStreamFactory->createStream((is_array($content) ? json_encode($content) : $content)));
+        if ($content !== 'null' && $content !== null) {
+            $request = $request->withBody($this->contentStreamFactory->createStream(is_array($content) ? json_encode($content) : (string)$content));
         }
 
         $request = $request->withHeader('Content-Type', 'application/json');

@@ -169,7 +169,7 @@ class Index
         if ($prefixIndex === true) {
             $path = '/' . $this->name . $path;
         } else {
-            $path = '/' . $path;
+            $path = '/' . ltrim($path, '/');
         }
 
         return $this->client->request($method, $path, $arguments, $content);

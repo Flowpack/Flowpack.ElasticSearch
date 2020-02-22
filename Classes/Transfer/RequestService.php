@@ -94,7 +94,12 @@ class RequestService
                 list($path, $query) = explode('?', $path);
                 $uri = $uri->withQuery($query);
             }
+
             $uri = $uri->withPath($uri->getPath() . $path);
+        }
+
+        if (!empty($arguments)) {
+            $uri = $uri->withQuery($uri->getQuery() . '&' . http_build_query($arguments));
         }
 
         $request = $this->requestFactory->createServerRequest($method, $uri);

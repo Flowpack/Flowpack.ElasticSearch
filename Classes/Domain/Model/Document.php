@@ -50,7 +50,7 @@ class Document
      * With a fresh instance of this document, or a conducted change, this flag gets set to TRUE again.
      * When retrieved from the storage, or successfully set to the storage, it's FALSE.
      *
-     * @var boolean
+     * @var bool
      */
     protected $dirty = true;
 
@@ -60,7 +60,7 @@ class Document
      * @param string $id
      * @param int $version
      */
-    public function __construct(AbstractType $type, array $data = null, $id = null, $version = null)
+    public function __construct(AbstractType $type, ?array $data = null, ?string $id = null, ?int $version = null)
     {
         $this->type = $type;
         $this->data = $data;
@@ -84,10 +84,11 @@ class Document
     /**
      * Stores this document. If ID is given, PUT will be used; else POST
      *
-     * @throws ElasticSearchException
      * @return void
+     * @throws \Neos\Flow\Http\Exception
+     * @throws ElasticSearchException
      */
-    public function store()
+    public function store(): void
     {
         if ($this->id !== null) {
             $method = 'PUT';
@@ -96,7 +97,8 @@ class Document
             $method = 'POST';
             $path = '';
         }
-        $response = $this->request($method, $path, [], json_encode($this->data));
+
+        $response = $this->request($method, $path, [], json_encode($this->getData()));
         $treatedContent = $response->getTreatedContent();
 
         $this->id = $treatedContent['_id'];
@@ -105,34 +107,11 @@ class Document
     }
 
     /**
-     * @param string $method
-     * @param string $path
-     * @param array $arguments
-     * @param string $content
-     * @return Response
-     * @throws ElasticSearchException
-     * @throws \Neos\Flow\Http\Exception
-     */
-    protected function request(string $method, ?string $path = null, array $arguments = [], ?string $content = null): Response
-    {
-        return $this->type->request($method, $path, $arguments, $content);
-    }
-
-    /**
      * @return boolean
      */
     public function isDirty(): bool
     {
         return $this->dirty;
-    }
-
-    /**
-     * @param boolean $dirty
-     * @return void
-     */
-    protected function setDirty(bool $dirty = true): void
-    {
-        $this->dirty = $dirty;
     }
 
     /**
@@ -150,6 +129,7 @@ class Document
      */
     public function getData(): array
     {
+        $this->data[Mapping::NEOS_TYPE_FIELD] = $this->type->getName();
         return $this->data;
     }
 
@@ -179,7 +159,7 @@ class Document
      * @return mixed
      * @throws ElasticSearchException
      */
-    public function getField(string $fieldName, $silent = false)
+    public function getField(string $fieldName, bool $silent = false)
     {
         if (!array_key_exists($fieldName, $this->data) && $silent === false) {
             throw new ElasticSearchException(sprintf('The field %s was not present in data of document in %s/%s.', $fieldName, $this->type->getIndex()->getName(), $this->type->getName()), 1340274696);
@@ -195,4 +175,28 @@ class Document
     {
         return $this->type;
     }
+
+    /**
+     * @param string $method
+     * @param string $path
+     * @param array $arguments
+     * @param string $content
+     * @return Response
+     * @throws ElasticSearchException
+     * @throws \Neos\Flow\Http\Exception
+     */
+    protected function request(string $method, ?string $path = null, array $arguments = [], ?string $content = null): Response
+    {
+        return $this->type->request($method, $path, $arguments, $content);
+    }
+
+    /**
+     * @param boolean $dirty
+     * @return void
+     */
+    protected function setDirty(bool $dirty = true): void
+    {
+        $this->dirty = $dirty;
+    }
+
 }

@@ -44,7 +44,7 @@ class Response
         $content = $response->getBody()->getContents();
         $treatedContent = json_decode($content, true);
 
-        if (strlen($content) > 0) {
+        if ($content !== '') {
             if ($treatedContent === null) {
                 throw new Exception('The request returned an invalid JSON string which was "' . $content . '".', 1338976439, $response, $request);
             }

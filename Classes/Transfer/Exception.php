@@ -43,13 +43,25 @@ class Exception extends ElasticSearchException
     {
         $this->response = $response;
         $this->request = $request;
+
+        $this->request->getBody()->rewind();
+        $this->response->getBody()->rewind();
+
         if ($request !== null) {
             $message = sprintf(
-                "Elasticsearch request failed.\n[%s %s]: %s\n\nRequest data: %s",
+"Elasticsearch request failed:
+\n[%s %s]: %s
+\n\n
+Request data: 
+\n%s
+\n\n
+Response body:
+\n%s",
                 $request->getMethod(),
                 $request->getUri(),
-                $message . '; Response body: ' . $response->getBody()->getContents(),
-                $request->getBody()->getContents()
+                $message,
+                $request->getBody()->getContents(),
+                $response->getBody()->getContents()
             );
         }
 

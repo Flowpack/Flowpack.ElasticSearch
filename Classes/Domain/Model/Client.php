@@ -23,6 +23,9 @@ use Neos\Flow\Annotations as Flow;
 class Client
 {
     /**
+     * The cluster environment name.
+     * With this key, configuration like the client configuration and the indices on that cluster are referenced.
+     *
      * @var string
      */
     protected $bundle = 'default';
@@ -46,7 +49,7 @@ class Client
     /**
      * @return string
      */
-    public function getBundle()
+    public function getBundle(): string
     {
         return $this->bundle;
     }
@@ -55,7 +58,7 @@ class Client
      * @param string $bundle
      * @return void
      */
-    public function setBundle($bundle)
+    public function setBundle(string $bundle): void
     {
         $this->bundle = $bundle;
     }
@@ -63,7 +66,7 @@ class Client
     /**
      * @return array
      */
-    public function getClientConfigurations()
+    public function getClientConfigurations(): array
     {
         return $this->clientConfigurations;
     }
@@ -72,7 +75,7 @@ class Client
      * @param array $clientConfigurations
      * @return void
      */
-    public function setClientConfigurations(array $clientConfigurations)
+    public function setClientConfigurations(array $clientConfigurations): void
     {
         $this->clientConfigurations = $clientConfigurations;
     }

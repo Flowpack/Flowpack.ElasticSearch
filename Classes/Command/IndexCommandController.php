@@ -61,6 +61,8 @@ class IndexCommandController extends CommandController
      * @param string $indexName The name of the new index
      * @param string $clientName The client name to use
      * @return void
+     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws \Neos\Flow\Cli\Exception\StopCommandException
      */
     public function createCommand($indexName, $clientName = null)
     {
@@ -90,6 +92,8 @@ class IndexCommandController extends CommandController
      * @param string $indexName The name of the new index
      * @param string $clientName The client name to use
      * @return void
+     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws \Neos\Flow\Cli\Exception\StopCommandException
      */
     public function updateSettingsCommand($indexName, $clientName = null)
     {

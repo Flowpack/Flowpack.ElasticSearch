@@ -97,14 +97,17 @@ class Index
      * @param Client $client $client
      * @throws ElasticSearchException
      */
-    public function __construct($name, Client $client = null)
+    public function __construct(string $name, Client $client = null)
     {
         $name = trim($name);
-        if (empty($name) || substr($name, 0, 1) === '_') {
+        if (empty($name) || strpos($name, '_') === 0) {
             throw new ElasticSearchException('The provided index name "' . $name . '" must not be empty and not start with an underscore.', 1340187948);
-        } elseif ($name !== strtolower($name)) {
+        }
+
+        if ($name !== strtolower($name)) {
             throw new ElasticSearchException('The provided index name "' . $name . '" must be all lowercase.', 1340187956);
         }
+
         $this->name = $name;
         $this->settingsKey = $name;
         $this->client = $client;
@@ -125,7 +128,7 @@ class Index
      * @param string $typeName
      * @return AbstractType
      */
-    public function findType($typeName): AbstractType
+    public function findType(string $typeName): AbstractType
     {
         return new GenericType($this, $typeName);
     }
@@ -187,15 +190,15 @@ class Index
     /**
      * @return array|null
      */
-    protected function getSettings()
+    protected function getSettings(): ?array
     {
         if ($this->client instanceof Client) {
             $path = 'indexes.' . $this->client->getBundle() . '.' . $this->settingsKey;
         } else {
             $path = 'indexes.default' . '.' . $this->settingsKey;
         }
-        $settings = Arrays::getValueByPath($this->settings, $path);
 
+        $settings = Arrays::getValueByPath($this->settings, $path);
         return $settings !== null ? $this->dynamicIndexSettingService->process($settings, $path, $this->getName()) : $settings;
     }
 
@@ -203,7 +206,7 @@ class Index
      * @throws ElasticSearchException
      * @throws \Neos\Flow\Http\Exception
      */
-    public function updateSettings()
+    public function updateSettings(): void
     {
         $settings = $this->getSettings();
         $updatableSettings = [];
@@ -221,7 +224,7 @@ class Index
      * @throws ElasticSearchException
      * @throws \Neos\Flow\Http\Exception
      */
-    public function delete()
+    public function delete(): void
     {
         $this->request('DELETE');
     }
@@ -233,7 +236,7 @@ class Index
      * @throws ElasticSearchException
      * @throws \Neos\Flow\Http\Exception
      */
-    public function refresh()
+    public function refresh(): void
     {
         $this->request('POST', '/_refresh');
     }
@@ -241,7 +244,7 @@ class Index
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -250,7 +253,7 @@ class Index
      * @param Client $client
      * @return void
      */
-    public function setClient($client)
+    public function setClient(Client $client): void
     {
         $this->client = $client;
     }
@@ -259,7 +262,7 @@ class Index
      * @param string $settingsKey
      * @return void
      */
-    public function setSettingsKey($settingsKey)
+    public function setSettingsKey(string $settingsKey): void
     {
         $this->settingsKey = $settingsKey;
     }

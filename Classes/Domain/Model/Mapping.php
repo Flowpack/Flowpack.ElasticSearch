@@ -21,6 +21,9 @@ use Neos\Utility\Arrays;
  */
 class Mapping
 {
+
+    protected const TYPE_PROPERTY_NAME = '_neos_type';
+
     /**
      * @var AbstractType
      */
@@ -52,6 +55,7 @@ class Mapping
     public function __construct(AbstractType $type)
     {
         $this->type = $type;
+        $this->properties[static::TYPE_PROPERTY_NAME] = ['type' => 'keyword'];
     }
 
     /**
@@ -80,7 +84,7 @@ class Mapping
     /**
      * @return AbstractType
      */
-    public function getType()
+    public function getType(): AbstractType
     {
         return $this->type;
     }
@@ -89,8 +93,10 @@ class Mapping
      * Sets this mapping to the server
      *
      * @return Response
+     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws \Neos\Flow\Http\Exception
      */
-    public function apply()
+    public function apply(): Response
     {
         $content = json_encode($this->asArray());
 
@@ -102,20 +108,18 @@ class Mapping
      *
      * @return array
      */
-    public function asArray()
+    public function asArray(): array
     {
-        return [
-            $this->type->getName() => Arrays::arrayMergeRecursiveOverrule([
-                'dynamic_templates' => $this->getDynamicTemplates(),
-                'properties' => $this->getProperties(),
-            ], $this->fullMapping),
-        ];
+        return Arrays::arrayMergeRecursiveOverrule([
+            'dynamic_templates' => $this->getDynamicTemplates(),
+            'properties' => $this->getProperties(),
+        ], $this->fullMapping);
     }
 
     /**
      * @return array
      */
-    public function getDynamicTemplates()
+    public function getDynamicTemplates(): array
     {
         return $this->dynamicTemplates;
     }
@@ -123,7 +127,7 @@ class Mapping
     /**
      * @return array
      */
-    public function getProperties()
+    public function getProperties(): array
     {
         return $this->properties;
     }
@@ -135,7 +139,7 @@ class Mapping
      * @param array $mappingConfiguration
      * @return void
      */
-    public function addDynamicTemplate($dynamicTemplateName, array $mappingConfiguration)
+    public function addDynamicTemplate(string $dynamicTemplateName, array $mappingConfiguration): void
     {
         $this->dynamicTemplates[] = [
             $dynamicTemplateName => $mappingConfiguration,
@@ -147,7 +151,7 @@ class Mapping
      *
      * @return array
      */
-    public function getFullMapping()
+    public function getFullMapping(): array
     {
         return $this->fullMapping;
     }
@@ -160,7 +164,7 @@ class Mapping
      * @param array $fullMapping
      * @return void
      */
-    public function setFullMapping(array $fullMapping)
+    public function setFullMapping(array $fullMapping): void
     {
         $this->fullMapping = $fullMapping;
     }

@@ -62,6 +62,7 @@ class EntityMappingBuilder
      * Builds a Mapping collection from the annotation sources that are present
      *
      * @return MappingCollection<Mapping>
+     * @throws ElasticSearchException
      */
     public function buildMappingInformation()
     {
@@ -77,6 +78,7 @@ class EntityMappingBuilder
      * @param string $className
      * @param IndexableAnnotation $annotation
      * @return Mapping
+     * @throws ElasticSearchException
      */
     protected function buildMappingFromClassAndAnnotation($className, IndexableAnnotation $annotation)
     {
@@ -97,7 +99,7 @@ class EntityMappingBuilder
      * @return void
      * @throws ElasticSearchException
      */
-    protected function augmentMappingByProperty(Mapping $mapping, $className, $propertyName)
+    protected function augmentMappingByProperty(Mapping $mapping, string $className, string $propertyName): void
     {
         list($propertyType) = $this->reflectionService->getPropertyTagValues($className, $propertyName, 'var');
         if (($transformAnnotation = $this->reflectionService->getPropertyAnnotation($className, $propertyName, Transform::class)) !== null) {

@@ -110,8 +110,10 @@ class Document
      * @param array $arguments
      * @param string $content
      * @return Response
+     * @throws ElasticSearchException
+     * @throws \Neos\Flow\Http\Exception
      */
-    protected function request($method, $path = null, array $arguments = [], $content = null)
+    protected function request(string $method, ?string $path = null, array $arguments = [], ?string $content = null): Response
     {
         return $this->type->request($method, $path, $arguments, $content);
     }
@@ -119,7 +121,7 @@ class Document
     /**
      * @return boolean
      */
-    public function isDirty()
+    public function isDirty(): bool
     {
         return $this->dirty;
     }
@@ -128,7 +130,7 @@ class Document
      * @param boolean $dirty
      * @return void
      */
-    protected function setDirty($dirty = true)
+    protected function setDirty(bool $dirty = true): void
     {
         $this->dirty = $dirty;
     }
@@ -136,7 +138,7 @@ class Document
     /**
      * @return int
      */
-    public function getVersion()
+    public function getVersion(): int
     {
         return $this->version;
     }
@@ -146,7 +148,7 @@ class Document
      *
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
@@ -155,7 +157,7 @@ class Document
      * @param array $data
      * @return void
      */
-    public function setData(array $data)
+    public function setData(array $data): void
     {
         $this->data = $data;
         $this->setDirty();
@@ -164,7 +166,7 @@ class Document
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -177,7 +179,7 @@ class Document
      * @return mixed
      * @throws ElasticSearchException
      */
-    public function getField($fieldName, $silent = false)
+    public function getField(string $fieldName, $silent = false)
     {
         if (!array_key_exists($fieldName, $this->data) && $silent === false) {
             throw new ElasticSearchException(sprintf('The field %s was not present in data of document in %s/%s.', $fieldName, $this->type->getIndex()->getName(), $this->type->getName()), 1340274696);
@@ -189,7 +191,7 @@ class Document
     /**
      * @return AbstractType the type of this Document
      */
-    public function getType()
+    public function getType(): AbstractType
     {
         return $this->type;
     }

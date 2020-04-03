@@ -5,7 +5,6 @@
     "description": "This package provides wrapper functionality for the Elasticsearch engine.",
     "require": {
         "ext-curl": "*",
-
         "doctrine/annotations": "^1.0",
         "doctrine/collections": "^1.0",
         "doctrine/orm": "^2.0",

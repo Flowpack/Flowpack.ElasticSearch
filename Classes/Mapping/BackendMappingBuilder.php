@@ -49,8 +49,9 @@ class BackendMappingBuilder
      *
      * @return MappingCollection<Model\Mapping>
      * @throws ElasticSearchException
+     * @throws \Neos\Flow\Http\Exception
      */
-    public function buildMappingInformation()
+    public function buildMappingInformation(): MappingCollection
     {
         if (!$this->client instanceof Model\Client) {
             throw new ElasticSearchException('No client was given for mapping retrieval. Set a client BackendMappingBuilder->setClient().', 1339678111);
@@ -92,7 +93,7 @@ class BackendMappingBuilder
      * @param Model\Client $client
      * @return void
      */
-    public function setClient(Model\Client $client)
+    public function setClient(Model\Client $client): void
     {
         $this->client = $client;
     }
@@ -101,7 +102,7 @@ class BackendMappingBuilder
      * @return array
      * @throws ElasticSearchException
      */
-    public function getIndicesWithoutTypeInformation()
+    public function getIndicesWithoutTypeInformation(): array
     {
         if ($this->indicesWithoutTypeInformation === null) {
             throw new ElasticSearchException('For getting the indices having no mapping information attached, BackendMappingBuilder->buildMappingInformation() has to be run first.', 1339751812);

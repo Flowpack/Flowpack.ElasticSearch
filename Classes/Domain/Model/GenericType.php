@@ -22,7 +22,7 @@ class GenericType extends AbstractType
      * @param Index $index
      * @param string $name
      */
-    public function __construct(Index $index, $name)
+    public function __construct(Index $index, $name = null)
     {
         parent::__construct($index, $name);
     }

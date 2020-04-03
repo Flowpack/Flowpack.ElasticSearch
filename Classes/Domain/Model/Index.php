@@ -168,9 +168,9 @@ class Index
         if ($this->client === null) {
             throw new ElasticSearchException('The client of the index "' . $this->name . '" is not set, hence no requests can be done.', 1566313883);
         }
-        $path = ($path ? trim($path) : '');
+        $path = ltrim($path ? trim($path) : '', '/');
         if ($prefixIndex === true) {
-            $path = '/' . $this->name . $path;
+            $path = '/' . $this->name . '/' . $path;
         } else {
             $path = '/' . ltrim($path, '/');
         }
@@ -220,25 +220,25 @@ class Index
     }
 
     /**
-     * @return void
+     * @return Response
      * @throws ElasticSearchException
      * @throws \Neos\Flow\Http\Exception
      */
-    public function delete(): void
+    public function delete(): Response
     {
-        $this->request('DELETE');
+        return $this->request('DELETE');
     }
 
     /**
      * Refresh the index
      *
-     * @return void
+     * @return Response
      * @throws ElasticSearchException
      * @throws \Neos\Flow\Http\Exception
      */
-    public function refresh(): void
+    public function refresh(): Response
     {
-        $this->request('POST', '/_refresh');
+        return $this->request('POST', '/_refresh');
     }
 
     /**

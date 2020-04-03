@@ -13,6 +13,7 @@ namespace Flowpack\ElasticSearch\Domain\Model;
  * source code.
  */
 
+use Flowpack\ElasticSearch\Domain\Exception\DocumentPropertiesMismatchException;
 use Flowpack\ElasticSearch\Domain\Factory\DocumentFactory;
 use Flowpack\ElasticSearch\Transfer\Response;
 use Neos\Flow\Annotations as Flow;
@@ -58,7 +59,7 @@ abstract class AbstractType
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -66,7 +67,7 @@ abstract class AbstractType
     /**
      * @return Index
      */
-    public function getIndex()
+    public function getIndex(): Index
     {
         return $this->index;
     }
@@ -76,8 +77,11 @@ abstract class AbstractType
      *
      * @param string $id
      * @return Document
+     * @throws DocumentPropertiesMismatchException
+     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws \Neos\Flow\Http\Exception
      */
-    public function findDocumentById($id)
+    public function findDocumentById(string $id): Document
     {
         $response = $this->request('GET', '/' . $id);
         if ($response->getStatusCode() !== 200) {
@@ -93,19 +97,21 @@ abstract class AbstractType
      * @param array $arguments
      * @param string $content
      * @return Response
+     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws \Neos\Flow\Http\Exception
      */
-    public function request($method, $path = null, array $arguments = [], $content = null)
+    public function request(string $method, ?string $path = null, array $arguments = [], ?string $content = null): Response
     {
-        $path = '/' . $this->name . ($path ?: '');
-
         return $this->index->request($method, $path, $arguments, $content);
     }
 
     /**
      * @param string $id
      * @return boolean ...whether the deletion is considered successful
+     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws \Neos\Flow\Http\Exception
      */
-    public function deleteDocumentById($id)
+    public function deleteDocumentById(string $id): bool
     {
         $response = $this->request('DELETE', '/' . $id);
         $treatedContent = $response->getTreatedContent();
@@ -115,8 +121,10 @@ abstract class AbstractType
 
     /**
      * @return int
+     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws \Neos\Flow\Http\Exception
      */
-    public function count()
+    public function count(): ?int
     {
         $response = $this->request('GET', '/_count');
         if ($response->getStatusCode() !== 200) {
@@ -130,8 +138,10 @@ abstract class AbstractType
     /**
      * @param array $searchQuery The search query TODO: make it an object
      * @return Response
+     * @throws \Flowpack\ElasticSearch\Exception
+     * @throws \Neos\Flow\Http\Exception
      */
-    public function search(array $searchQuery)
+    public function search(array $searchQuery): Response
     {
         return $this->request('GET', '/_search', [], json_encode($searchQuery));
     }

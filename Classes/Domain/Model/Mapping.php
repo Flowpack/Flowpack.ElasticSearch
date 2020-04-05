@@ -22,7 +22,7 @@ use Neos\Utility\Arrays;
 class Mapping
 {
 
-    public const NEOS_TYPE_FIELD = '_neosType';
+    public const NEOS_TYPE_FIELD = 'neos_type';
 
     /**
      * @var AbstractType

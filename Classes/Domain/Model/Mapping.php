@@ -22,7 +22,7 @@ use Neos\Utility\Arrays;
 class Mapping
 {
 
-    public const NEOS_TYPE_FIELD = 'neos_type';
+    public const NEOS_TYPE_FIELD = 'neos.type';
 
     /**
      * @var AbstractType
@@ -55,7 +55,13 @@ class Mapping
     public function __construct(AbstractType $type)
     {
         $this->type = $type;
-        $this->properties[static::NEOS_TYPE_FIELD] = ['type' => 'keyword'];
+        $this->properties['neos'] = [
+            'properties' => [
+                'type' => [
+                    'type' => 'keyword',
+                ]
+            ]
+        ];
     }
 
     /**
@@ -70,14 +76,15 @@ class Mapping
     }
 
     /**
-     * Gets a property setting by its path
+     * Sets a property setting by its path
      *
      * @param array|string $path
      * @param string $value
      * @return void
      */
-    public function setPropertyByPath($path, $value)
+    public function setPropertyByPath($path, $value): void
     {
+        $path = str_replace('.', '.properties.', $path);
         $this->properties = Arrays::setValueByPath($this->properties, $path, $value);
     }
 
@@ -98,7 +105,7 @@ class Mapping
      */
     public function apply(): Response
     {
-        $content = json_encode($this->asArray());
+        $content = json_encode($this->asArray(), JSON_THROW_ON_ERROR, 512);
 
         return $this->type->request('PUT', '/_mapping', ['include_type_name' => 'false'], $content);
     }

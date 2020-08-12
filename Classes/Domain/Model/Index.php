@@ -122,6 +122,13 @@ class Index
     public function injectSettings(array $settings): void
     {
         $this->settings = $settings;
+        $indexSettings = $this->getSettings();
+        if (!isset($indexSettings['prefix']) || empty($indexSettings['prefix'])) {
+            return;
+        }
+        // This is obviously a side effect but can only be done after injecting settings 
+        // and it needs to be done as early as possible
+        $this->name = $settings['prefix'] . '-' . $this->name;
     }
 
     /**

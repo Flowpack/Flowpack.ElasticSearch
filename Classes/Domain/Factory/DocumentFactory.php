@@ -19,6 +19,7 @@ use Flowpack\ElasticSearch\Transfer\Response;
 use Neos\Error\Messages\Error;
 use Neos\Error\Messages\Result as ErrorResult;
 use Neos\Flow\Annotations as Flow;
+use Neos\Utility\Arrays;
 
 /**
  * Reconstitute a Document from the ElasticSearch index.
@@ -45,7 +46,7 @@ class DocumentFactory
             $error = new Error('The received index name "%s" does not match the expected one "%s".', 1340264838, [$content['_index'], $type->getIndex()->getName()]);
             $verificationResults->addError($error);
         }
-        if (isset($content['_type']) && $type->getName() !== $content['_type']) {
+        if ($type->getName() !== Arrays::getValueByPath($content, '_source.neos_type')) {
             $error = new Error('The received type name "%s" does not match the expected one "%s".', 1340265103, [$content['_type'], $type->getName()]);
             $verificationResults->addError($error);
         }

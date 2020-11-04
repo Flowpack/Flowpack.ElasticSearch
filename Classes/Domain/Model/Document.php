@@ -92,10 +92,10 @@ class Document
     {
         if ($this->id !== null) {
             $method = 'PUT';
-            $path = '/' . $this->id;
+            $path = '/_doc/' . $this->id;
         } else {
             $method = 'POST';
-            $path = '';
+            $path = '/_doc/';
         }
 
         $response = $this->request($method, $path, [], json_encode($this->getData()));

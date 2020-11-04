@@ -17,6 +17,7 @@ use Flowpack\ElasticSearch\Domain\Exception\DocumentPropertiesMismatchException;
 use Flowpack\ElasticSearch\Domain\Factory\DocumentFactory;
 use Flowpack\ElasticSearch\Transfer\Response;
 use Neos\Flow\Annotations as Flow;
+use Neos\Utility\TypeHandling;
 
 /**
  * An abstract document type. Implement your own or use the GenericType provided with this package.
@@ -81,9 +82,9 @@ abstract class AbstractType
      * @throws \Flowpack\ElasticSearch\Exception
      * @throws \Neos\Flow\Http\Exception
      */
-    public function findDocumentById(string $id): Document
+    public function findDocumentById(string $id): ?Document
     {
-        $response = $this->request('GET', '/' . $id);
+        $response = $this->request('GET', '/_doc/' . $id);
         if ($response->getStatusCode() !== 200) {
             return null;
         }

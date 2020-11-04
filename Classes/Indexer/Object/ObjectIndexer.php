@@ -17,6 +17,7 @@ use Flowpack\ElasticSearch\Annotations\Transform as TransformAnnotation;
 use Flowpack\ElasticSearch\Domain\Model\Client;
 use Flowpack\ElasticSearch\Domain\Model\Document;
 use Flowpack\ElasticSearch\Domain\Model\GenericType;
+use Flowpack\ElasticSearch\Domain\Model\Mapping;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Persistence\PersistenceManagerInterface;
 use Neos\Flow\Reflection\ReflectionService;
@@ -121,7 +122,6 @@ class ObjectIndexer
     protected function getIndexablePropertiesAndValuesFromObject($object)
     {
         $className = TypeHandling::getTypeForValue($object);
-        $data = [];
         foreach ($this->indexInformer->getClassProperties($className) as $propertyName) {
             if (ObjectAccess::isPropertyGettable($object, $propertyName) === false) {
                 continue;
@@ -172,6 +172,7 @@ class ObjectIndexer
         $document = $type->findDocumentById($id);
         if ($document !== null) {
             $objectData = $this->getIndexablePropertiesAndValuesFromObject($object);
+            $objectData[Mapping::NEOS_TYPE_FIELD] = $type->getName();
             if (strcmp(json_encode($objectData), json_encode($document->getData())) === 0) {
                 $actionType = null;
             } else {

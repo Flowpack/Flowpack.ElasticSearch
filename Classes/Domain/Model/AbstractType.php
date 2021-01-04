@@ -114,7 +114,7 @@ abstract class AbstractType
      */
     public function deleteDocumentById(string $id): bool
     {
-        $response = $this->request('DELETE', '/' . $id);
+        $response = $this->request('DELETE', '/_doc/' . $id);
         $treatedContent = $response->getTreatedContent();
 
         return $response->getStatusCode() === 200 && $treatedContent['result'] === 'deleted';

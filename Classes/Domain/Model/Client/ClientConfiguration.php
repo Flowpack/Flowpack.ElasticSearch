@@ -79,12 +79,12 @@ class ClientConfiguration
     }
 
     /**
-     * @param int $port
+     * @param mixed $port Cast to int internally
      * @return void
      */
-    public function setPort(int $port): void
+    public function setPort($port): void
     {
-        $this->port = $port;
+        $this->port = (int)$port;
     }
 
     /**

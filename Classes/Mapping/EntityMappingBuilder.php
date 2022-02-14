@@ -131,7 +131,9 @@ class EntityMappingBuilder
                     if (isset($multiFields[$multiFieldIndexName])) {
                         throw new ElasticSearchException('Duplicate index name in the same multi field is not allowed "' . $className . '::' . $propertyName . '".');
                     }
-                    $multiFieldAnnotation->type = $mappingType;
+                    if (!$multiFieldAnnotation->type) {
+                        $multiFieldAnnotation->type = $mappingType;
+                    }
                     $multiFields[$multiFieldIndexName] = $this->processMappingAnnotation($multiFieldAnnotation);
                 }
                 $mapping->setPropertyByPath([$propertyName, 'fields'], $multiFields);
@@ -150,7 +152,9 @@ class EntityMappingBuilder
             if ($directiveValue === null) {
                 continue;
             }
-            $propertyMapping = Arrays::setValueByPath($propertyMapping, $mappingDirective, $directiveValue);
+            if ($mappingDirective != 'index_name') {
+                $propertyMapping = Arrays::setValueByPath($propertyMapping, $mappingDirective, $directiveValue);
+            }
         }
 
         return $propertyMapping;

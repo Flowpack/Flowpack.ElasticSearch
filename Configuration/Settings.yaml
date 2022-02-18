@@ -13,6 +13,8 @@ Flowpack:
       client: default
     transfer:
       connectionTimeout: 60
+      ssl:
+        verify: true
 Neos:
   Flow:
     persistence:

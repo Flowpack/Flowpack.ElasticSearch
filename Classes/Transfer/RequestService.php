@@ -67,6 +67,7 @@ class RequestService
     {
         $requestEngine = new CurlEngine();
         $requestEngine->setOption(CURLOPT_TIMEOUT, $this->settings['transfer']['connectionTimeout']);
+        $requestEngine->setOption(CURLOPT_SSL_VERIFYPEER, $this->settings['transfer']['ssl']['verify'] ?? true);
         $this->browser->setRequestEngine($requestEngine);
     }
 

@@ -37,7 +37,7 @@ class DocumentFactory
      * @return Model\Document
      * @throws DocumentPropertiesMismatchException
      */
-    public function createFromResponse(Model\AbstractType $type, $id = null, Response $response)
+    public function createFromResponse(Model\AbstractType $type, $id, Response $response)
     {
         $content = $response->getTreatedContent();
 

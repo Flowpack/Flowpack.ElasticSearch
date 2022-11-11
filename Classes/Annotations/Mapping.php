@@ -75,6 +75,14 @@ final class Mapping
     public $analyzer;
 
     /**
+     * The normalizer used to normalizer the content of keyword type fields during indexing.
+     *
+     * @var string
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/normalizer.html
+     */
+    public $normalizer;
+
+    /**
      * The analyzer used to analyze the text contents only when searching using a query string.
      *
      * @var string

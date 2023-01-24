@@ -122,13 +122,6 @@ class Index
     public function injectSettings(array $settings): void
     {
         $this->settings = $settings;
-        $indexSettings = $this->getSettings();
-        if (!isset($indexSettings['prefix']) || empty($indexSettings['prefix'])) {
-            return;
-        }
-        // This is obviously a side effect but can only be done after injecting settings 
-        // and it needs to be done as early as possible
-        $this->name = $settings['prefix'] . '-' . $this->name;
     }
 
     /**
@@ -173,11 +166,11 @@ class Index
     public function request(string $method, string $path = null, array $arguments = [], $content = null, bool $prefixIndex = true): Response
     {
         if ($this->client === null) {
-            throw new ElasticSearchException('The client of the index "' . $this->name . '" is not set, hence no requests can be done.', 1566313883);
+            throw new ElasticSearchException('The client of the index "' . $this->prefixName() . '" is not set, hence no requests can be done.', 1566313883);
         }
         $path = ltrim($path ? trim($path) : '', '/');
         if ($prefixIndex === true) {
-            $path = '/' . $this->name . '/' . $path;
+            $path = '/' . $this->prefixName() . '/' . $path;
         } else {
             $path = '/' . ltrim($path, '/');
         }
@@ -253,6 +246,11 @@ class Index
      */
     public function getName(): string
     {
+        return $this->prefixName();
+    }
+
+    public function getOriginalName(): string
+    {
         return $this->name;
     }
 
@@ -272,5 +270,20 @@ class Index
     public function setSettingsKey(string $settingsKey): void
     {
         $this->settingsKey = $settingsKey;
+    }
+
+    /**
+     * Prepends configured preset to the base index name
+     *
+     * @return string
+     */
+    private function prefixName(): string
+    {
+        $indexSettings = $this->getSettings();
+        if (!isset($indexSettings['prefix']) || empty($indexSettings['prefix'])) {
+            return $this->name;
+        }
+
+        return $indexSettings['prefix'] . '-' . $this->name;
     }
 }

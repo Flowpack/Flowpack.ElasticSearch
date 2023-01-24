@@ -50,10 +50,8 @@ class IndexTest extends FunctionalTestCase
                     '/index_without_prefix/_settings',
                     [],
                     json_encode([
-                        'settings' => [
-                            'index' => [
-                                'number_of_replicas' => 2
-                            ]
+                        'index' => [
+                            'number_of_replicas' => 2
                         ]
                     ], JSON_THROW_ON_ERROR)
                 ]
@@ -100,10 +98,8 @@ class IndexTest extends FunctionalTestCase
                     '/prefix-index_with_prefix/_settings',
                     [],
                     json_encode([
-                        'settings' => [
-                            'index' => [
-                                'number_of_replicas' => 1
-                            ]
+                        'index' => [
+                            'number_of_replicas' => 1
                         ]
                     ], JSON_THROW_ON_ERROR)
                 ]

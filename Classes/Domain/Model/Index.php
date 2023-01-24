@@ -29,39 +29,39 @@ class Index
      * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-update-settings.html
      */
     static protected $updatableSettings = [
-        'settings.index.number_of_replicas',
-        'settings.index.auto_expand_replicas',
-        'settings.index.blocks.read_only',
-        'settings.index.blocks.read',
-        'settings.index.blocks.write',
-        'settings.index.blocks.metadata',
-        'settings.index.refresh_interval',
-        'settings.index.index_concurrency',
-        'settings.index.codec',
-        'settings.index.codec.bloom.load',
-        'settings.index.fail_on_merge_failure',
-        'settings.index.translog.flush_threshold_ops',
-        'settings.index.translog.flush_threshold_size',
-        'settings.index.translog.flush_threshold_period',
-        'settings.index.translog.disable_flush',
-        'settings.index.cache.filter.max_size',
-        'settings.index.cache.filter.expire',
-        'settings.index.gateway.snapshot_interval',
-        'settings.index.routing.allocation.include',
-        'settings.index.routing.allocation.exclude',
-        'settings.index.routing.allocation.require',
-        'settings.index.routing.allocation.disable_allocation',
-        'settings.index.routing.allocation.disable_new_allocation',
-        'settings.index.routing.allocation.disable_replica_allocation',
-        'settings.index.routing.allocation.enable',
-        'settings.index.routing.allocation.total_shards_per_node',
-        'settings.index.recovery.initial_shards',
-        'settings.index.gc_deletes',
-        'settings.index.ttl.disable_purge',
-        'settings.index.translog.fs.type',
-        'settings.index.compound_format',
-        'settings.index.compound_on_flush',
-        'settings.index.warmer.enabled',
+        'index.number_of_replicas',
+        'index.auto_expand_replicas',
+        'index.blocks.read_only',
+        'index.blocks.read',
+        'index.blocks.write',
+        'index.blocks.metadata',
+        'index.refresh_interval',
+        'index.index_concurrency',
+        'index.codec',
+        'index.codec.bloom.load',
+        'index.fail_on_merge_failure',
+        'index.translog.flush_threshold_ops',
+        'index.translog.flush_threshold_size',
+        'index.translog.flush_threshold_period',
+        'index.translog.disable_flush',
+        'index.cache.filter.max_size',
+        'index.cache.filter.expire',
+        'index.gateway.snapshot_interval',
+        'index.routing.allocation.include',
+        'index.routing.allocation.exclude',
+        'index.routing.allocation.require',
+        'index.routing.allocation.disable_allocation',
+        'index.routing.allocation.disable_new_allocation',
+        'index.routing.allocation.disable_replica_allocation',
+        'index.routing.allocation.enable',
+        'index.routing.allocation.total_shards_per_node',
+        'index.recovery.initial_shards',
+        'index.gc_deletes',
+        'index.ttl.disable_purge',
+        'index.translog.fs.type',
+        'index.compound_format',
+        'index.compound_on_flush',
+        'index.warmer.enabled',
     ];
 
     static protected $allowedIndexCreateKeys = [
@@ -94,6 +94,7 @@ class Index
     protected $client;
 
     /**
+     * These are the Flow "Settings" aka Configuration, NOT the index settings
      * @var array
      */
     protected $settings;
@@ -120,7 +121,7 @@ class Index
     }
 
     /**
-     * Inject the settings
+     * Inject the framework settings
      *
      * @param array $settings
      * @return void
@@ -190,15 +191,15 @@ class Index
      */
     public function create(): void
     {
-        $indexSettings = $this->getSettings();
-        $creationSettings = array_filter($indexSettings, static fn($key) => in_array($key, self::$allowedIndexCreateKeys, true), ARRAY_FILTER_USE_KEY);
-        $this->request('PUT', null, [], json_encode($creationSettings));
+        $indexConfiguration = $this->getConfiguration();
+        $indexCreateObject = array_filter($indexConfiguration, static fn($key) => in_array($key, self::$allowedIndexCreateKeys, true), ARRAY_FILTER_USE_KEY);
+        $this->request('PUT', null, [], json_encode($indexCreateObject));
     }
 
     /**
      * @return array|null
      */
-    protected function getSettings(): ?array
+    protected function getConfiguration(): ?array
     {
         if ($this->client instanceof Client) {
             $path = 'indexes.' . $this->client->getBundle() . '.' . $this->settingsKey;
@@ -206,8 +207,8 @@ class Index
             $path = 'indexes.default' . '.' . $this->settingsKey;
         }
 
-        $settings = Arrays::getValueByPath($this->settings, $path);
-        return $settings !== null ? $this->dynamicIndexSettingService->process($settings, $path, $this->name) : $settings;
+        $cconfiguration = Arrays::getValueByPath($this->settings, $path);
+        return $cconfiguration !== null ? $this->dynamicIndexSettingService->process($cconfiguration, $path, $this->name) : $cconfiguration;
     }
 
     /**
@@ -216,7 +217,8 @@ class Index
      */
     public function updateSettings(): void
     {
-        $settings = $this->getSettings();
+        // we only ever need the settings path from all the settings.
+        $settings = $this->getConfiguration()['settings'] ?? [];
         $updatableSettings = [];
         foreach (static::$updatableSettings as $settingPath) {
             $setting = Arrays::getValueByPath($settings, $settingPath);
@@ -289,11 +291,11 @@ class Index
      */
     private function prefixName(): string
     {
-        $indexSettings = $this->getSettings();
-        if (!isset($indexSettings['prefix']) || empty($indexSettings['prefix'])) {
+        $indexConfiguration = $this->getConfiguration();
+        if (!isset($indexConfiguration['prefix']) || empty($indexConfiguration['prefix'])) {
             return $this->name;
         }
 
-        return $indexSettings['prefix'] . '-' . $this->name;
+        return $indexConfiguration['prefix'] . '-' . $this->name;
     }
 }

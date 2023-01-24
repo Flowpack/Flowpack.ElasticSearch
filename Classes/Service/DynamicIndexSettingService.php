@@ -20,6 +20,7 @@ use Neos\Utility\PositionalArraySorter;
 
 /**
  * Transform indices settings dynamically
+ * FIXME: This should be called DynamicIndexConfigurationService, the "settings" represent more than what elastic index "settings" are.
  *
  * @Flow\Scope("singleton")
  */

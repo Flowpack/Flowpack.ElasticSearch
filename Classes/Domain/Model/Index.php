@@ -29,39 +29,45 @@ class Index
      * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-update-settings.html
      */
     static protected $updatableSettings = [
-        'index.number_of_replicas',
-        'index.auto_expand_replicas',
-        'index.blocks.read_only',
-        'index.blocks.read',
-        'index.blocks.write',
-        'index.blocks.metadata',
-        'index.refresh_interval',
-        'index.index_concurrency',
-        'index.codec',
-        'index.codec.bloom.load',
-        'index.fail_on_merge_failure',
-        'index.translog.flush_threshold_ops',
-        'index.translog.flush_threshold_size',
-        'index.translog.flush_threshold_period',
-        'index.translog.disable_flush',
-        'index.cache.filter.max_size',
-        'index.cache.filter.expire',
-        'index.gateway.snapshot_interval',
-        'index.routing.allocation.include',
-        'index.routing.allocation.exclude',
-        'index.routing.allocation.require',
-        'index.routing.allocation.disable_allocation',
-        'index.routing.allocation.disable_new_allocation',
-        'index.routing.allocation.disable_replica_allocation',
-        'index.routing.allocation.enable',
-        'index.routing.allocation.total_shards_per_node',
-        'index.recovery.initial_shards',
-        'index.gc_deletes',
-        'index.ttl.disable_purge',
-        'index.translog.fs.type',
-        'index.compound_format',
-        'index.compound_on_flush',
-        'index.warmer.enabled',
+        'settings.index.number_of_replicas',
+        'settings.index.auto_expand_replicas',
+        'settings.index.blocks.read_only',
+        'settings.index.blocks.read',
+        'settings.index.blocks.write',
+        'settings.index.blocks.metadata',
+        'settings.index.refresh_interval',
+        'settings.index.index_concurrency',
+        'settings.index.codec',
+        'settings.index.codec.bloom.load',
+        'settings.index.fail_on_merge_failure',
+        'settings.index.translog.flush_threshold_ops',
+        'settings.index.translog.flush_threshold_size',
+        'settings.index.translog.flush_threshold_period',
+        'settings.index.translog.disable_flush',
+        'settings.index.cache.filter.max_size',
+        'settings.index.cache.filter.expire',
+        'settings.index.gateway.snapshot_interval',
+        'settings.index.routing.allocation.include',
+        'settings.index.routing.allocation.exclude',
+        'settings.index.routing.allocation.require',
+        'settings.index.routing.allocation.disable_allocation',
+        'settings.index.routing.allocation.disable_new_allocation',
+        'settings.index.routing.allocation.disable_replica_allocation',
+        'settings.index.routing.allocation.enable',
+        'settings.index.routing.allocation.total_shards_per_node',
+        'settings.index.recovery.initial_shards',
+        'settings.index.gc_deletes',
+        'settings.index.ttl.disable_purge',
+        'settings.index.translog.fs.type',
+        'settings.index.compound_format',
+        'settings.index.compound_on_flush',
+        'settings.index.warmer.enabled',
+    ];
+
+    static protected $allowedIndexCreateKeys = [
+        'settings',
+        'aliases',
+        'mappings'
     ];
 
     /**
@@ -122,13 +128,6 @@ class Index
     public function injectSettings(array $settings): void
     {
         $this->settings = $settings;
-        $indexSettings = $this->getSettings();
-        if (!isset($indexSettings['prefix']) || empty($indexSettings['prefix'])) {
-            return;
-        }
-        // This is obviously a side effect but can only be done after injecting settings 
-        // and it needs to be done as early as possible
-        $this->name = $settings['prefix'] . '-' . $this->name;
     }
 
     /**
@@ -141,7 +140,7 @@ class Index
     }
 
     /**
-     * @param array <AbstractType> $types
+     * @param array<AbstractType> $types
      * @return TypeGroup
      */
     public function findTypeGroup(array $types): TypeGroup
@@ -173,11 +172,11 @@ class Index
     public function request(string $method, string $path = null, array $arguments = [], $content = null, bool $prefixIndex = true): Response
     {
         if ($this->client === null) {
-            throw new ElasticSearchException('The client of the index "' . $this->name . '" is not set, hence no requests can be done.', 1566313883);
+            throw new ElasticSearchException('The client of the index "' . $this->prefixName() . '" is not set, hence no requests can be done.', 1566313883);
         }
         $path = ltrim($path ? trim($path) : '', '/');
         if ($prefixIndex === true) {
-            $path = '/' . $this->name . '/' . $path;
+            $path = '/' . $this->prefixName() . '/' . $path;
         } else {
             $path = '/' . ltrim($path, '/');
         }
@@ -191,7 +190,9 @@ class Index
      */
     public function create(): void
     {
-        $this->request('PUT', null, [], json_encode($this->getSettings()));
+        $indexSettings = $this->getSettings();
+        $creationSettings = array_filter($indexSettings, static fn($key) => in_array($key, self::$allowedIndexCreateKeys, true), ARRAY_FILTER_USE_KEY);
+        $this->request('PUT', null, [], json_encode($creationSettings));
     }
 
     /**
@@ -206,7 +207,7 @@ class Index
         }
 
         $settings = Arrays::getValueByPath($this->settings, $path);
-        return $settings !== null ? $this->dynamicIndexSettingService->process($settings, $path, $this->getName()) : $settings;
+        return $settings !== null ? $this->dynamicIndexSettingService->process($settings, $path, $this->name) : $settings;
     }
 
     /**
@@ -223,7 +224,9 @@ class Index
                 $updatableSettings = Arrays::setValueByPath($updatableSettings, $settingPath, $setting);
             }
         }
-        $this->request('PUT', '/_settings', [], json_encode($updatableSettings));
+        if ($updatableSettings !== []) {
+            $this->request('PUT', '/_settings', [], json_encode($updatableSettings));
+        }
     }
 
     /**
@@ -253,6 +256,11 @@ class Index
      */
     public function getName(): string
     {
+        return $this->prefixName();
+    }
+
+    public function getOriginalName(): string
+    {
         return $this->name;
     }
 
@@ -272,5 +280,20 @@ class Index
     public function setSettingsKey(string $settingsKey): void
     {
         $this->settingsKey = $settingsKey;
+    }
+
+    /**
+     * Prepends configured preset to the base index name
+     *
+     * @return string
+     */
+    private function prefixName(): string
+    {
+        $indexSettings = $this->getSettings();
+        if (!isset($indexSettings['prefix']) || empty($indexSettings['prefix'])) {
+            return $this->name;
+        }
+
+        return $indexSettings['prefix'] . '-' . $this->name;
     }
 }

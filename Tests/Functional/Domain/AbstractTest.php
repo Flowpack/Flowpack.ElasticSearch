@@ -40,7 +40,7 @@ abstract class AbstractTest extends FunctionalTestCase
         parent::setUp();
 
         $this->clientFactory = $this->objectManager->get(ClientFactory::class);
-        $client = $this->clientFactory->create();
+        $client = $this->clientFactory->create("FunctionalTests");
         $this->testingIndex = $client->findIndex('flow_elasticsearch_functionaltests');
 
         if ($this->testingIndex->exists()) {

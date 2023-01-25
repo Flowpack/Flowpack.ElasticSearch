@@ -64,6 +64,12 @@ class Index
         'index.warmer.enabled',
     ];
 
+    static protected $allowedIndexCreateKeys = [
+        'settings',
+        'aliases',
+        'mappings'
+    ];
+
     /**
      * @var DynamicIndexSettingService
      * @Flow\Inject
@@ -88,6 +94,7 @@ class Index
     protected $client;
 
     /**
+     * These are the Flow "Settings" aka Configuration, NOT the index settings
      * @var array
      */
     protected $settings;
@@ -114,7 +121,7 @@ class Index
     }
 
     /**
-     * Inject the settings
+     * Inject the framework settings
      *
      * @param array $settings
      * @return void
@@ -122,13 +129,6 @@ class Index
     public function injectSettings(array $settings): void
     {
         $this->settings = $settings;
-        $indexSettings = $this->getSettings();
-        if (!isset($indexSettings['prefix']) || empty($indexSettings['prefix'])) {
-            return;
-        }
-        // This is obviously a side effect but can only be done after injecting settings 
-        // and it needs to be done as early as possible
-        $this->name = $settings['prefix'] . '-' . $this->name;
     }
 
     /**
@@ -141,7 +141,7 @@ class Index
     }
 
     /**
-     * @param array <AbstractType> $types
+     * @param array<AbstractType> $types
      * @return TypeGroup
      */
     public function findTypeGroup(array $types): TypeGroup
@@ -173,11 +173,11 @@ class Index
     public function request(string $method, string $path = null, array $arguments = [], $content = null, bool $prefixIndex = true): Response
     {
         if ($this->client === null) {
-            throw new ElasticSearchException('The client of the index "' . $this->name . '" is not set, hence no requests can be done.', 1566313883);
+            throw new ElasticSearchException('The client of the index "' . $this->prefixName() . '" is not set, hence no requests can be done.', 1566313883);
         }
         $path = ltrim($path ? trim($path) : '', '/');
         if ($prefixIndex === true) {
-            $path = '/' . $this->name . '/' . $path;
+            $path = '/' . $this->prefixName() . '/' . $path;
         } else {
             $path = '/' . ltrim($path, '/');
         }
@@ -191,13 +191,15 @@ class Index
      */
     public function create(): void
     {
-        $this->request('PUT', null, [], json_encode($this->getSettings()));
+        $indexConfiguration = $this->getConfiguration() ?? [];
+        $indexCreateObject = array_filter($indexConfiguration, static fn($key) => in_array($key, self::$allowedIndexCreateKeys, true), ARRAY_FILTER_USE_KEY);
+        $this->request('PUT', null, [], $this->encodeRequestBody($indexCreateObject));
     }
 
     /**
      * @return array|null
      */
-    protected function getSettings(): ?array
+    protected function getConfiguration(): ?array
     {
         if ($this->client instanceof Client) {
             $path = 'indexes.' . $this->client->getBundle() . '.' . $this->settingsKey;
@@ -205,8 +207,8 @@ class Index
             $path = 'indexes.default' . '.' . $this->settingsKey;
         }
 
-        $settings = Arrays::getValueByPath($this->settings, $path);
-        return $settings !== null ? $this->dynamicIndexSettingService->process($settings, $path, $this->getName()) : $settings;
+        $cconfiguration = Arrays::getValueByPath($this->settings, $path);
+        return $cconfiguration !== null ? $this->dynamicIndexSettingService->process($cconfiguration, $path, $this->name) : $cconfiguration;
     }
 
     /**
@@ -215,7 +217,8 @@ class Index
      */
     public function updateSettings(): void
     {
-        $settings = $this->getSettings();
+        // we only ever need the settings path from all the settings.
+        $settings = $this->getConfiguration()['settings'] ?? [];
         $updatableSettings = [];
         foreach (static::$updatableSettings as $settingPath) {
             $setting = Arrays::getValueByPath($settings, $settingPath);
@@ -223,7 +226,9 @@ class Index
                 $updatableSettings = Arrays::setValueByPath($updatableSettings, $settingPath, $setting);
             }
         }
-        $this->request('PUT', '/_settings', [], json_encode($updatableSettings));
+        if ($updatableSettings !== []) {
+            $this->request('PUT', '/_settings', [], $this->encodeRequestBody($updatableSettings));
+        }
     }
 
     /**
@@ -253,6 +258,11 @@ class Index
      */
     public function getName(): string
     {
+        return $this->prefixName();
+    }
+
+    public function getOriginalName(): string
+    {
         return $this->name;
     }
 
@@ -272,5 +282,29 @@ class Index
     public function setSettingsKey(string $settingsKey): void
     {
         $this->settingsKey = $settingsKey;
+    }
+
+    /**
+     * Prepends configured preset to the base index name
+     *
+     * @return string
+     */
+    private function prefixName(): string
+    {
+        $indexConfiguration = $this->getConfiguration();
+        if (!isset($indexConfiguration['prefix']) || empty($indexConfiguration['prefix'])) {
+            return $this->name;
+        }
+
+        return $indexConfiguration['prefix'] . '-' . $this->name;
+    }
+
+    private function encodeRequestBody(array $content): string
+    {
+        if ($content === []) {
+            return '';
+        }
+
+        return json_encode($content);
     }
 }

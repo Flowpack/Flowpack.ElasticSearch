@@ -1,0 +1,29 @@
+Flowpack:
+  ElasticSearch:
+    clients:
+      FunctionalTests:
+        -
+          host: localhost
+          port: 9200
+          scheme: 'http'
+          username: ''
+          password: ''
+    realtimeIndexing:
+      # we also use this setting for the object indexer client bundle
+      client: FunctionalTests
+
+    indexes:
+      FunctionalTests: # Configuration bundle name
+        index_with_prefix: # The index prefix name, must be the same as in the Neos.ContentRepository.Search.elasticSearch.indexName setting
+          prefix: 'prefix'
+          settings:
+            index:
+              number_of_replicas: 1
+              soft_deletes:
+                enabled: true
+        index_without_prefix:
+          settings:
+            index:
+              number_of_replicas: 2
+              soft_deletes:
+                enabled: true

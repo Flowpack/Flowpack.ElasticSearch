@@ -42,7 +42,7 @@ class DocumentTest extends AbstractTest
         $document = new Document(new TwitterType($this->testingIndex), $data);
         static::assertNull($document->getId());
         $document->store();
-        static::assertRegExp('/\w+/', $document->getId());
+        static::assertMatchesRegularExpression('/\w+/', $document->getId());
     }
 
     /**

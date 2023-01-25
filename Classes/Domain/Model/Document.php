@@ -29,19 +29,19 @@ class Document
     /**
      * The actual data to store to the document
      *
-     * @var array
+     * @var array|null
      */
     protected $data;
 
     /**
      * The version that has been assigned to this document.
      *
-     * @var int
+     * @var int|null
      */
     protected $version;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $id;
 
@@ -115,9 +115,9 @@ class Document
     }
 
     /**
-     * @return int
+     * @return int|nulll
      */
-    public function getVersion(): int
+    public function getVersion(): ?int
     {
         return $this->version;
     }
@@ -144,9 +144,9 @@ class Document
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -178,9 +178,9 @@ class Document
 
     /**
      * @param string $method
-     * @param string $path
+     * @param string|null $path
      * @param array $arguments
-     * @param string $content
+     * @param string|null $content
      * @return Response
      * @throws ElasticSearchException
      * @throws \Neos\Flow\Http\Exception
@@ -198,5 +198,4 @@ class Document
     {
         $this->dirty = $dirty;
     }
-
 }

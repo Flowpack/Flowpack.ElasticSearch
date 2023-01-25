@@ -192,7 +192,7 @@ class Index
     public function create(): void
     {
         $indexConfiguration = $this->getConfiguration() ?? [];
-        $indexCreateObject = is_array($indexConfiguration) ? array_filter($indexConfiguration, static fn($key) => in_array($key, self::$allowedIndexCreateKeys, true), ARRAY_FILTER_USE_KEY) : [];
+        $indexCreateObject = array_filter($indexConfiguration, static fn($key) => in_array($key, self::$allowedIndexCreateKeys, true), ARRAY_FILTER_USE_KEY);
         $this->request('PUT', null, [], $this->encodeRequestBody($indexCreateObject));
     }
 
@@ -301,7 +301,7 @@ class Index
 
     private function encodeRequestBody(array $content): string
     {
-        if (empty($content)) {
+        if ($content === []) {
             return '';
         }
 

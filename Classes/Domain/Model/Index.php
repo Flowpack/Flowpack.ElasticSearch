@@ -191,9 +191,9 @@ class Index
      */
     public function create(): void
     {
-        $indexConfiguration = $this->getConfiguration();
-        $indexCreateObject = array_filter($indexConfiguration, static fn($key) => in_array($key, self::$allowedIndexCreateKeys, true), ARRAY_FILTER_USE_KEY);
-        $this->request('PUT', null, [], json_encode($indexCreateObject));
+        $indexConfiguration = $this->getConfiguration() ?? [];
+        $indexCreateObject = is_array($indexConfiguration) ? array_filter($indexConfiguration, static fn($key) => in_array($key, self::$allowedIndexCreateKeys, true), ARRAY_FILTER_USE_KEY) : [];
+        $this->request('PUT', null, [], $this->encodeRequestBody($indexCreateObject));
     }
 
     /**
@@ -227,7 +227,7 @@ class Index
             }
         }
         if ($updatableSettings !== []) {
-            $this->request('PUT', '/_settings', [], json_encode($updatableSettings));
+            $this->request('PUT', '/_settings', [], $this->encodeRequestBody($updatableSettings));
         }
     }
 
@@ -297,5 +297,14 @@ class Index
         }
 
         return $indexConfiguration['prefix'] . '-' . $this->name;
+    }
+
+    private function encodeRequestBody(array $content): string
+    {
+        if (empty($content)) {
+            return '';
+        }
+
+        return json_encode($content);
     }
 }

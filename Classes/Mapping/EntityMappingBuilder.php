@@ -131,7 +131,10 @@ class EntityMappingBuilder
                     if (isset($multiFields[$multiFieldIndexName])) {
                         throw new ElasticSearchException('Duplicate index name in the same multi field is not allowed "' . $className . '::' . $propertyName . '".');
                     }
-                    $multiFieldAnnotation->type = $mappingType;
+                    if (!$multiFieldAnnotation->type) {
+                        // Fallback to the parent's type if not specified on multi-field
+                        $multiFieldAnnotation->type = $mappingType;
+                    }
                     $multiFields[$multiFieldIndexName] = $this->processMappingAnnotation($multiFieldAnnotation);
                 }
                 $mapping->setPropertyByPath([$propertyName, 'fields'], $multiFields);

@@ -126,7 +126,10 @@ final class Mapping
     public function getPropertiesArray()
     {
         $properties = get_object_vars($this);
+
+        // Remove unsupported ES mapping properties. These properties are used internally only.
         unset($properties['fields']);
+        unset($properties['index_name']);
 
         return $properties;
     }

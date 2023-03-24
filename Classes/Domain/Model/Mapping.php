@@ -35,7 +35,7 @@ class Mapping
     protected $properties = [];
 
     /**
-     * see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-root-object-type.html#_dynamic_templates
+     * see https://www.elastic.co/guide/en/elasticsearch/reference/current/dynamic-templates.html
      * @var array
      */
     protected $dynamicTemplates = [];

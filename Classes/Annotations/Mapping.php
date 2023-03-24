@@ -24,7 +24,7 @@ final class Mapping
      * Defaults to the property/field name.
      *
      * @var string
-     * @see http://www.elasticsearch.org/guide/reference/mapping/core-types.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
      */
     public $index_name;
 
@@ -33,7 +33,7 @@ final class Mapping
      * Defaults to `no` (note, the JSON document itself is stored, and it can be retrieved from it).
      *
      * @var string
-     * @see http://www.elasticsearch.org/guide/reference/mapping/core-types.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
      */
     public $store;
 
@@ -44,7 +44,7 @@ final class Mapping
      * Defaults to analyzed.
      *
      * @var string
-     * @see http://www.elasticsearch.org/guide/reference/mapping/core-types.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
      */
     public $index;
 
@@ -52,7 +52,7 @@ final class Mapping
      * Possible values are `no`, `yes`, `with_offsets`, `with_positions`, `with_positions_offsets`.
      * Defaults to `no`.
      *
-     * @see http://www.elasticsearch.org/guide/reference/mapping/core-types.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
      * @var string
      */
     public $term_vector;
@@ -61,7 +61,7 @@ final class Mapping
      * The boost value. Defaults to `1.0`.
      *
      * @var float
-     * @see http://www.elasticsearch.org/guide/reference/mapping/boost-field.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/7.5/mapping-boost.html
      */
     public $boost;
 
@@ -70,7 +70,7 @@ final class Mapping
      * Defaults to the globally configured analyzer.
      *
      * @var string
-     * @see http://www.elasticsearch.org/guide/reference/mapping/core-types.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
      */
     public $analyzer;
 
@@ -78,7 +78,7 @@ final class Mapping
      * The normalizer used to normalizer the content of keyword type fields during indexing.
      *
      * @var string
-     * @see https://www.elastic.co/guide/en/elasticsearch/reference/master/normalizer.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/normalizer.html
      */
     public $normalizer;
 
@@ -86,7 +86,7 @@ final class Mapping
      * The analyzer used to analyze the text contents only when searching using a query string.
      *
      * @var string
-     * @see https://www.elastic.co/guide/en/elasticsearch/reference/5.6/search-analyzer.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-analyzer.html
      */
 	public $search_analyzer;
     
@@ -95,7 +95,7 @@ final class Mapping
      * Defaults to the property/field type.
      *
      * @var string
-     * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-types.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html
      */
     public $type;
 
@@ -104,25 +104,25 @@ final class Mapping
      * Defaults to `dateOptionalTime`.
      *
      * @var string
-     * @see http://www.elasticsearch.org/guide/reference/mapping/date-format.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html
      */
     public $format;
 
     /**
      * @var array
-     * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/1.x/_multi_fields.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html#types-multi-fields
      */
     public $fields;
 
     /**
      * @var array
-     * @see https://www.elastic.co/guide/en/elasticsearch/reference/5.6/properties.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/properties.html
      */
     public $properties;
 
     /**
      * @var bool
-     * @see https://www.elastic.co/guide/en/elasticsearch/reference/5.4/fielddata.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/text.html#fielddata-mapping-param
      */
     public $fielddata;
 

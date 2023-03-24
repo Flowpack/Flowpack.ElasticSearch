@@ -26,7 +26,7 @@ class Index
 {
     /**
      * @var array
-     * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-update-settings.html
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html
      */
     static protected $updatableSettings = [
         'index.number_of_replicas',

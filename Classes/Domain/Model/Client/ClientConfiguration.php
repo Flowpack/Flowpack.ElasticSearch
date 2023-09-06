@@ -38,12 +38,12 @@ class ClientConfiguration
     protected $scheme = 'http';
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $username = '';
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $password = '';
 
@@ -107,9 +107,9 @@ class ClientConfiguration
     /**
      * Returns username
      *
-     * @return string
+     * @return string|null
      */
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
@@ -117,10 +117,10 @@ class ClientConfiguration
     /**
      * Sets username
      *
-     * @param string $username
+     * @param string|null $username
      * @return void
      */
-    public function setUsername(string $username): void
+    public function setUsername(?string $username): void
     {
         $this->username = $username;
     }
@@ -128,9 +128,9 @@ class ClientConfiguration
     /**
      * Returns password
      *
-     * @return string
+     * @return string|null
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -138,10 +138,10 @@ class ClientConfiguration
     /**
      * Sets password
      *
-     * @param string $password
+     * @param string|null $password
      * @return void
      */
-    public function setPassword(string $password): void
+    public function setPassword(?string $password): void
     {
         $this->password = $password;
     }

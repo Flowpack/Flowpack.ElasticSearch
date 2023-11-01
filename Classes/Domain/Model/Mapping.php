@@ -100,7 +100,7 @@ class Mapping
     {
         $content = json_encode($this->asArray());
 
-        return $this->type->request('PUT', '/_mapping', ['include_type_name' => 'false'], $content);
+        return $this->type->request('PUT', '/_mapping', [], $content);
     }
 
     /**

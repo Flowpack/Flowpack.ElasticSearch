@@ -15,6 +15,10 @@ Flowpack:
       connectionTimeout: 60
       sslVerifyPeer: true
       sslVerifyHost: true
+      sslCaInfo: ''
+      sslCert: ''
+      sslKey: ''
+      sslKeyPasswd: ''
 Neos:
   Flow:
     persistence:

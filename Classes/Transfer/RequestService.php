@@ -69,6 +69,23 @@ class RequestService
         $requestEngine->setOption(CURLOPT_TIMEOUT, $this->settings['transfer']['connectionTimeout']);
         $requestEngine->setOption(CURLOPT_SSL_VERIFYPEER, $this->settings['transfer']['sslVerifyPeer'] ?? true ? 2 : 0);
         $requestEngine->setOption(CURLOPT_SSL_VERIFYHOST, $this->settings['transfer']['sslVerifyHost'] ?? true ? 2 : 0);
+
+        if (!empty($this->settings['transfer']['sslCaInfo'])) {
+            $requestEngine->setOption(CURLOPT_CAINFO, $this->settings['transfer']['sslCaInfo']);
+        }
+
+        if (!empty($this->settings['transfer']['sslKey'])) {
+            $requestEngine->setOption(CURLOPT_SSLKEY, $this->settings['transfer']['sslKey']);
+        }
+
+        if (!empty($this->settings['transfer']['sslCert'])) {
+            $requestEngine->setOption(CURLOPT_SSLCERT, $this->settings['transfer']['sslCert']);
+        }
+
+        if (!empty($this->settings['transfer']['sslKeyPasswd'])) {
+            $requestEngine->setOption(CURLOPT_SSLKEYPASSWD, $this->settings['transfer']['sslKeyPasswd']);
+        }
+
         $this->browser->setRequestEngine($requestEngine);
     }
 

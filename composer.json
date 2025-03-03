@@ -8,10 +8,10 @@
         "doctrine/annotations": "^1.0",
         "doctrine/collections": "^1.0",
         "doctrine/orm": "^2.0",
-        "neos/error-messages": "^6.0 || ^7.0 || ^8.0 || dev-master",
-        "neos/flow": "^6.0 || ^7.0 || ^8.0 || dev-master",
-        "neos/utility-arrays": "^6.0 || ^7.0 || ^8.0 || dev-master",
-        "neos/utility-objecthandling": "^6.0 || ^7.0 || ^8.0 || dev-master"
+        "neos/error-messages": "^6.0 || ^7.0 || ^8.0 || ^9.0 || dev-master",
+        "neos/flow": "^6.0 || ^7.0 || ^8.0 || ^9.0 || dev-master",
+        "neos/utility-arrays": "^6.0 || ^7.0 || ^8.0 || ^9.0 || dev-master",
+        "neos/utility-objecthandling": "^6.0 || ^7.0 || ^8.0 || ^9.0 || dev-master"
     },
     "autoload": {
         "psr-4": {

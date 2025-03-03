@@ -37,7 +37,7 @@ class DocumentTest extends AbstractTest
      * @dataProvider simpleDocumentDataProvider
      * @test
      */
-    public function idOfFreshNewDocumentIsPopulatedAfterStoring(array $data = null)
+    public function idOfFreshNewDocumentIsPopulatedAfterStoring(?array $data = null)
     {
         $document = new Document(new TwitterType($this->testingIndex), $data);
         static::assertNull($document->getId());
@@ -49,7 +49,7 @@ class DocumentTest extends AbstractTest
      * @dataProvider simpleDocumentDataProvider
      * @test
      */
-    public function versionOfFreshNewDocumentIsCreatedAfterStoringAndIncreasedAfterSubsequentStoring(array $data = null)
+    public function versionOfFreshNewDocumentIsCreatedAfterStoringAndIncreasedAfterSubsequentStoring(?array $data = null)
     {
         $document = new Document(new TwitterType($this->testingIndex), $data);
         static::assertNull($document->getVersion());

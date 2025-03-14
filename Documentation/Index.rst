@@ -47,6 +47,23 @@ and password in your client settings::
 	          username: john
 	          password: mysecretpassword
 
+The following options are available to configure TLS connections. These correspond to the options provided by cURL::
+
+    sslVerifyHost: true
+    sslVerifyPeer: true
+
+    # CA certificate to verify the peer with
+    sslCaInfo: './root-ca.pem'
+
+    # file containing the private SSL key
+    sslKey: './client-key.pem'
+
+    # file containing the PEM formatted certificate
+    sslCert: './client.pem'
+
+    # password needed for the private SSL key
+    sslKeyPasswd: 'some-password'
+
 Running the Functional Tests
 ============================
 

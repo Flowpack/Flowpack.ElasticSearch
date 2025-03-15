@@ -37,7 +37,7 @@ class Response
      * @throws Exception
      * @throws Exception\ApiException
      */
-    public function __construct(ResponseInterface $response, RequestInterface $request = null)
+    public function __construct(ResponseInterface $response, ?RequestInterface $request = null)
     {
         $this->originalResponse = $response;
 

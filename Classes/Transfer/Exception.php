@@ -39,7 +39,7 @@ class Exception extends ElasticSearchException
      * @param RequestInterface|null $request
      * @param \Exception|null $previous
      */
-    public function __construct($message, $code, ResponseInterface $response, RequestInterface $request = null, \Exception $previous = null)
+    public function __construct($message, $code, ResponseInterface $response, ?RequestInterface $request = null, \Exception $previous = null)
     {
         $this->response = $response;
         $this->request = $request;

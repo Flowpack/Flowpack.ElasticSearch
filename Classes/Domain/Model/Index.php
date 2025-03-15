@@ -104,7 +104,7 @@ class Index
      * @param Client $client $client
      * @throws ElasticSearchException
      */
-    public function __construct(string $name, Client $client = null)
+    public function __construct(string $name, ?Client $client = null)
     {
         $name = trim($name);
         if (empty($name) || strpos($name, '_') === 0) {
@@ -170,7 +170,7 @@ class Index
      * @throws ElasticSearchException
      * @throws \Neos\Flow\Http\Exception
      */
-    public function request(string $method, string $path = null, array $arguments = [], $content = null, bool $prefixIndex = true): Response
+    public function request(string $method, ?string $path = null, array $arguments = [], $content = null, bool $prefixIndex = true): Response
     {
         if ($this->client === null) {
             throw new ElasticSearchException('The client of the index "' . $this->prefixName() . '" is not set, hence no requests can be done.', 1566313883);

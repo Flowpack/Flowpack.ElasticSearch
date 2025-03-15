@@ -78,7 +78,7 @@ class ObjectIndexer
      * @param Client $client
      * @return void
      */
-    public function indexObject($object, $signalInformation = null, Client $client = null)
+    public function indexObject($object, $signalInformation = null, ?Client $client = null)
     {
         $type = $this->getIndexTypeForObject($object, $client);
         if ($type === null) {
@@ -98,7 +98,7 @@ class ObjectIndexer
      * @param Client $client
      * @return GenericType
      */
-    protected function getIndexTypeForObject($object, Client $client = null)
+    protected function getIndexTypeForObject($object, ?Client $client = null)
     {
         if ($client === null) {
             $client = $this->client;
@@ -144,7 +144,7 @@ class ObjectIndexer
      * @param Client $client
      * @return void
      */
-    public function removeObject($object, $signalInformation = null, Client $client = null)
+    public function removeObject($object, $signalInformation = null, ?Client $client = null)
     {
         $type = $this->getIndexTypeForObject($object, $client);
         if ($type === null) {
@@ -162,7 +162,7 @@ class ObjectIndexer
      * @param Client $client
      * @return string one of this' ACTION_TYPE_* constants or NULL if no action is required
      */
-    public function objectIndexActionRequired($object, Client $client = null)
+    public function objectIndexActionRequired($object, ?Client $client = null)
     {
         $type = $this->getIndexTypeForObject($object, $client);
         if ($type === null) {
